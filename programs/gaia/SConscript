@@ -1,0 +1,111 @@
+#!/bin/env python
+
+Import('*')
+
+#######################################
+# ENVIRONMENT
+#######################################
+env = env.Copy();
+
+env.Append(LIBS = [ 'z', 'm', 'jpeg', 'GL', 'GLU', 'db-4.2' ]);
+env.Append(CPPPATH = [ '../../lib/wwfetch' ]);
+env.Append(LIBPATH = [ '../../lib/wwfetch' ]);
+env.ParseConfig('sdl-config --cflags --libs');
+env.ParseConfig('curl-config --cflags --libs');
+env.ParseConfig('libpng-config --cflags --libs');
+
+if int(env['gpsd']):
+	env.Append( LIBS = [ 'gps' ], CCFLAGS = [ '-DWITH_GPSD' ], CXXFLAGS = [ '-DWITH_GPSD' ] )
+
+env.Append(CCFLAGS = [ '-DDATADIR="\\"'+env['datadir']+'\\""' ] );
+env.Append(CXXFLAGS = [ '-DDATADIR="\\"'+env['datadir']+'\\""' ] );
+
+#######################################
+# CHECKS
+#######################################
+if not env.GetOption('clean'):
+	config = env.Configure(log_file = '/dev/null')
+	config_ok = True
+
+	if not config.CheckHeader('SDL.h'):
+		print "You need to install SDL development libraries"
+		config_ok = False
+
+	if not config.CheckHeader('GL/gl.h'):
+		print "You need to install GL development libraries"
+		config_ok = False
+
+	if not config.CheckHeader( [ 'stdio.h', 'jpeglib.h' ] ):
+		print "You need to install jpeg development libraries"
+		config_ok = False
+
+	if not config.CheckHeader('png.h'):
+		print "You need to install png development libraries"
+		config_ok = False
+
+	if int(env['gpsd']) and not config.CheckHeader('gps.h'):
+		print "You need to install libgps from gpsd package (http://gpsd.berlios.de/), or turn off gpsd support with `gpsd=0' option (you'll still be able to use GPS)"
+		config_ok = False
+
+
+	if not config.CheckLib('curl'):
+		print "You need to install libcurl development libraries"
+		config_ok = False
+
+	if not config.CheckLib('jpeg'):
+		print "You need to install jpeg development libraries"
+		config_ok = False
+
+	if not config.CheckLib('png'):
+		print "You need to install png development libraries"
+		config_ok = False
+
+	if int(env['gpsd']) and not config.CheckLib('gps'):
+		print "You need to install libgps from gpsd package (http://gpsd.berlios.de/), or turn off gpsd support with `gpsd=0' option (you'll still be able to use GPS)"
+		config_ok = False
+
+	if not config_ok:
+		Exit(1)
+
+	env = config.Finish()
+
+#######################################
+# TARGETS
+#######################################
+srcs = Split("""EarthView.cc
+		FilesystemStorage.cc
+		FlatEarthView.cc
+		GPSLayer.cc
+		GPSSourceNMEA.cc
+		GPSSourceTest.cc
+		GridLayer.cc
+		Hud.cc
+		HudIcon.cc
+		HudObject.cc
+		Main.cc
+		MasterLayer.cc
+		Messages.cc
+		PreloadedTextureManager.cc
+		RawBuffer.cc
+		SimpleTileStorage.cc
+		SlaveLayer.cc
+		SphereEarthView.cc
+		TestMasterLayer.cc
+		TestSlaveLayer.cc
+		Texture.cc
+		TextureTile.cc
+		Tile.cc
+		Timer.cc
+		Viewpoint.cc
+		WorldWindFetcher.cc
+		WorldWindLayer.cc
+		WorldWindTileManager.cc""")
+
+if int(env['gpsd']):
+	srcs += ['GPSSourceGPSD.cc']
+
+env.Program('gaia', [srcs, libwwfetch])
+
+if not int(env['local']):
+	env.Install(env['prefix'] + '/bin/', ['gaia']);
+	env.Install(env['prefix'] + '/share/gaia/', ['../../data/font.png']);

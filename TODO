@@ -1,0 +1,66 @@
+TODO
+~~~~
+Graphics/user interface:
+* Full 3D earth renderer (partially done)
+* HUD to display text labels and icons (partially done)
+  * Text label support
+    * Bar with current geographical coordinates and statistics
+    * Freetype font renderer (will also allow internationalization
+      of HUD)
+* GUI (most probably Qt)
+* Ability to set initial viewer's coordinates, bossubly with location
+  catalogue (patch available)
+* gaia-mkmap utility; tell it corner coordinates, dimensions, dpi, and
+  it'll make you map in single JPEG, ready for printing or whatever.
+* Implement non-realtime OpenGL rendering. Thus, even software
+  emulation will be usable. You navigate with only hollow grid
+  visible, then you stop navigating and the view is rendered in 3D.
+  Anyone can tell me, is software OpenGL available in Windows Mobile
+  devices?
+
+Master layers:
+* Implement NASA layer
+
+Caching:
+* Implement tile cache. It'll be compatible with NASA layer, but
+  generally multi-purpose.
+* Add utility to control it (read and write dumps, read and write
+  separate files, delete areas etc.).
+
+Slave layers:
+* GPS: Render path in lines, instead of HUD dots
+* GPS: Path optimizer (convert strait line of points to 2 points)
+* GPS: Interface to add muliple GPS entities from command line
+* GPS: Auto reconnect to gpsd if connection is lost
+* GPS: Direction indicator for easy finding marker that's not in view
+  currently.
+* GPS: Ability to follow GPS marker
+* Grid: correct grid rendering
+  * Render degrees for grid lines (via HUD)
+* Anyone with any good layer ideas? Mail me (working layers are most
+  welcome, of course:)
+  * My ideas so far: SunlightLayer, TimezoneLayer,
+    SatelliteCoverageLayer
+* Layer to place and display any number of custom image files on
+  the map. Will add support for these:
+  http://www.archive.org/details/maps_usgs
+  Most probably, that'll be available only ofter GUI is done, it's
+  to clumsy to control from command line.
+
+Other:
+* Windows port
+
+Random ideas and suggestions (for far future):
+* GIS support (grass.itc.it, qgis.org), export geotiffs (what's that?)
+* www.ecogeographica.com support (didn't looked there yet)
+
+Known bugs:
+* Tile may be loaded twice (master layer refactoring)
+* Tiles are sometimes stuck unloaded (master layer refactoring)
+* Timer is not threadsafe
+* On MacOSX, when exiting, stucks on pthread_join in
+  SimpleTileStorage::~SimpleTileStorage (I suppose it will stuck on
+  any pthread_join, as thread handling is the same everywhere in gaia).
+* NMEA doesn't work with USB devices on Linux (putc to a clist with no
+  reserved cblocks). Also need to setup tty before work (like line
+  speed etc.)

@@ -1,0 +1,65 @@
+           gaia - opensource 3D interface to the planet
+          ==============================================
+
+Command line arguments
+~~~~~~~~~~~~~~~~~~~~~~
+-w, --world=MODEL
+    Select world model. Default model is `flat', which gives you
+    simple flat world view, similar to plain paper map. No rotation
+    or tilt, but this model is fastest. Another model currently
+    available is `3d', which will show you earth as a globe with
+    extended navigation functions. It's currently not finished, so
+    not much of use.
+
+-m, --master=TYPE
+    Select master layer. Master layer determines where earth data
+    comes from and how it's shown. Default master layer is `nasa',
+    which needs no explanation. Another layer is `test' used
+    primarily for testing other components.
+
+-t, --test
+    Add test slave layer. Used for testing like test master layer.
+
+-g, --grid
+    Add grid slave layer. Shows dynamic geographical grid (not
+    fully functional currently).
+
+-p, --gps=SOURCE
+    Add GPS slave layer. Shows location of GPS device and it's route.
+    Available sources are:
+
+    gpsd://host[:port] - Connect to gpsd running on specified host
+    and port. Port is optional and defaults to 2947. Gpsd supports
+    many GPS devices and may be run locally or remotely. For details,
+    see http://gpsd.berlios.de/
+
+    nmea://path - Path to device (socket/fifo also works) that outputs
+    NMEA information from GPS device.
+
+    test:// - Provides fake coordinates for layer testing.
+
+Building
+~~~~~~~~
+To build gaia, you need:
+    - SCons (http://www.scons.org)
+    - cURL library (http://curl.haxx.se)
+    - SDL library (http://www.libsdl.org)
+    - jpeg library (http://www.ijg.org)
+    - png library (http://libpng.sourceforge.net)
+    - libgps (http://gpsd.berlios.de) - optional
+
+Once you obtain all of these, just run `scons' in this directory.
+After the successfull build, run `./gaia'. The program will create
+~/.gaia directory to store downloaded images.
+
+Keyboard controls
+~~~~~~~~~~~~~~~~~
+Arrow keys    Pan view
+=/-           Zoom in/out
+Q, Esc        Quit
+
+Mouse controls
+~~~~~~~~~~~~~~
+Drag with left button    Pan view
+Drag with right button   Zoom in/out
+Wheel                    Zoom in/out

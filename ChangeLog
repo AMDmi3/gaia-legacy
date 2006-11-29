@@ -1,0 +1,57 @@
+gaia 0.1.1 unreleased
+---------------------
+ * Fixed failure to run on displays with 16bit color depth
+ * Fixed compile under OpenBSD (+improvements in SCons stuff)
+ * Fixed bug with navigation going mad and not working on some systems
+ * Fixed crashes on SMP (thanks for contribution)
+ * Google Earth imagery support removed
+ * NASA World Wind imagery support added
+ * Build system improved
+
+gaia 0.1.0 2006-11-10
+---------------------
+ * Added GPS layer which is capable of displaying route and current
+   location for any NMEA-speaking device. Also works as gpsd
+   (http://gpsd.berlios.de/) client, allowing you to work with almost
+   any GPS device either locally or via network.
+ * Added HUD class for displaying labels and icons on the map.
+ * Flat earth view now has aspect ratio correction.
+ * Google stuff moved to separate plain C library libgefetch, which
+   may be used in other projects. See libgefetch/gefetch.h, interface
+   is really easy.
+ * All imagery is now accessible (no more need for -DMOSCOW like stuff)
+ * Navigation greatly improved
+
+gaia 0.0.5 2006-10-29
+---------------------
+ * New layered structure to display all kinds of geo-bound data
+   on one screen. Current functionality implemented as GoogleLayer.
+ * Initial work on some additional slave layers (like GridLayer).
+ * Initial work on 3D earth view.
+ * Add commandline arguments parsing. See gaia --help.
+
+gaia 0.0.4 2006-10-11
+---------------------
+ * Fixup release which addresses some critical bugs found when testing
+   gaia on linux.
+
+gaia 0.0.3 2006-10-09
+---------------------
+ * Most of code severely rewritten. Add modularity, eliminate lags, improve
+   stability, add some things that may be needed in the future
+ * Prepare for first public release, add documentation
+ * Almost no user-visible changes
+
+gaia 0.0.2 2006-06-12
+---------------------
+ * Networking: curl, keyhole authentication and file downloading supported
+ * Tiles are downloaded from keyhole (still only from hardcoded cluster)
+ * Better handling of in-memory texture cache
+ * Queues for tile fetching (from disk) / downloading (from keyhole)
+
+gaia 0.0.1 2006-05-09
+---------------------
+ * Flat rendering of textured earth surface
+ * Basic navigation with arrow keys and +/-
+ * Disk storage for earth tiles
+ * No networking yet
