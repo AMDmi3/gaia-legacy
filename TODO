@@ -18,9 +18,6 @@ Graphics/user interface:
   Anyone can tell me, is software OpenGL available in Windows Mobile
   devices?
 
-Master layers:
-* Implement NASA layer
-
 Caching:
 * Implement tile cache. It'll be compatible with NASA layer, but
   generally multi-purpose.
