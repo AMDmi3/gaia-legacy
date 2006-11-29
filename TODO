@@ -8,7 +8,7 @@ Graphics/user interface:
     * Freetype font renderer (will also allow internationalization
       of HUD)
 * GUI (most probably Qt)
-* Ability to set initial viewer's coordinates, bossubly with location
+* Ability to set initial viewer's coordinates, possibly with location
   catalogue (patch available)
 * gaia-mkmap utility; tell it corner coordinates, dimensions, dpi, and
   it'll make you map in single JPEG, ready for printing or whatever.
@@ -43,6 +43,7 @@ Slave layers:
   http://www.archive.org/details/maps_usgs
   Most probably, that'll be available only ofter GUI is done, it's
   to clumsy to control from command line.
+* Country borders (patch avilable)
 
 Other:
 * Windows port
@@ -50,6 +51,7 @@ Other:
 Random ideas and suggestions (for far future):
 * GIS support (grass.itc.it, qgis.org), export geotiffs (what's that?)
 * www.ecogeographica.com support (didn't looked there yet)
+* Add list of contributors
 
 Known bugs:
 * Tile may be loaded twice (master layer refactoring)
