@@ -20,9 +20,9 @@ opts.Add(BoolOption('use_env', 'Use environment variables (CC, CXX, CCFLAGS, CXX
 # paths
 opts.Add(BoolOption('local', 'Compile gaia so it can be run in place (no installation is planned)', 1));
 
-opts.Add(PathOption('prefix', 'Install prefix', '/usr/local'));
-opts.Add(('bindir', 'Path where to install executables to (default PREFIX/bin)', ''));
-opts.Add(('datadir', 'Path where to install read-only data to (default PREFIX/share/gaia)', ''));
+opts.Add(('prefix', 'Install prefix', ''));
+opts.Add(('bindir', 'Path (relative to prefix) where to install executables to (default bin)', 'bin'));
+opts.Add(('datadir', 'Path (relative to prefix) where to install read-only data to (default share/gaia)', 'share/gaia'));
 
 #######################################
 # ENVIRONMENT & SYSTEM_SPECIFIC CONFIGURATION
@@ -31,13 +31,10 @@ env = Environment( CCFLAGS = [ '-Wall', '-g' ],
 		   CXXFLAGS = [ '-Wall', '-g' ],
 		   options = opts )
 
-if int(env['local']):
+if env['prefix'] == "":
 	env['prefix'] = '.'
 	env['bindir'] = '.'
 	env['datadir'] = 'data'
-else:
-	if env['bindir'] == '': env['bindir'] = env['prefix'] + '/bin'
-	if env['datadir'] == '': env['datadir'] = env['prefix'] + '/share/gaia'
 
 if not env.GetOption('clean'):
 	if sys.platform.startswith('freebsd'):
@@ -78,5 +75,5 @@ libwwfetch = SConscript('lib/wwfetch/SConscript', exports = ['env'])
 
 SConscript('programs/gaia/SConscript', exports = ['env', 'libwwfetch'])
 
-if not int(env['local']):
+if env['prefix'] != ".":
 	env.Alias('install', env['prefix'])

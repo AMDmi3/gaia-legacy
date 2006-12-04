@@ -17,8 +17,8 @@ env.ParseConfig('libpng-config --cflags --libs');
 if int(env['gpsd']):
 	env.Append( LIBS = [ 'gps' ], CCFLAGS = [ '-DWITH_GPSD' ], CXXFLAGS = [ '-DWITH_GPSD' ] )
 
-env.Append(CCFLAGS = [ '-DDATADIR="\\"'+env['datadir']+'\\""' ] );
-env.Append(CXXFLAGS = [ '-DDATADIR="\\"'+env['datadir']+'\\""' ] );
+env.Append(CCFLAGS = [ '-DDATADIR="\\"' + env['prefix'] + "/" + env['datadir'] + '\\""' ] );
+env.Append(CXXFLAGS = [ '-DDATADIR="\\"' + env['prefix'] + "/" + env['datadir'] + '\\""' ] );
 
 #######################################
 # CHECKS
@@ -104,8 +104,8 @@ srcs = Split("""EarthView.cc
 if int(env['gpsd']):
 	srcs += ['GPSSourceGPSD.cc']
 
-env.Program('gaia', [srcs, libwwfetch])
+env.Program('../../gaia', [srcs, libwwfetch])
 
-if not int(env['local']):
-	env.Install(env['prefix'] + '/bin/', ['gaia']);
-	env.Install(env['prefix'] + '/share/gaia/', ['../../data/font.png']);
+if env['prefix'] != '.':
+	env.Install(env['prefix'] + "/" + env['bindir'], ['../../gaia']);
+	env.Install(env['prefix'] + "/" + env['datadir'], ['../../data/font.png']);
