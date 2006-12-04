@@ -12,6 +12,7 @@ Graphics/user interface:
   catalogue (patch available)
 * gaia-mkmap utility; tell it corner coordinates, dimensions, dpi, and
   it'll make you map in single JPEG, ready for printing or whatever.
+  (should be also available from gaia itself). XXX: wtf is geotiffs?
 * Implement non-realtime OpenGL rendering. Thus, even software
   emulation will be usable. You navigate with only hollow grid
   visible, then you stop navigating and the view is rendered in 3D.
