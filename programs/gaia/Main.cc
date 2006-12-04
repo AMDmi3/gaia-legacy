@@ -177,52 +177,30 @@ int loop() {
 			break;
 
 		case SDL_KEYDOWN:
+		case SDL_KEYUP:
 			switch (event.key.keysym.sym) {
 			case SDLK_ESCAPE:
 			case SDLK_q:
 				return 0;
 			case SDLK_LEFT:
-				g_EarthView->StartMovement(NAV_PAN_LEFT);
+				event.type == SDL_KEYDOWN ? g_EarthView->StartMovement(NAV_PAN_LEFT) : g_EarthView->StopMovement(NAV_PAN_LEFT);
 				break;
 			case SDLK_RIGHT:
-				g_EarthView->StartMovement(NAV_PAN_RIGHT);
+				event.type == SDL_KEYDOWN ? g_EarthView->StartMovement(NAV_PAN_RIGHT) : g_EarthView->StopMovement(NAV_PAN_RIGHT);
 				break;
 			case SDLK_DOWN:
-				g_EarthView->StartMovement(NAV_PAN_DOWN);
+				event.type == SDL_KEYDOWN ? g_EarthView->StartMovement(NAV_PAN_DOWN) : g_EarthView->StopMovement(NAV_PAN_DOWN);
 				break;
 			case SDLK_UP:
-				g_EarthView->StartMovement(NAV_PAN_UP);
+				event.type == SDL_KEYDOWN ? g_EarthView->StartMovement(NAV_PAN_UP) : g_EarthView->StopMovement(NAV_PAN_UP);
 				break;
+			case SDLK_PAGEUP:
 			case SDLK_EQUALS:
-				g_EarthView->StartMovement(NAV_ZOOM_IN);
+				event.type == SDL_KEYDOWN ? g_EarthView->StartMovement(NAV_ZOOM_IN) : g_EarthView->StopMovement(NAV_ZOOM_IN);
 				break;
+			case SDLK_PAGEDOWN:
 			case SDLK_MINUS:
-				g_EarthView->StartMovement(NAV_ZOOM_OUT);
-				break;
-			default:
-				break;
-			}
-			break;
-
-		case SDL_KEYUP:
-			switch (event.key.keysym.sym) {
-			case SDLK_LEFT:
-				g_EarthView->StopMovement(NAV_PAN_LEFT);
-				break;
-			case SDLK_RIGHT:
-				g_EarthView->StopMovement(NAV_PAN_RIGHT);
-				break;
-			case SDLK_DOWN:
-				g_EarthView->StopMovement(NAV_PAN_DOWN);
-				break;
-			case SDLK_UP:
-				g_EarthView->StopMovement(NAV_PAN_UP);
-				break;
-			case SDLK_EQUALS:
-				g_EarthView->StopMovement(NAV_ZOOM_IN);
-				break;
-			case SDLK_MINUS:
-				g_EarthView->StopMovement(NAV_ZOOM_OUT);
+				event.type == SDL_KEYDOWN ? g_EarthView->StartMovement(NAV_ZOOM_OUT) : g_EarthView->StopMovement(NAV_ZOOM_OUT);
 				break;
 			default:
 				break;
