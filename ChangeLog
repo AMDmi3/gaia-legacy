@@ -1,4 +1,4 @@
-gaia 0.1.1 unreleased
+gaia 0.1.1 2006-12-04
 ---------------------
  * Fixed failure to run on displays with 16bit color depth
  * Fixed compile under OpenBSD (+improvements in SCons stuff)
@@ -7,6 +7,7 @@ gaia 0.1.1 unreleased
  * Google Earth imagery support removed
  * NASA World Wind imagery support added
  * Build system improved
+ * On-disk image cache tweaked (but no fast indexed storage for now)
 
 gaia 0.1.0 2006-11-10
 ---------------------
