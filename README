@@ -38,8 +38,8 @@ Command line arguments
 
     test:// - Provides fake coordinates for layer testing.
 
-Building
-~~~~~~~~
+Building & Installation
+~~~~~~~~~~~~~~~~~~~~~~~
 To build gaia, you need:
     - SCons (http://www.scons.org)
     - cURL library (http://curl.haxx.se)
@@ -48,9 +48,25 @@ To build gaia, you need:
     - png library (http://libpng.sourceforge.net)
     - libgps (http://gpsd.berlios.de) - optional
 
-Once you obtain all of these, just run `scons' in this directory.
-After the successfull build, run `./gaia'. The program will create
-~/.gaia directory to store downloaded images.
+Once you obtain all of these, just run in this directory:
+
+% scons
+
+This will build gaia and produce binar(y/ies) runnable from current
+directory.
+
+If you want systemwide installation of gaia, you should explicitly
+provide prefix and specify install target:
+
+% scons prefix=/usr/local install
+
+This will build gaia and install binaries into /usr/local/bin/ and
+data files into /usr/local/share/gaia/. You can change path suffixes:
+
+% scons prefix=/usr/local bindir=bin/gaia datadir=data/gaia install
+
+Now, binaries will be installed into /usr/local/bin/gaia/ and data
+files into /usr/local/data/gaia/
 
 Keyboard controls
 ~~~~~~~~~~~~~~~~~
