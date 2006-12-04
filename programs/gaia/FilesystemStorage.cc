@@ -1,6 +1,5 @@
 /*
  * gaia - opensource 3D interface to the planet
- * Copyright (C) 2006 gaia project
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,57 +19,17 @@
 #include "FilesystemStorage.h"
 
 FilesystemStorage::FilesystemStorage(std::string root) {
-#if 0
-	int ret;
-
-	m_Cache = 0;
-	m_SecCache = 0;
-
-	try {
-		if ((ret = db_create(&m_Cache, 0, 0)) != 0)
-			throw Exception("db_create() failed for primary BDB");
-
-		if ((ret = db_create(&m_SecCache, 0, 0)) != 0)
-			throw Exception("db_create() failed for secondary BDB");
-
-		if ((ret = m_Cache->open(m_Cache, 0, (root + "cache.db").c_str(), 0, DB_BTREE, DB_CREATE, 0)) != 0)
-			throw Exception("open() failed for primary BDB");
-
-		if ((ret = m_SecCache->set_flags(m_SecCache, DB_DUPSORT)) != 0)
-			throw Exception("set_flags() failed for secondary BDB");
-
-		if ((ret = m_SecCache->open(m_SecCache, 0, (root + "cache.sec.db").c_str(), 0, DB_BTREE, DB_CREATE, 0)) != 0)
-			throw Exception("open() failed for secondary BDB");
-
-		if ((ret = m_Cache->associate(m_Cache, 0, m_SecCache, sec_key_creation, 0)) != 0)
-			throw Exception("associate() failed");
-	} catch (...) {
-		if (m_Cache)
-			m_Cache->close(m_Cache, 0);
-		if (m_SecCache)
-			m_SecCache->close(m_SecCache, 0);
-		throw;
-	}
-#endif
+	m_StorageRoot = root;
 }
 
 FilesystemStorage::~FilesystemStorage() {
-#if 0
-	m_Cache->close(m_Cache, 0);
-	m_SecCache->close(m_SecCache, 0);
-#endif
 }
 
 void FilesystemStorage::Process(TilePtr tile) {
-#if 0
 	if (!tile->IsLoaded()) { /* loading */
+		std::string path = m_StorageRoot + PathFromCoords(tile->GetX(), tile->GetY(), tile->GetLevel(), tile->GetType());
 		try {
-			PSSPrimaryKey k;
-
-			DBT key, data;
-
-			key.data = &k;
-			key.size = sizeof(k);
+			int f;
 
 			if ((f = open(path.c_str(), O_RDONLY)) == -1)
 				throw ErrnoException("cannot open file in filesystem storage", errno);
@@ -86,21 +45,14 @@ void FilesystemStorage::Process(TilePtr tile) {
 			}
 
 			close(f);
-		} catch(ErrnoException &) {
+		} catch(ErrnoException &e) {
 			/* unable to load current tile, i.e. tile is not in a storage
 			 * THIS is not an error */
-		} catch(std::exception &) {
+		} catch(std::exception &e) {
 			/* unable to load current tile, i.e. tile is not in a storage
 			 * THIS is not an error */
 		}
 	} else if (tile->IsSaveable()) { /* saving */
-		PSSPrimaryKey k;
-		PSSData d;
-
-		/* compose PSSPrimaryKey */
-		/* compose PSSData */
-		/* store */
-
 		std::string subpath = PathFromCoords(tile->GetX(), tile->GetY(), tile->GetLevel(), tile->GetType());
 
 		/* store file, creating needed directories */
@@ -136,5 +88,40 @@ void FilesystemStorage::Process(TilePtr tile) {
 		}
 		throw Exception("shouldn't get here");
 	}
-#endif
+}
+
+std::string FilesystemStorage::PathFromCoords(int x, int y, int level, int type) {
+	std::string path;
+	std::string name;
+
+	int i;
+	char *ext = "";
+	ext = ".jpg";
+
+	for (i = 0; i <= level; i++) {
+		int bit = 1 << (level-i);
+
+		if (x & bit) {
+			if (y & bit)    name += "2";
+			else            name += "1";
+		} else {
+			if (y & bit)    name += "3";
+			else            name += "0";
+		}
+
+		if (i < (level+1 & ~0x3)) {
+			if (x & bit) {
+				if (y & bit)    path += "2";
+				else            path += "1";
+			} else {
+				if (y & bit)    path += "3";
+				else            path += "0";
+			}
+
+			if (i % 4 == 3)
+			path += "/";
+		}
+	}
+
+	return std::string("/") + path + name + ext;
 }

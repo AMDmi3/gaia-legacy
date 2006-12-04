@@ -21,7 +21,7 @@
 #include <getopt.h>
 
 #include "WorldWindFetcher.h"
-//#include "FilesystemStorage.h"
+#include "FilesystemStorage.h"
 #include "WorldWindTileManager.h"
 #include "PreloadedTextureManager.h"
 #include "Hud.h"
@@ -41,7 +41,7 @@
 #define GAIA_TITLE "Gaia " GAIA_VERSION
 
 WorldWindFetcher	*g_WWFetcher = 0;
-//FilesystemStorage	*g_Storage = 0;
+FilesystemStorage	*g_Storage = 0;
 
 MasterLayer		*g_MasterLayer = 0;
 SlaveLayer		*g_SlaveLayers[256];
@@ -104,8 +104,10 @@ void cleanup() {
 		delete g_SlaveLayers[i];
 
 	if (g_WWFetcher) g_WWFetcher->Detach();
+	if (g_Storage) g_WWFetcher->Detach();
 
 	delete g_WWFetcher;
+	delete g_Storage;
 
 	PreloadedTextureManager::Instance()->Clear();
 
@@ -298,16 +300,16 @@ int main(int argc, char **argv) {
 	}
 
 	/* create dotdir */
-/*	std::string dotdir = std::string(getenv("HOME")) + "/.gaia";
+	std::string dotdir = std::string(getenv("HOME")) + "/.gaia";
 	if (mkdir(dotdir.c_str(), 0777) != 0 && errno != EEXIST) {
 		warning("Cannot create dotdir (%s): %s\n", dotdir.c_str(), strerror(errno));
 		return 1;
 	}
-	std::string gecachedir = dotdir + "/gecache";
-	if (mkdir(gecachedir.c_str(), 0777) != 0 && errno != EEXIST) {
-		warning("Cannot create cache directory (%s): %s\n", gecachedir.c_str(), strerror(errno));
+	std::string cachedir = dotdir + "/cache";
+	if (mkdir(cachedir.c_str(), 0777) != 0 && errno != EEXIST) {
+		warning("Cannot create cache directory (%s): %s\n", cachedir.c_str(), strerror(errno));
 		return 1;
-	}*/
+	}
 
 	/* init SDL */
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -346,17 +348,17 @@ int main(int argc, char **argv) {
 		PreloadedTextureManager::Instance()->LoadPNG(TEXTURE_FONT, DATADIR "/font.png");
 
 		/* sources */
-//		debug("Initializing tile storage\n");
-//		g_Storage = new FilesystemStorage(gecachedir);
+		debug("Initializing tile storage\n");
+		g_Storage = new FilesystemStorage(cachedir);
 		debug("Initializing WorldWind fetcher\n");
 		g_WWFetcher = new WorldWindFetcher();
 		/* make storage graph */
-//		g_WWFetcher->SetSaveStorage(g_Storage);
-//		g_Storage->SetNextLoadStorage(g_WWFetcher);
+		g_WWFetcher->SetSaveStorage(g_Storage);
+		g_Storage->SetNextLoadStorage(g_WWFetcher);
 
 		/* init manager */
 		debug("Initializing tile manager\n");
-		g_TileManager = new WorldWindTileManager(g_WWFetcher);
+		g_TileManager = new WorldWindTileManager(g_Storage);
 
 		/* master layer */
 		if (use_testmaster)	g_MasterLayer = new TestMasterLayer();

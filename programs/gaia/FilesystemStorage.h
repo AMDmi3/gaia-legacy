@@ -1,6 +1,5 @@
 /*
  * gaia - opensource 3D interface to the planet
- * Copyright (C) 2006 gaia project
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -17,34 +16,24 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __GAIA__FILESYSTEMSTORAGE_H__
-#define __GAIA__FILESYSTEMSTORAGE_H__
+#ifndef __FILESYSTEMSTORAGE_H__
+#define __FILESYSTEMSTORAGE_H__
 
 #include <string>
 #include <list>
-#include <db.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #include "SimpleTileStorage.h"
 
-struct PSSPrimaryKey {
-	unsigned int	x;
-	unsigned int	y;
-	unsigned short	level;
-
-	unsigned char	type;
-#define TYPE_IMAGE 0x01
-};
-
-struct PSSSecondaryKey {
-	unsigned long	lastaccess;
-};
-
-struct PSSData {
-	unsigned long	lastmodify;
-	unsigned long	lastaccess;
-	unsigned char	data[0];
-};
-
+/**
+ * Filesystem cache to store tiles locally.
+ *
+ * @deprecated This implementation wastes tons of inodes, lots of space, is
+ * very slow and ineffective. Will be replaced, see TODO file.
+ *
+ * @deprecated should be restructured and merged to GoogleLayer
+ */
 class FilesystemStorage: public SimpleTileStorage {
 public:
 	/**
@@ -66,8 +55,15 @@ protected:
 	void Process(TilePtr tile);
 
 private:
-	DB	*m_Cache;
-	DB	*m_SecCache;
+	/**
+	 * Convert tile type and coords into path
+	 *
+	 * @returns tile path relative to storage root
+	 */
+	std::string PathFromCoords(int x, int y, int level, int type);
+
+private:
+	std::string	m_StorageRoot;	///< Root directory of the storage
 };
 
 #endif 
