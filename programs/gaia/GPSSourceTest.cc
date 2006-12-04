@@ -34,11 +34,8 @@ int GPSSourceTest::Poll(GPSData *target) {
 	m_Length += double(time-m_LastPoll)/(1000*3600)*20.0/40000.0;	/* ~20km/h */
 	m_LastPoll = time;
 
-//	target->longitude = 0.0;
-//	target->latitude = m_Length;
-
-	target->longitude = 38.47141/360.0;
-	target->latitude = 56.37081/360.0;
+	target->longitude = 0.0;
+	target->latitude = m_Length;
 
 	return 1;
 }
