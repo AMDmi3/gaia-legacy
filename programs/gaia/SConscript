@@ -7,7 +7,7 @@ Import('*')
 #######################################
 env = env.Copy();
 
-env.Append(LIBS = [ 'z', 'm', 'jpeg', 'GL', 'GLU', 'db-4.2' ]);
+env.Append(LIBS = [ 'z', 'm', 'jpeg', 'GL', 'GLU' ]);
 env.Prepend(CPPPATH = [ '../../lib/wwfetch' ]);
 env.Prepend(LIBPATH = [ '../../lib/wwfetch' ]);
 env.ParseConfig('sdl-config --cflags --libs');
