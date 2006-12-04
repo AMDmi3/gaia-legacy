@@ -18,8 +18,6 @@ opts.Add(BoolOption('extras', 'Compile examples and tests', 0));
 opts.Add(BoolOption('use_env', 'Use environment variables (CC, CXX, CCFLAGS, CXXFLAGS, CPPPATH, LIBPATH)', 0));
 
 # paths
-opts.Add(BoolOption('local', 'Compile gaia so it can be run in place (no installation is planned)', 1));
-
 opts.Add(('prefix', 'Install prefix', ''));
 opts.Add(('bindir', 'Path (relative to prefix) where to install executables to (default bin)', 'bin'));
 opts.Add(('datadir', 'Path (relative to prefix) where to install read-only data to (default share/gaia)', 'share/gaia'));
@@ -27,9 +25,7 @@ opts.Add(('datadir', 'Path (relative to prefix) where to install read-only data 
 #######################################
 # ENVIRONMENT & SYSTEM_SPECIFIC CONFIGURATION
 #######################################
-env = Environment( CCFLAGS = [ '-Wall', '-g' ],
-		   CXXFLAGS = [ '-Wall', '-g' ],
-		   options = opts )
+env = Environment( options = opts )
 
 if env['prefix'] == "":
 	env['prefix'] = '.'
@@ -62,6 +58,8 @@ if int(env['use_env']):
 
 env.Append(CCFLAGS = [ '-DGAIA_VERSION="\\"' + version + '\\""' ])
 env.Append(CXXFLAGS = [ '-DGAIA_VERSION="\\"' + version + '\\""' ])
+
+env.Append(CCFLAGS = [ '-Wall', '-g' ], CXXFLAGS = [ '-Wall', '-g' ])
 
 #######################################
 # CHECKS
