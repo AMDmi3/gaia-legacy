@@ -32,6 +32,8 @@ if env['prefix'] == "":
 	env['bindir'] = '.'
 	env['datadir'] = 'data'
 
+SConsignFile()
+
 if not env.GetOption('clean'):
 	if sys.platform.startswith('freebsd'):
 		print "Compiling for FreeBSD"
