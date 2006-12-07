@@ -25,8 +25,8 @@ opts.Add(('datadir', 'Path (relative to prefix) where to install read-only data 
 #######################################
 # ENVIRONMENT & SYSTEM_SPECIFIC CONFIGURATION
 #######################################
-env = Environment( CCFLAGS = [],
-		   CXXFLAGS = [],
+env = Environment( CCFLAGS = [ '-Wall', '-g' ],
+		   CXXFLAGS = [ '-Wall', '-g' ],
 		   options = opts )
 
 if env['prefix'] == "":
@@ -62,8 +62,6 @@ if int(env['use_env']):
 
 env.Append(CCFLAGS = [ '-DGAIA_VERSION="\\"' + version + '\\""' ])
 env.Append(CXXFLAGS = [ '-DGAIA_VERSION="\\"' + version + '\\""' ])
-
-env.Append(CCFLAGS = [ '-Wall', '-g' ], CXXFLAGS = [ '-Wall', '-g' ])
 
 #######################################
 # CHECKS
