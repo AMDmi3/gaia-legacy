@@ -27,6 +27,12 @@
  * @param level level of image [0..]
  */
 wwfetch_error wwfetch_fetch_image(wwfetch *handle, int x, int y, int level) {
+	/* WW will let us download data at any resolution, but level > 14 is
+	 * just not useful, as pixels will become visible, so save traffic and
+	 * don't download it */
+	if (level > 14)
+		return WWFETCH_NOT_FOUND;
+
 	int res = 1 << (level);
 
 	double x1 = (double)(x)/(double)(res) * 360.0 - 180.0;
@@ -36,7 +42,10 @@ wwfetch_error wwfetch_fetch_image(wwfetch *handle, int x, int y, int level) {
 
 	/* form full url */
 	char urlbuf[1024];
-	if (snprintf(urlbuf, sizeof(urlbuf), "http://wms.jpl.nasa.gov/wms.cgi?request=GetMap&layers=global_mosaic_base&srs=EPSG:4326&width=256&height=256&bbox=%f,%f,%f,%f&format=image/jpeg&version=1.1.0&styles=", x1, y1, x2, y2) >= sizeof(urlbuf))
+
+	/* possible layers {global_mosaic|global_mosaic_base|modis|BMNG} global_mosaic = best quality */
+	/* XXX: make it possible to select layer from outside libwwfetch */
+	if (snprintf(urlbuf, sizeof(urlbuf), "http://wms.jpl.nasa.gov/wms.cgi?request=GetMap&layers=global_mosaic&srs=EPSG:4326&width=256&height=256&bbox=%f,%f,%f,%f&format=image/jpeg&version=1.1.0&styles=", x1, y1, x2, y2) >= sizeof(urlbuf))
 		return WWFETCH_SMALL_BUFFER;
 
 	wwfetch_error result = wwfetch_fetch(handle, urlbuf);

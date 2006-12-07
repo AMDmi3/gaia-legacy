@@ -31,13 +31,6 @@ WorldWindFetcher::~WorldWindFetcher() {
 
 void WorldWindFetcher::Process(TilePtr tile) {
 	int res;
-	/* WW will let us download data at any resolution, but level > 13 is
-	 * just not useful, as pixels will become visible, so save traffic and
-	 * don't download it */
-	if (tile->GetLevel() > 13) {
-		tile->Null();
-		return;
-	}
 
 	if ((res = wwfetch_fetch_image(&m_WWFetch, tile->GetX(), tile->GetY(), tile->GetLevel())) == WWFETCH_NOT_FOUND) {
 		tile->Null();
