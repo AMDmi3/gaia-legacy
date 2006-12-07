@@ -39,5 +39,14 @@ wwfetch_error wwfetch_fetch_image(wwfetch *handle, int x, int y, int level) {
 	if (snprintf(urlbuf, sizeof(urlbuf), "http://wms.jpl.nasa.gov/wms.cgi?request=GetMap&layers=global_mosaic_base&srs=EPSG:4326&width=256&height=256&bbox=%f,%f,%f,%f&format=image/jpeg&version=1.1.0&styles=", x1, y1, x2, y2) >= sizeof(urlbuf))
 		return WWFETCH_SMALL_BUFFER;
 
-	return wwfetch_fetch(handle, urlbuf);
+	wwfetch_error result = wwfetch_fetch(handle, urlbuf);
+	if (result == WWFETCH_OK) {
+		/* ensure that we got a jpeg file, (ww sends xml error packets) */
+		/* XXX: - is this a correct test for JPEG?
+		 *      - what's in that xml data? introduce additional wwfetch_error's?
+		 *      - libjpeg does not handle corrupt data gracefully? */
+		if (handle->currentsize < 4 || handle->currentdata[0] != 0xff || handle->currentdata[1] != 0xd8 || handle->currentdata[2] != 0xff || handle->currentdata[3] != 0xe0)
+			return WWFETCH_FETCH_FAILED;
+	}
+	return result;
 }
