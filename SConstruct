@@ -25,7 +25,9 @@ opts.Add(('datadir', 'Path (relative to prefix) where to install read-only data 
 #######################################
 # ENVIRONMENT & SYSTEM_SPECIFIC CONFIGURATION
 #######################################
-env = Environment( options = opts )
+env = Environment( CCFLAGS = [],
+		   CXXFLAGS = [],
+		   options = opts )
 
 if env['prefix'] == "":
 	env['prefix'] = '.'
