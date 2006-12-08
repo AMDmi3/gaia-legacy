@@ -13,7 +13,7 @@ Command line arguments
 
 -m, --master=TYPE
     Select master layer. Master layer determines where earth data
-    comes from and how it's shown. Default master layer is `nasa',
+    comes from and how it's shown. Default master layer is `worldwind',
     which needs no explanation. Another layer is `test' used
     primarily for testing other components.
 
