@@ -19,11 +19,42 @@
 
 #include "WorldWindLayer.h"
 
-WorldWindLayer::WorldWindLayer(WorldWindTileManager *tm) {
-	m_TileManager = tm;
+WorldWindLayer::WorldWindLayer(std::string storageroot) {
+	/* create WorldWind infrastructure: disk cache */
+	m_DiskCache = new FilesystemStorage(storageroot);
+
+	/* image fetcher */
+	try {
+		m_ImageFetcher = new WorldWindFetcher();
+	} catch (...) {
+		delete m_DiskCache;
+		throw;
+	}
+
+	/* and manager */
+	try {
+		m_ImageFetcher->SetSaveStorage(m_DiskCache);
+		m_DiskCache->SetNextLoadStorage(m_ImageFetcher);
+
+		m_TileManager = new WorldWindTileManager(m_DiskCache);
+	} catch (...) {
+		m_ImageFetcher->Detach();
+		m_DiskCache->Detach();
+
+		delete m_ImageFetcher;
+		delete m_DiskCache;
+		throw;
+	}
 }
 
 WorldWindLayer::~WorldWindLayer() {
+	delete m_TileManager;
+
+	m_ImageFetcher->Detach();
+	m_DiskCache->Detach();
+
+	delete m_ImageFetcher;
+	delete m_DiskCache;
 }
 
 #define EPSILON 0.00001
@@ -176,6 +207,9 @@ void WorldWindLayer::RenderRegion(Region *rgn) {
 			glDisable(GL_TEXTURE_2D);
 		}
 	}
+
+	/* XXX: does it belong here? */
+	m_TileManager->Cleanup();
 }
 
 int WorldWindLayer::GetSplitLevel(double wlen, double plen) {

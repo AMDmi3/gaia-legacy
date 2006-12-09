@@ -22,12 +22,15 @@
 
 #include "Layer.h"
 #include "WorldWindTileManager.h"
+#include "WorldWindFetcher.h"
+#include "FilesystemStorage.h"
+#include "WorldWindTileManager.h"
 
 #define MIN_TEXTURE_DISTANCE 192.0
 
 class WorldWindLayer: public Layer {
 public:
-	WorldWindLayer(WorldWindTileManager *tm);
+	WorldWindLayer(std::string storageroot);
 	virtual ~WorldWindLayer();
 
 	void RenderRegion(Region *rgn);
@@ -36,6 +39,8 @@ public:
 
 protected:
 	WorldWindTileManager	*m_TileManager;
+	WorldWindFetcher        *m_ImageFetcher;
+	FilesystemStorage       *m_DiskCache;
 };
 
 #endif

@@ -20,9 +20,6 @@
 #include <SDL.h>
 #include <getopt.h>
 
-#include "WorldWindFetcher.h"
-#include "FilesystemStorage.h"
-#include "WorldWindTileManager.h"
 #include "PreloadedTextureManager.h"
 #include "Hud.h"
 #include "FlatEarthView.h"
@@ -39,13 +36,9 @@
 
 #define GAIA_TITLE "Gaia " GAIA_VERSION
 
-WorldWindFetcher	*g_WWFetcher = 0;
-FilesystemStorage	*g_Storage = 0;
-
 Layer			*g_Layers[256];
 int			g_nLayers = 0;
 
-WorldWindTileManager	*g_TileManager = 0;
 EarthView		*g_EarthView = 0;
 //Hud			*g_Hud = 0;
 
@@ -91,17 +84,10 @@ void cleanup() {
 
 	delete g_EarthView;
 //	delete g_Hud;
-	delete g_TileManager;
 
 	int i;
 	for (i = 0; i < g_nLayers; i++)
 		delete g_Layers[i];
-
-	if (g_WWFetcher) g_WWFetcher->Detach();
-	if (g_Storage) g_WWFetcher->Detach();
-
-	delete g_WWFetcher;
-	delete g_Storage;
 
 	PreloadedTextureManager::Instance()->Clear();
 
@@ -308,21 +294,8 @@ int main(int argc, char **argv) {
 		/* preloaded textures */
 		PreloadedTextureManager::Instance()->LoadPNG(TEXTURE_FONT, DATADIR "/font.png");
 
-		/* sources */
-		debug("Initializing tile storage\n");
-		g_Storage = new FilesystemStorage(cachedir);
-		debug("Initializing WorldWind fetcher\n");
-		g_WWFetcher = new WorldWindFetcher();
-		/* make storage graph */
-		g_WWFetcher->SetSaveStorage(g_Storage);
-		g_Storage->SetNextLoadStorage(g_WWFetcher);
-
-		/* init manager */
-		debug("Initializing tile manager\n");
-		g_TileManager = new WorldWindTileManager(g_Storage);
-
 		/* layers */
-		g_Layers[g_nLayers++] = new WorldWindLayer(g_TileManager);
+		g_Layers[g_nLayers++] = new WorldWindLayer(cachedir);
 
 		if (use_test)	g_Layers[g_nLayers++] = new TestLayer();
 		if (use_grid)	g_Layers[g_nLayers++] = new GridLayer();
@@ -364,7 +337,6 @@ int main(int argc, char **argv) {
 
 				SDL_GL_SwapBuffers();
 
-				g_TileManager->Cleanup();
 				SDL_Delay(1);
 			}
 			if (timer->GetTime()-last_time > 5000) {

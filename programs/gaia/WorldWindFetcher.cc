@@ -38,7 +38,7 @@ void WorldWindFetcher::Process(TilePtr tile) {
 	} else if (res != WWFETCH_OK) {
 		warning("Couldn't fetch image: %s\n", wwfetch_strerror(res));
 		if (res == WWFETCH_CURL_ERROR)
-			warning("   Curl error code: %s\n", curl_easy_strerror(wwfetch_getlastcurlerror(&m_WWFetch)));
+			warning("   Curl error: %s\n", curl_easy_strerror(wwfetch_getlastcurlerror(&m_WWFetch)));
 		sleep(1);	/* don't do a DOS in case of any problems */
 		throw ErrnoException("wwfetch_fetch_image() failed", res);
 	}
