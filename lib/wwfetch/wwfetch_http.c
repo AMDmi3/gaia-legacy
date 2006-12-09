@@ -114,6 +114,7 @@ wwfetch_error wwfetch_do_http_request(wwfetch *handle, int method, const char *u
 	if ((handle->lastcurlerror = curl_easy_setopt(handle->curl, CURLOPT_WRITEDATA, handle)) != CURLE_OK)
 		return WWFETCH_CURL_ERROR;
 
+	int i;
 	if ((handle->lastcurlerror = curl_easy_perform(handle->curl)) != CURLE_OK)
 		return WWFETCH_CURL_ERROR;
 

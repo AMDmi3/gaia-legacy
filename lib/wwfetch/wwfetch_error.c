@@ -23,26 +23,26 @@ const char *wwfetch_strerror(int err) {
 	switch (err) {
 
 	case WWFETCH_OK:
-		return "No error";
+		return "successfull";
 	case WWFETCH_MALLOC_FAILED:
-		return "Malloc failed";
+		return "malloc failed";
 	case WWFETCH_SMALL_BUFFER:
-		return "Internal buffer is too small (may be bug in library)";
+		return "internal buffer is too small (may be bug in libwwfetch)";
 	case WWFETCH_CURL_INIT_FAILED:
-		return "Libcurl initialization failed";
+		return "libcurl initialization failed";
 	case WWFETCH_CURL_ERROR:
-		return "Libcurl error";	/* see wwfetch_getlastcurlerror() */
+		return "libcurl error";	/* see wwfetch_getlastcurlerror() */
 	case WWFETCH_CORRUPT_DATA:
-		return "Unexpected or corrupt data encountered";
+		return "unexpected or corrupt data received";
 	case WWFETCH_FETCH_FAILED:
-		return "Data fetch failed";
+		return "error fetching object";
 	case WWFETCH_NOT_FOUND:
-		return "Data not found";
+		return "object not found";
 	default:
-		return "Unknown error";
+		return "unknown error";
 	}
 }
 
-int wwfetch_getlastcurlerror(wwfetch *handle) {
+CURLcode wwfetch_getlastcurlerror(wwfetch *handle) {
 	return handle->lastcurlerror;
 }

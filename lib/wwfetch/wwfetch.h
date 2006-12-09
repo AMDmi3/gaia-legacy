@@ -60,7 +60,7 @@ typedef struct wwfetch {
 	CURL		*curl;
 
 	/* cURL error code */
-	int		lastcurlerror;
+	CURLcode	lastcurlerror;
 
 	/* headers for curl */
 	struct curl_slist *curlheaders;
@@ -76,7 +76,7 @@ void		wwfetch_cleanup(wwfetch *handle);
 
 /* errors */
 const char	*wwfetch_strerror(int err);
-int		wwfetch_getlastcurlerror(wwfetch *handle);
+CURLcode	wwfetch_getlastcurlerror(wwfetch *handle);
 
 /* fetch specific types of data */
 wwfetch_error	wwfetch_fetch_image(wwfetch *handle, int x, int y, int level);
