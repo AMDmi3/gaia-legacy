@@ -20,29 +20,24 @@
 #include "WorldWindLayer.h"
 
 WorldWindLayer::WorldWindLayer(std::string storageroot) {
-	/* create WorldWind infrastructure: disk cache */
-	m_DiskCache = new FilesystemStorage(storageroot);
+	m_DiskCache = 0;
+	m_ImageFetcher = 0;
+	m_TileManager = 0;
 
-	/* image fetcher */
 	try {
+		/* create disk cache */
+		m_DiskCache = new FilesystemStorage(storageroot);
 		m_ImageFetcher = new WorldWindFetcher();
-	} catch (...) {
-		delete m_DiskCache;
-		throw;
-	}
 
-	/* and manager */
-	try {
 		m_ImageFetcher->SetSaveStorage(m_DiskCache);
 		m_DiskCache->SetNextLoadStorage(m_ImageFetcher);
 
 		m_TileManager = new WorldWindTileManager(m_DiskCache);
 	} catch (...) {
-		m_ImageFetcher->Detach();
-		m_DiskCache->Detach();
-
+		delete m_TileManager;
 		delete m_ImageFetcher;
 		delete m_DiskCache;
+
 		throw;
 	}
 }
