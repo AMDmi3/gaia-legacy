@@ -87,7 +87,7 @@ void FlatEarthView::Render() {
 		rgn.w[1].y = 0.25;
 	}
 
-	/* call master layer */
+	/* call layers rendering routines */
 	for (std::vector<Layer*>::iterator i = m_Layers.begin(); i < m_Layers.end(); i++)
 		(*i)->RenderRegion(&rgn);
 }

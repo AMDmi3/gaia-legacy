@@ -17,17 +17,16 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __GAIA__TESTMASTERLAYER_H__
-#define __GAIA__TESTMASTERLAYER_H__
+#ifndef __GAIA__TESTLAYER_H__
+#define __GAIA__TESTLAYER_H__
 
 #include "Layer.h"
 
 /**
- * Master layer for testing other parts of gaia.
+ * Layer for rendering testing.
  *
- * Designed primarily for *EarthView classes testing, TestMasterLayer
- * only renders regions requested as coloured triangles. Overdrawn
- * slave layers also supported.
+ * Designed primarily for *EarthView classes testing, TestLayer
+ * only renders regions requested as coloured triangles.
  */
 class TestLayer: public Layer {
 public:

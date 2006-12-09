@@ -11,21 +11,15 @@ Command line arguments
     extended navigation functions. It's currently not finished, so
     not much of use.
 
--m, --master=TYPE
-    Select master layer. Master layer determines where earth data
-    comes from and how it's shown. Default master layer is `worldwind',
-    which needs no explanation. Another layer is `test' used
-    primarily for testing other components.
-
 -t, --test
-    Add test slave layer. Used for testing like test master layer.
+    Add test layer. Used for rendering testing.
 
 -g, --grid
-    Add grid slave layer. Shows dynamic geographical grid (not
-    fully functional currently).
+    Add grid layer. Shows dynamic geographical grid (not fully
+    functional currently).
 
 -p, --gps=SOURCE
-    Add GPS slave layer. Shows location of GPS device and it's route.
+    Add GPS layer. Shows location of GPS device and it's route.
     Available sources are:
 
     gpsd://host[:port] - Connect to gpsd running on specified host

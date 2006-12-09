@@ -25,7 +25,7 @@ Caching:
 * Add utility to control it (read and write dumps, read and write
   separate files, delete areas etc.).
 
-Slave layers:
+Additional layers:
 * GPS: Render path in lines, instead of HUD dots
 * GPS: Path optimizer (convert strait line of points to 2 points)
 * GPS: Interface to add muliple GPS entities from command line
@@ -55,8 +55,8 @@ Random ideas and suggestions (for far future):
 * Add list of contributors
 
 Known bugs:
-* Tile may be loaded twice (master layer refactoring)
-* Tiles are sometimes stuck unloaded (master layer refactoring)
+* Tile may be loaded twice (layer refactoring)
+* Tiles are sometimes stuck unloaded (layer refactoring)
 * Timer is not threadsafe
 * On MacOSX, when exiting, stucks on pthread_join in
   SimpleTileStorage::~SimpleTileStorage (I suppose it will stuck on

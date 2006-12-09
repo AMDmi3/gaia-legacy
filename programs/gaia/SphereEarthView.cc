@@ -77,7 +77,7 @@ void SphereEarthView::Render() {
 			rgn.calc_proj(model, proj, view);
 			rgn.reset_proj_z();
 
-			/* call master layer */
+			/* call layers rendering routines */
 			for (std::vector<Layer*>::iterator i = m_Layers.begin(); i < m_Layers.end(); i++)
 				(*i)->RenderRegion(&rgn);
 		}

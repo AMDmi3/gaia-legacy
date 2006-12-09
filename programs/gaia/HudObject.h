@@ -39,7 +39,7 @@ public:
 	 * @param pos object position on screen coordinates
 	 * @param size object size in pixels
 	 * @param center coordinate of objects's center in pixels
-	 * @param layer determines order of object rendering (has nothing to do with Master/Slave Layers)
+	 * @param layer determines order of object rendering (has nothing to do with geo Layers)
 	 * @param flags flags to determine object behavior
 	 */
 	HudObject(Vector2i pos, Vector2i size, Vector2i center, int layer, int flags): m_Size(size), m_Center(center), m_Pos(pos), m_Layer(layer), m_Flags(flags) {}
