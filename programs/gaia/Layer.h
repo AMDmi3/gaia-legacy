@@ -20,6 +20,8 @@
 #ifndef __GAIA__LAYER_H__
 #define __GAIA__LAYER_H__
 
+#include "Region.h"
+
 /**
  * Base class for all geo-bound data
  */
@@ -28,12 +30,19 @@ public:
 	/**
 	 * Constructor
 	 */
-	Layer() {}
+	Layer();
 
 	/**
 	 * Destructor
 	 */
-	virtual ~Layer() {}
+	virtual ~Layer();
+
+	/**
+	 * Render one specific region of earth surface
+	 *
+	 * @param rgn region to render
+	 */
+	virtual void RenderRegion(Region *rgn) = 0;
 };
 
 #endif

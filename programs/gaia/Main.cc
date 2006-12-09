@@ -28,9 +28,8 @@
 #include "FlatEarthView.h"
 #include "SphereEarthView.h"
 
-#include "TestMasterLayer.h"
+#include "TestLayer.h"
 #include "WorldWindLayer.h"
-#include "TestSlaveLayer.h"
 #include "GridLayer.h"
 #include "GPSLayer.h"
 
@@ -43,9 +42,8 @@
 WorldWindFetcher	*g_WWFetcher = 0;
 FilesystemStorage	*g_Storage = 0;
 
-MasterLayer		*g_MasterLayer = 0;
-SlaveLayer		*g_SlaveLayers[256];
-int			g_nSlaveLayers = 0;
+Layer			*g_Layers[256];
+int			g_nLayers = 0;
 
 WorldWindTileManager	*g_TileManager = 0;
 EarthView		*g_EarthView = 0;
@@ -64,7 +62,6 @@ int			g_MouseDownMask = 0;
 
 static struct option longopts[] = {
 	{ "world",	required_argument,	0,	'w' },
-	{ "master",	required_argument,	0,	'm' },
 	{ "test",	no_argument,		0,	't' },
 	{ "grid",	no_argument,		0,	'g' },
 	{ "gps",	required_argument,	0,	'p' },
@@ -75,10 +72,9 @@ void usage() {
 	printf("gaia %s\n", GAIA_VERSION);
 	printf("\nOptions:\n");
 	printf("  -w, --world=MODEL   Select world model\n");
-	printf("  -m, --master=TYPE   Select master layer\n");
-	printf("  -t, --test          Add test slave layer\n");
-	printf("  -g, --grid          Add grid slave layer\n");
-	printf("  -p, --gps=SOURCE    Add GPS slave layer\n");
+	printf("  -t, --test          Add test layer\n");
+	printf("  -g, --grid          Add grid layer\n");
+	printf("  -p, --gps=SOURCE    Add GPS layer\n");
 	printf("\nKeys:\n");
 	printf("  Arrow keys    Pan view\n");
 	printf("  =/-           Zoom in/out\n");
@@ -97,11 +93,9 @@ void cleanup() {
 //	delete g_Hud;
 	delete g_TileManager;
 
-	delete g_MasterLayer;
-
 	int i;
-	for (i = 0; i < g_nSlaveLayers; i++)
-		delete g_SlaveLayers[i];
+	for (i = 0; i < g_nLayers; i++)
+		delete g_Layers[i];
 
 	if (g_WWFetcher) g_WWFetcher->Detach();
 	if (g_Storage) g_WWFetcher->Detach();
@@ -229,7 +223,6 @@ int main(int argc, char **argv) {
 	int ch;
 
 	int use_sphere = 0;
-	int use_testmaster = 0;
 
 	int use_test = 0;
 	int use_grid = 0;
@@ -237,7 +230,7 @@ int main(int argc, char **argv) {
 	char *gps_source = "";
 
 	/* arguments parsing */
-	while ((ch = getopt_long(argc, argv, "w:m:tgp:h", longopts, NULL)) != -1)
+	while ((ch = getopt_long(argc, argv, "w:tgp:h", longopts, NULL)) != -1)
 		switch (ch) {
 		case 'w':
 			if (strcmp(optarg, "3d") == 0)
@@ -246,16 +239,6 @@ int main(int argc, char **argv) {
 				use_sphere = 0;
 			else {
 				warning("Unknown world model %s\n", optarg);
-				exit(1);
-			}
-			break;
-		case 'm':
-			if (strcmp(optarg, "worldwind") == 0)
-				use_testmaster= 0;
-			else if (strcmp(optarg, "test") == 0)
-				use_testmaster= 1;
-			else {
-				warning("Unknown master layer %s\n", optarg);
 				exit(1);
 			}
 			break;
@@ -338,27 +321,25 @@ int main(int argc, char **argv) {
 		debug("Initializing tile manager\n");
 		g_TileManager = new WorldWindTileManager(g_Storage);
 
-		/* master layer */
-		if (use_testmaster)	g_MasterLayer = new TestMasterLayer();
-		else			g_MasterLayer = new WorldWindLayer(g_TileManager);
+		/* layers */
+		g_Layers[g_nLayers++] = new WorldWindLayer(g_TileManager);
 
-		/* slave layers */
-		if (use_test)	g_SlaveLayers[g_nSlaveLayers++] = new TestSlaveLayer();
-		if (use_grid)	g_SlaveLayers[g_nSlaveLayers++] = new GridLayer();
+		if (use_test)	g_Layers[g_nLayers++] = new TestLayer();
+		if (use_grid)	g_Layers[g_nLayers++] = new GridLayer();
 		if (use_gps)	{
 			GPSLayer *l = new GPSLayer();
 			l->AddEntity("Default", gps_source);
-			g_SlaveLayers[g_nSlaveLayers++] = l;
+			g_Layers[g_nLayers++] = l;
 		}
 
-		int i;
-		for (i = 0; i < g_nSlaveLayers; i++)
-			g_MasterLayer->BindSlaveLayer(g_SlaveLayers[i]);
-
 		/* view */
-		if (use_sphere)	g_EarthView = new SphereEarthView(g_MasterLayer);
-		else		g_EarthView = new FlatEarthView(g_MasterLayer);
+		if (use_sphere)	g_EarthView = new SphereEarthView();
+		else		g_EarthView = new FlatEarthView();
 		g_EarthView->Resize(g_WindowWidth, g_WindowHeight);
+
+		int i;
+		for (i = 0; i < g_nLayers; i++)
+			g_EarthView->BindLayer(g_Layers[i]);
 
 		/* hud */
 //		g_Hud = new Hud();

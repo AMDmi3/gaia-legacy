@@ -20,8 +20,6 @@
 #include "GPSLayer.h"
 
 GPSLayer::GPSLayer() {
-	m_Caps = SLAVELAYERCAP_OVERDRAW;
-
 }
 
 GPSLayer::~GPSLayer() {
@@ -123,7 +121,7 @@ void GPSLayer::AddEntity(char *name, char *source) {
 	m_Entities.push_back(e);
 }
 
-void GPSLayer::Overdraw(Region *rgn) {
+void GPSLayer::RenderRegion(Region *rgn) {
 	double model[16];
 	double proj[16];
 	int view[4];

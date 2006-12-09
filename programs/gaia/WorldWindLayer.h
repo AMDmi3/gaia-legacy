@@ -20,12 +20,12 @@
 #ifndef __GAIA__WORLDWINDLAYER_H__
 #define __GAIA__WORLDWINDLAYER_H__
 
-#include "MasterLayer.h"
+#include "Layer.h"
 #include "WorldWindTileManager.h"
 
 #define MIN_TEXTURE_DISTANCE 192.0
 
-class WorldWindLayer: public MasterLayer {
+class WorldWindLayer: public Layer {
 public:
 	WorldWindLayer(WorldWindTileManager *tm);
 	virtual ~WorldWindLayer();

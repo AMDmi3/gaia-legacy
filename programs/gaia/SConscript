@@ -83,15 +83,13 @@ srcs = Split("""EarthView.cc
 		HudIcon.cc
 		HudObject.cc
 		Main.cc
-		MasterLayer.cc
 		Messages.cc
 		PreloadedTextureManager.cc
 		RawBuffer.cc
 		SimpleTileStorage.cc
-		SlaveLayer.cc
 		SphereEarthView.cc
-		TestMasterLayer.cc
-		TestSlaveLayer.cc
+		Layer.cc
+		TestLayer.cc
 		Texture.cc
 		TextureTile.cc
 		Tile.cc

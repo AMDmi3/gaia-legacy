@@ -20,8 +20,10 @@
 #ifndef __GAIA__EARTHVIEW_H__
 #define __GAIA__EARTHVIEW_H__
 
+#include <vector>
+
 #include "Viewpoint.h"
-#include "MasterLayer.h"
+#include "Layer.h"
 
 #define NAV_DRAG_PAN	0x01
 #define NAV_DRAG_ZOOM	0x02
@@ -39,8 +41,10 @@
  */
 class EarthView {
 public:
-	EarthView(MasterLayer *ml);
+	EarthView();
 	virtual ~EarthView();
+
+	void BindLayer(Layer *layer);
 
 	virtual void Render() = 0;
 	virtual void Animate(double delta) = 0;
@@ -56,7 +60,8 @@ public:
 	virtual int SingleMovement(int flags);
 
 protected:
-	MasterLayer	*m_MasterLayer;		///< Master layer to use
+	std::vector<Layer*>	m_Layers;	///< Layers to use
+
 	Eye		m_Eye;			///< Current viewer's position
 
 	int		m_ViewportWidth;	///< Viewport width in pixels

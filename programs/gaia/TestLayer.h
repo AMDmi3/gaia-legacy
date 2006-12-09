@@ -17,18 +17,31 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "MasterLayer.h"
+#ifndef __GAIA__TESTMASTERLAYER_H__
+#define __GAIA__TESTMASTERLAYER_H__
 
-MasterLayer::MasterLayer() {
-}
+#include "Layer.h"
 
-MasterLayer::~MasterLayer() {
-}
+/**
+ * Master layer for testing other parts of gaia.
+ *
+ * Designed primarily for *EarthView classes testing, TestMasterLayer
+ * only renders regions requested as coloured triangles. Overdrawn
+ * slave layers also supported.
+ */
+class TestLayer: public Layer {
+public:
+	/**
+	 * Constructor
+	 */
+	TestLayer();
 
-void MasterLayer::BindSlaveLayer(SlaveLayer *layer) {
-	m_SlaveLayers.push_back(layer);
-}
+	/**
+	 * Destructor
+	 */
+	virtual ~TestLayer();
 
-void MasterLayer::ClearSlaveLayers() {
-	m_SlaveLayers.clear();
-}
+	void RenderRegion(Region *rgn);
+};
+
+#endif

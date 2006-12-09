@@ -21,7 +21,7 @@
 #define __GAIA__SPHEREEARTHVIEW_H__
 
 #include "Viewpoint.h"
-#include "MasterLayer.h"
+#include "Layer.h"
 #include "PreloadedTextureManager.h"
 #include "EarthView.h"
 
@@ -36,7 +36,7 @@ public:
 	/**
 	 * Constructor.
 	 */
-	SphereEarthView(MasterLayer *ml);
+	SphereEarthView();
 
 	/**
 	 * Destructor.

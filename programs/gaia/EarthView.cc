@@ -19,12 +19,15 @@
 
 #include "EarthView.h"
 
-EarthView::EarthView(MasterLayer *ml) {
-	m_MasterLayer = ml;
+EarthView::EarthView() {
 	m_ViewportWidth = m_ViewportHeight = 0;
 }
 
 EarthView::~EarthView() {
+}
+
+void EarthView::BindLayer(Layer *layer) {
+	m_Layers.push_back(layer);
 }
 
 void EarthView::Resize(int width, int height) {

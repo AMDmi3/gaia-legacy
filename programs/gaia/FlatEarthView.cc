@@ -19,7 +19,7 @@
 
 #include "FlatEarthView.h"
 
-FlatEarthView::FlatEarthView(MasterLayer *ml): EarthView(ml) {
+FlatEarthView::FlatEarthView() {
 	m_CurrentMovementFlags = 0;
 }
 
@@ -88,7 +88,8 @@ void FlatEarthView::Render() {
 	}
 
 	/* call master layer */
-	m_MasterLayer->RenderRegion(&rgn);
+	for (std::vector<Layer*>::iterator i = m_Layers.begin(); i < m_Layers.end(); i++)
+		(*i)->RenderRegion(&rgn);
 }
 
 void FlatEarthView::Animate(double delta) {

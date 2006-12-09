@@ -19,7 +19,7 @@
 
 #include "SphereEarthView.h"
 
-SphereEarthView::SphereEarthView(MasterLayer *ml): EarthView(ml) {
+SphereEarthView::SphereEarthView() {
 }
 
 SphereEarthView::~SphereEarthView() {
@@ -78,7 +78,8 @@ void SphereEarthView::Render() {
 			rgn.reset_proj_z();
 
 			/* call master layer */
-			m_MasterLayer->RenderRegion(&rgn);
+			for (std::vector<Layer*>::iterator i = m_Layers.begin(); i < m_Layers.end(); i++)
+				(*i)->RenderRegion(&rgn);
 		}
 	}
 }

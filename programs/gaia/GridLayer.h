@@ -20,7 +20,7 @@
 #ifndef __GAIA__GRIDLAYER_H__
 #define __GAIA__GRIDLAYER_H__
 
-#include "SlaveLayer.h"
+#include "Layer.h"
 
 #define MIN_GRID_DISTANCE 100.0
 
@@ -31,12 +31,12 @@
  *
  * @todo drawing angle values with text
  */
-class GridLayer: public SlaveLayer {
+class GridLayer: public Layer {
 public:
 	GridLayer();
 	virtual ~GridLayer();
 
-	void Overdraw(Region *rgn);
+	void RenderRegion(Region *rgn);
 
 	double GetGridStep(double wlen, double plen);
 };

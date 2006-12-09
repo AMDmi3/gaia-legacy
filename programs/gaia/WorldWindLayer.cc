@@ -176,10 +176,6 @@ void WorldWindLayer::RenderRegion(Region *rgn) {
 			glDisable(GL_TEXTURE_2D);
 		}
 	}
-
-	for (std::vector<SlaveLayer*>::iterator i = m_SlaveLayers.begin(); i < m_SlaveLayers.end(); i++)
-		if ((*i)->GetCap(SLAVELAYERCAP_OVERDRAW))
-			(*i)->Overdraw(rgn);
 }
 
 int WorldWindLayer::GetSplitLevel(double wlen, double plen) {

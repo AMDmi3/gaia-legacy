@@ -25,7 +25,7 @@
 #include <pthread.h>
 
 #include "Timer.h"
-#include "SlaveLayer.h"
+#include "Layer.h"
 #include "GPSSourceNMEA.h"
 #include "GPSSourceTest.h"
 #ifdef WITH_GPSD
@@ -64,7 +64,7 @@ struct GPSEntity {
  * @todo route optimizer (i.e. for strait line consisting of many
  * points, leave only first and last)
  */
-class GPSLayer: public SlaveLayer {
+class GPSLayer: public Layer {
 public:
 	/**
 	 * Constructor
@@ -76,7 +76,7 @@ public:
 	 */
 	virtual ~GPSLayer();
 
-	void Overdraw(Region *rgn);
+	void RenderRegion(Region *rgn);
 
 	/**
 	 * Adds one GPS entity

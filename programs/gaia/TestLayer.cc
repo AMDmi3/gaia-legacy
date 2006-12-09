@@ -17,18 +17,26 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "TestSlaveLayer.h"
+#include "TestLayer.h"
 
-#define RENDER_DIAGONALS
-
-TestSlaveLayer::TestSlaveLayer() {
-	m_Caps = SLAVELAYERCAP_OVERDRAW;
+TestLayer::TestLayer() {
 }
 
-TestSlaveLayer::~TestSlaveLayer() {
+TestLayer::~TestLayer() {
 }
 
-void TestSlaveLayer::Overdraw(Region *rgn) {
+void TestLayer::RenderRegion(Region *rgn) {
+	glBegin(GL_QUADS);
+	glColor3f(rgn->w[0].x/2.0 + 0.25, 0.5 - rgn->w[0].x/2.0 - 0.25, rgn->w[0].y + 0.25);
+	glVertex3f(rgn->v[0].x, rgn->v[0].y, rgn->v[0].z);
+	glColor3f(rgn->w[1].x/2.0 + 0.25, 0.5 - rgn->w[1].x/2.0 - 0.25, rgn->w[0].y + 0.25);
+	glVertex3f(rgn->v[1].x, rgn->v[1].y, rgn->v[1].z);
+	glColor3f(rgn->w[1].x/2.0 + 0.25, 0.5 - rgn->w[1].x/2.0 - 0.25, rgn->w[1].y + 0.25);
+	glVertex3f(rgn->v[2].x, rgn->v[2].y, rgn->v[2].z);
+	glColor3f(rgn->w[0].x/2.0 + 0.25, 0.5 - rgn->w[0].x/2.0 - 0.25, rgn->w[1].y + 0.25);
+	glVertex3f(rgn->v[3].x, rgn->v[3].y, rgn->v[3].z);
+	glEnd();
+
 	glColor3f(1.0, 0.0, 0.0);
 	glBegin(GL_LINE_LOOP);
 	glVertex3f(rgn->v[0].x, rgn->v[0].y, rgn->v[0].z);
@@ -36,12 +44,11 @@ void TestSlaveLayer::Overdraw(Region *rgn) {
 	glVertex3f(rgn->v[2].x, rgn->v[2].y, rgn->v[2].z);
 	glVertex3f(rgn->v[3].x, rgn->v[3].y, rgn->v[3].z);
 	glEnd();
-#ifdef RENDER_DIAGONALS
+
 	glBegin(GL_LINES);
 	glVertex3f(rgn->v[0].x, rgn->v[0].y, rgn->v[0].z);
 	glVertex3f(rgn->v[2].x, rgn->v[2].y, rgn->v[2].z);
 	glVertex3f(rgn->v[1].x, rgn->v[1].y, rgn->v[1].z);
 	glVertex3f(rgn->v[3].x, rgn->v[3].y, rgn->v[3].z);
 	glEnd();
-#endif
 }

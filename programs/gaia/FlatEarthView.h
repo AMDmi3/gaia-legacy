@@ -34,7 +34,7 @@ public:
 	/**
 	 * Constructor.
 	 */
-	FlatEarthView(MasterLayer *ml);
+	FlatEarthView();
 
 	/**
 	 * Destructor.

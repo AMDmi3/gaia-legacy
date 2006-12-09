@@ -20,7 +20,6 @@
 #include "GridLayer.h"
 
 GridLayer::GridLayer() {
-	m_Caps = SLAVELAYERCAP_OVERDRAW;
 }
 
 GridLayer::~GridLayer() {
@@ -28,7 +27,7 @@ GridLayer::~GridLayer() {
 
 #define EPSILON 0.00001
 
-void GridLayer::Overdraw(Region *rgn) {
+void GridLayer::RenderRegion(Region *rgn) {
 	double xstep = min2(GetGridStep(rgn->w[1].x - rgn->w[0].x, rgn->proj_length(0,1)), GetGridStep(rgn->w[1].x - rgn->w[0].x, rgn->proj_length(2,3)));
 	double ystep = min2(GetGridStep(rgn->w[1].y - rgn->w[0].y, rgn->proj_length(1,2)), GetGridStep(rgn->w[1].y - rgn->w[0].y, rgn->proj_length(3,0)));
 
