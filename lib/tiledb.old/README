@@ -1,0 +1,9 @@
+libtiledb, library to deal with disk database of abstract tiled
+data organized in quadtree.
+
+Patterns of usage:
+From gaia: single reads and single appends only. Software crash
+should not currupt the database.
+
+From gaia-cache: batch reads of both indices and data, batch writes
+with data replacing.
