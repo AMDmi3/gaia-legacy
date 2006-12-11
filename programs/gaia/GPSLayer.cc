@@ -19,6 +19,8 @@
 
 #include "GPSLayer.h"
 
+namespace gaia {
+
 GPSLayer::GPSLayer() {
 }
 
@@ -160,3 +162,5 @@ void GPSLayer::RenderRegion(Region *rgn) {
 		pthread_mutex_unlock(&(*i)->datamutex);
 	}
 }
+
+} /* namespace gaia */

@@ -19,6 +19,11 @@
 
 #include "GLWidget.h"
 
+#include "FlatEarthView.h"
+#include "TestLayer.h"
+
+namespace gaia {
+
 GLWidget::GLWidget(QWidget* parent, const char* name): QGLWidget(parent, name) {
 }
 
@@ -28,12 +33,12 @@ GLWidget::~GLWidget() {
 void GLWidget::paintGL() {
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	glBegin(GL_LINE_LOOP);
-	glVertex3f(1.0, 1.0, 0.0);
-	glVertex3f(1.0, -1.0, 0.0);
-	glVertex3f(-1.0, -1.0, 0.0);
-	glVertex3f(-1.0, 1.0, 0.0);
-	glEnd();
+	FlatEarthView	ew;
+	TestLayer	tl;
+
+	ew.BindLayer(&tl);
+	ew.Resize(100, 100);
+	ew.Render();
 }
 
 void GLWidget::initializeGL() {
@@ -41,9 +46,6 @@ void GLWidget::initializeGL() {
 }
 
 void GLWidget::resizeGL( int w, int h ) {
-	glViewport(0, 0, (GLint)w, (GLint)h);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glFrustum(-1.0, 1.0, -1.0, 1.0, 5.0, 15.0);
-	glMatrixMode(GL_MODELVIEW);
 }
+
+} /* namespace gaia */

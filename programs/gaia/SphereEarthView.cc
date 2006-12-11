@@ -19,6 +19,8 @@
 
 #include "SphereEarthView.h"
 
+namespace gaia {
+
 SphereEarthView::SphereEarthView() {
 }
 
@@ -139,3 +141,5 @@ void SphereEarthView::NormalizeEye() {
 	if (m_Eye.h < MIN_HEIGHT)	m_Eye.h = MIN_HEIGHT;
 	if (m_Eye.h > MAX_HEIGHT)	m_Eye.h = MAX_HEIGHT;
 }
+
+} /* namespace gaia */

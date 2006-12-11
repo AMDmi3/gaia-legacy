@@ -23,6 +23,8 @@
 #include "HudObject.h"
 #include "PreloadedTextureManager.h"
 
+namespace gaia {
+
 /**
  * Hud icon
  */
@@ -47,5 +49,7 @@ protected:
 	Vector2d	m_TextureSize;
 	int		m_TextureID;
 };
+
+} /* namespace gaia */
 
 #endif

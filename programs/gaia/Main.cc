@@ -21,6 +21,8 @@
 #include <qapplication.h>
 #include <qgl.h>
 
+using namespace gaia;
+
 int main( int argc, char **argv ) {
 	QApplication app(argc,argv);
 

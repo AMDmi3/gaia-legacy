@@ -19,6 +19,8 @@
 
 #include "WorldWindFetcher.h"
 
+namespace gaia {
+
 WorldWindFetcher::WorldWindFetcher() {
 	int res;
 	if ((res = wwfetch_init(&m_WWFetch)) != WWFETCH_OK)
@@ -52,3 +54,5 @@ void WorldWindFetcher::Process(TilePtr tile) {
 		throw;
 	}
 }
+
+} /* namespace gaia */

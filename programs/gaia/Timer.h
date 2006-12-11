@@ -22,10 +22,12 @@
 
 #include <stdint.h>
 
+#define UNSAFE_TICKS_LENGTH	0x100000000ULL
+
+namespace gaia {
+
 typedef uint64_t		ticks_t;
 typedef uint32_t		unsafe_ticks_t;
-
-#define UNSAFE_TICKS_LENGTH	0x100000000ULL
 
 /**
  * Singleton timer class.
@@ -81,5 +83,7 @@ private:
 	unsafe_ticks_t	m_UnsafeTicks;
 	ticks_t		m_Frame;
 };
+
+} /* namespace gaia */
 
 #endif

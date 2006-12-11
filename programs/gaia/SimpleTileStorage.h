@@ -27,6 +27,8 @@
 #include "TileStorage.h"
 #include "Messages.h"
 
+namespace gaia {
+
 /**
  * Base class for tile storages with queue and one working thread;
  *
@@ -104,5 +106,7 @@ protected:
 	TileStorage	*m_pNextLoadStorage;	///< Storage to pass tile to for loading, if we couldn't load it
 	TileStorage	*m_pSaveStorage;	///< Storage to pass tile to for saving
 };
+
+} /* namespace gaia */
 
 #endif

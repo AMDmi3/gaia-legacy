@@ -22,6 +22,8 @@
 
 #include "Exceptions.h"
 
+namespace gaia {
+
 /**
  * Structure to store single GPS state
  */
@@ -50,5 +52,7 @@ public:
 	 */
 	virtual int Poll(GPSData *target) = 0;
 };
+
+} /* namespace gaia */
 
 #endif

@@ -19,6 +19,8 @@
 
 #include "Texture.h"
 
+namespace gaia {
+
 Texture::Texture() {
 	m_Pixels = 0;
 	m_ID = 0;
@@ -397,3 +399,5 @@ void Texture::LoadPNG(int source, ...) {
 
 	va_end(va);
 }
+
+} /* namespace gaia */

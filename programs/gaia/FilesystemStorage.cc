@@ -18,6 +18,8 @@
 
 #include "FilesystemStorage.h"
 
+namespace gaia {
+
 FilesystemStorage::FilesystemStorage(std::string root) {
 	m_StorageRoot = root;
 }
@@ -125,3 +127,5 @@ std::string FilesystemStorage::PathFromCoords(int x, int y, int level, int type)
 
 	return std::string("/") + path + name + ext;
 }
+
+} /* namespace gaia */

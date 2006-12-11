@@ -19,6 +19,8 @@
 
 #include "Viewpoint.h"
 
+namespace gaia {
+
 Viewpoint::Viewpoint() {
 	m_Translation = 0.0;
 	m_TranslationTime = DEFAULT_TRANSLATION_TIME;
@@ -77,3 +79,5 @@ double Viewpoint::TranslationFunction(double percent) {
 Eye Viewpoint::GetEye() {
 	return m_CurrentEye;
 }
+
+} /* namespace gaia */

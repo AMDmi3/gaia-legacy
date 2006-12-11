@@ -22,6 +22,8 @@
 
 #include "Layer.h"
 
+namespace gaia {
+
 /**
  * Layer for rendering testing.
  *
@@ -42,5 +44,7 @@ public:
 
 	void RenderRegion(Region *rgn);
 };
+
+} /* namespace gaia */
 
 #endif

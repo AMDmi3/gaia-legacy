@@ -21,6 +21,8 @@
 #include "GLWidget.h"
 #include "ControlWidget.h"
 
+namespace gaia {
+
 MainWidget::MainWidget(QWidget* parent, const char* name): QSplitter(Qt::Horizontal, parent, name) {
 	/* create control widget (left bar) */
 	ControlWidget *cw = new ControlWidget(this);
@@ -30,3 +32,5 @@ MainWidget::MainWidget(QWidget* parent, const char* name): QSplitter(Qt::Horizon
 	/* create gl widget */
 	GLWidget* gl = new GLWidget(this);
 }
+
+} /* namespace gaia */

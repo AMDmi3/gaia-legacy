@@ -19,6 +19,8 @@
 
 #include "GPSSourceGPSD.h"
 
+namespace gaia {
+
 GPSSourceGPSD::GPSSourceGPSD(char *server, char *port) {
 	if ((m_GPS = gps_open(server, port)) == 0)
 		throw Exception("gps_open() failed");
@@ -51,3 +53,5 @@ int GPSSourceGPSD::Poll(GPSData *target) {
 
 	return 1;
 }
+
+} /* namespace gaia */

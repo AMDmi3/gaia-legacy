@@ -19,6 +19,8 @@
 
 #include "TestLayer.h"
 
+namespace gaia {
+
 TestLayer::TestLayer() {
 }
 
@@ -52,3 +54,5 @@ void TestLayer::RenderRegion(Region *rgn) {
 	glVertex3f(rgn->v[3].x, rgn->v[3].y, rgn->v[3].z);
 	glEnd();
 }
+
+} /* namespace gaia */

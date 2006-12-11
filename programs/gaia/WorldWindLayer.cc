@@ -19,6 +19,8 @@
 
 #include "WorldWindLayer.h"
 
+namespace gaia {
+
 WorldWindLayer::WorldWindLayer(std::string storageroot) {
 	m_DiskCache = 0;
 	m_ImageFetcher = 0;
@@ -215,3 +217,5 @@ int WorldWindLayer::GetSplitLevel(double wlen, double plen) {
 		level++;
 	}
 }
+
+} /* namespace gaia */

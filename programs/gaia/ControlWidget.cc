@@ -26,6 +26,8 @@
 #include "ControlWidget.h"
 #include "GLWidget.h"
 
+namespace gaia {
+
 ControlWidget::ControlWidget(QWidget* parent, const char* name): QWidget(parent, name) {
 	/* view model selector */
 	QHButtonGroup *group = new QHButtonGroup("View model", this);
@@ -45,3 +47,5 @@ ControlWidget::ControlWidget(QWidget* parent, const char* name): QWidget(parent,
 	layout->addWidget(group);
 	layout->addWidget(listview);
 }
+
+} /* namespace gaia */

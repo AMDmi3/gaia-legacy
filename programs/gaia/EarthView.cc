@@ -19,6 +19,8 @@
 
 #include "EarthView.h"
 
+namespace gaia {
+
 EarthView::EarthView() {
 	m_ViewportWidth = m_ViewportHeight = 0;
 }
@@ -60,3 +62,5 @@ int EarthView::StopMovement(int flags) {
 int EarthView::SingleMovement(int flags) {
 	return 0;
 }
+
+} /* namespace gaia */

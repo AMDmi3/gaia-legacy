@@ -26,6 +26,8 @@
 
 #include "SimpleTileStorage.h"
 
+namespace gaia {
+
 /**
  * Filesystem cache to store tiles locally.
  *
@@ -65,5 +67,7 @@ private:
 private:
 	std::string	m_StorageRoot;	///< Root directory of the storage
 };
+
+} /* namespace gaia */
 
 #endif 

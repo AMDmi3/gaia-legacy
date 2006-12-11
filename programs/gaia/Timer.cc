@@ -19,6 +19,8 @@
 
 #include "Timer.h"
 
+namespace gaia {
+
 Timer *Timer::m_Instance = 0;
 
 Timer *Timer::Instance() {
@@ -64,3 +66,5 @@ ticks_t Timer::GetTime() {
 ticks_t Timer::GetFrame() {
 	return m_Frame;
 }
+
+} /* namespace gaia */

@@ -19,6 +19,8 @@
 
 #include "RawBuffer.h"
 
+namespace gaia {
+
 RawBuffer::RawBuffer(void *data, size_t size) {
 	m_Data = new unsigned char [size];
 	memcpy(m_Data, data, size);
@@ -49,3 +51,5 @@ int RawBuffer::Size() {
 void *RawBuffer::Data() {
 	return m_Data;
 }
+
+} /* namespace gaia */

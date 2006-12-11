@@ -19,6 +19,8 @@
 
 #include "HudObject.h"
 
+namespace gaia {
+
 int HudObject::CheckBounds(int width, int height) {
 	Vector2i corner0 = m_Pos - m_Center;
 	Vector2i corner1 = m_Pos - m_Center + m_Size;
@@ -65,3 +67,5 @@ int HudObject_Compare(const void *a, const void *b) {
 		return 1;
 	return 0;
 }
+
+} /* namespace gaia */

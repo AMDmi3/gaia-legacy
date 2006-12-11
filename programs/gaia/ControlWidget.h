@@ -23,11 +23,15 @@
 #include <qwidget.h>
 #include <qsplitter.h>
 
+namespace gaia {
+
 class ControlWidget: public QWidget
 {
 	Q_OBJECT
 public:
 	ControlWidget(QWidget* parent = 0, const char* name = 0);
 };
+
+} /* namespace gaia */
 
 #endif

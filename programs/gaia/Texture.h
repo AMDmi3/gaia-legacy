@@ -29,6 +29,11 @@
 #include <string.h>
 #include <stdio.h>
 #include <png.h>
+
+namespace gaia {
+
+/* had to place it under namespace to avoid conflicting
+ * typedefs of INT32 in Qt and libjpeg */
 extern "C" {
 #include <jpeglib.h>
 }
@@ -113,5 +118,7 @@ protected:
 	GLuint	m_ID;		///< OpenGL ID of texture
 	unsigned char	*m_Pixels;	///< Store for raw rexture data (when not uploaded to OpenGL)
 };
+
+} /* namespace gaia */
 
 #endif

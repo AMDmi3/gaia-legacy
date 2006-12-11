@@ -24,6 +24,8 @@
 
 #define MIN_GRID_DISTANCE 100.0
 
+namespace gaia {
+
 /**
  * Geographical grid layer.
  *
@@ -40,5 +42,7 @@ public:
 
 	double GetGridStep(double wlen, double plen);
 };
+
+} /* namespace gaia */
 
 #endif

@@ -27,6 +27,8 @@
 #include <stdlib.h>
 #include <sys/time.h>
 
+namespace gaia {
+
 #ifdef DEBUG
 void debug(const char *fmt, ...);
 #else
@@ -35,5 +37,7 @@ void debug(const char *fmt, ...);
 
 void warning(const char *fmt, ...);
 void fatal(const char *fmt, ...);
+
+} /* namespace gaia */
 
 #endif

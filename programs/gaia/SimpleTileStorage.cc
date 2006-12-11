@@ -19,6 +19,8 @@
 
 #include "SimpleTileStorage.h"
 
+namespace gaia {
+
 SimpleTileStorage::SimpleTileStorage() {
 	if (pthread_mutex_init(&m_QueueMutex, 0) != 0) {
 		throw ErrnoException("pthread_mutex_init() failed", errno);
@@ -129,3 +131,5 @@ void SimpleTileStorage::Detach() {
 	m_pNextLoadStorage = 0;
 	m_pSaveStorage = 0;
 }
+
+} /* namespace gaia */

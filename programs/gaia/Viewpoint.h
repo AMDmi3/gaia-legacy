@@ -24,6 +24,8 @@
 
 #define DEFAULT_TRANSLATION_TIME	1.0
 
+namespace gaia {
+
 /**
  * Coordinates of virtual `eye'.
  */
@@ -146,5 +148,7 @@ protected:
 	double m_Translation;
 	double m_TranslationTime;
 };
+
+} /* namespace gaia */
 
 #endif

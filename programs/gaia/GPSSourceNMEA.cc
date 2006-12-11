@@ -19,6 +19,8 @@
 
 #include "GPSSourceNMEA.h"
 
+namespace gaia {
+
 GPSSourceNMEA::GPSSourceNMEA(char *path) {
 	if ((m_FD = open(path, O_RDONLY)) == -1)
 		throw Exception("open() failed for NMEA GPS source path");
@@ -160,3 +162,5 @@ int GPSSourceNMEA::TestChecksum(char *sentence, char *checksum) {
 	/* compare */
 	return (toupper(checksum[0]) == toupper(mysum[0]) && toupper(checksum[1]) == toupper(mysum[1]));
 }
+
+} /* namespace gaia */

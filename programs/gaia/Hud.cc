@@ -19,6 +19,8 @@
 
 #include "Hud.h"
 
+namespace gaia {
+
 Hud *Hud::m_Instance = 0;
 
 Hud *Hud::Instance() {
@@ -68,3 +70,5 @@ void Hud::Render(int width, int height) {
 
 	m_Objects.clear();
 }
+
+} /* namespace gaia */

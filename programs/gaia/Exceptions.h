@@ -25,6 +25,8 @@
 
 #define EXCEPTION_MESSAGE_BUFFER 1024
 
+namespace gaia {
+
 /*
  * Some clever books say that exception should be as lightweight
  * as possible, and I try stick to this rule for now.
@@ -86,5 +88,7 @@ private:
 
 	char		*m_TempBuf;
 };*/
+
+} /* namespace gaia */
 
 #endif

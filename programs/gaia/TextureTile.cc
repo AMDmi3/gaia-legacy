@@ -19,6 +19,8 @@
 
 #include "TextureTile.h"
 
+namespace gaia {
+
 /* *tors */
 TextureTile::TextureTile(int x, int y, int level, TextureTilePtr parent): Tile(x, y, level) {
 	m_Texture = 0;
@@ -94,3 +96,5 @@ void TextureTile::Unload() {
 	if (m_Texture)
 		m_Texture->Unload();
 }
+
+} /* namespace gaia */

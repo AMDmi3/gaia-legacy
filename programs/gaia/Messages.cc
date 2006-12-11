@@ -19,6 +19,8 @@
 
 #include "Messages.h"
 
+namespace gaia {
+
 #ifdef DEBUG
 void debug(const char *fmt, ...) {
 	struct timeval tv;
@@ -58,3 +60,5 @@ void fatal(const char *fmt, ...) {
 
 	exit(1);
 }
+
+} /* namespace gaia */

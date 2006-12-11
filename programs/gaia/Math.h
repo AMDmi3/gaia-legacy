@@ -23,6 +23,8 @@
 #include <math.h>
 #include "Exceptions.h"
 
+namespace gaia {
+
 /**
  * Simple 2d vector class
  */
@@ -325,5 +327,7 @@ inline int intersect_line_y(Vector3<T> &point1, Vector3<T> &point2, T &y, T *tar
 	*target = t;
 	return 1;
 }
+
+} /* namespace gaia */
 
 #endif

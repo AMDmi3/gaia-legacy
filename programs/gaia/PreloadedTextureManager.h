@@ -24,6 +24,8 @@
 
 #include "Texture.h"
 
+namespace gaia {
+
 /**
  * Texture manager for preloaded textures.
  * Used to store texture objects that are loaded on software startup
@@ -68,5 +70,7 @@ private:
 
 	std::map <int, Texture*> m_PreloadedTextures;	///< Map to store all loaded textures
 };
+
+} /* namespace gaia */
 
 #endif

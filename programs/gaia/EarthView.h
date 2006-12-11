@@ -36,6 +36,8 @@
 #define NAV_ZOOM_IN	0x10
 #define NAV_ZOOM_OUT	0x20
 
+namespace gaia {
+
 /**
  * Abstract class for earth view.
  */
@@ -67,5 +69,7 @@ protected:
 	int		m_ViewportWidth;	///< Viewport width in pixels
 	int		m_ViewportHeight;	///< Viewport height in pixels
 };
+
+} /* namespace gaia */
 
 #endif

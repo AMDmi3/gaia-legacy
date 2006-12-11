@@ -19,6 +19,8 @@
 
 #include "PreloadedTextureManager.h"
 
+namespace gaia {
+
 PreloadedTextureManager *PreloadedTextureManager::m_Instance = 0;
 
 PreloadedTextureManager *PreloadedTextureManager::Instance() {
@@ -81,3 +83,5 @@ void PreloadedTextureManager::Clear() {
 
 	m_PreloadedTextures.clear();
 }
+
+} /* namespace gaia */

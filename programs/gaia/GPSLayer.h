@@ -41,6 +41,8 @@
 /* minimal distance between two points */ 
 #define DATA_CONST_DIST 0.01/40000.0
 
+namespace gaia {
+
 /**
  * Single GPS entity
  * 
@@ -98,5 +100,7 @@ protected:
 	 */
 	std::vector<GPSEntity*>	m_Entities;
 };
+
+} /* namespace gaia */
 
 #endif

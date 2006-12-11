@@ -23,6 +23,8 @@
 #include "PreloadedTextureManager.h"
 #include "EarthView.h"
 
+namespace gaia {
+
 /**
  * Flat representation of Earth.
  *
@@ -81,5 +83,7 @@ protected:
 	Eye		m_SavedZoomEye;
 	Eye		m_SavedPanEye;
 };
+
+} /* namespace gaia */
 
 #endif

@@ -19,6 +19,8 @@
 
 #include "Tile.h"
 
+namespace gaia {
+
 Tile::Tile(int x, int y, int level) {
 	if (pthread_mutex_init(&m_RefCountMutex, 0) != 0)
 		throw ErrnoException("pthread_mutex_init() failed", errno);
@@ -119,3 +121,5 @@ unsigned int Tile::DecRef() {
 	pthread_mutex_unlock(&m_RefCountMutex);
 	return rc;
 }
+
+} /* namespace gaia */

@@ -20,6 +20,8 @@
 #ifndef __GAIA__SMARTPTR_H__
 #define __GAIA__SMARTPTR_H__
 
+namespace gaia {
+
 /**
  * Smart pointer with reference counting.
  *
@@ -96,5 +98,7 @@ public:
 private:
 	T	*m_Ptr;
 };
+
+} /* namespace gaia */
 
 #endif

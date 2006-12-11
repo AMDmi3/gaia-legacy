@@ -28,6 +28,8 @@
 
 #define DEFAULT_MAX_TEXTURES 100
 
+namespace gaia {
+
 /**
  * Tile manager.
  *
@@ -77,5 +79,7 @@ private:
 	int		m_nTextureTiles;	///< Root element of TextureTile quadtree
 	TextureTilePtr	m_TextureRoot;		///< Number of texture tiles in a tree
 };
+
+} /* namespace gaia */
 
 #endif

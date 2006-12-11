@@ -22,6 +22,8 @@
 
 #include "Region.h"
 
+namespace gaia {
+
 /**
  * Base class for all geo-bound data
  */
@@ -44,5 +46,7 @@ public:
 	 */
 	virtual void RenderRegion(Region *rgn) = 0;
 };
+
+} /* namespace gaia */
 
 #endif

@@ -28,6 +28,8 @@
 
 #include "Exceptions.h"
 
+namespace gaia {
+
 /**
  * Simple in-memory buffer.
  */
@@ -75,5 +77,7 @@ protected:
 	unsigned char	*m_Data;	///< Pointer to data
 	size_t		m_Size;		///< Size of data
 };
+
+} /* namespace gaia */
 
 #endif

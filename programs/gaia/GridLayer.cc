@@ -19,6 +19,8 @@
 
 #include "GridLayer.h"
 
+namespace gaia {
+
 GridLayer::GridLayer() {
 }
 
@@ -78,3 +80,5 @@ double GridLayer::GetGridStep(double wlen, double plen) {
 		grid /= 2.0;
 	}
 }
+
+} /* namespace gaia */

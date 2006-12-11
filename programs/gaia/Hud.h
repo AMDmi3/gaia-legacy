@@ -25,6 +25,8 @@
 
 #include "HudObject.h"
 
+namespace gaia {
+
 /**
  * Displays icons and text over 3d view
  *
@@ -64,5 +66,7 @@ private:
 protected:
 	std::vector<HudObject*>	m_Objects;	///< Array of objects
 };
+
+} /* namespace gaia */
 
 #endif

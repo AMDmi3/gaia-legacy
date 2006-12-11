@@ -23,6 +23,8 @@
 #include <GL/glu.h>
 #include "Math.h"
 
+namespace gaia {
+
 /**
  * Minimal renderable part of Earth
  *
@@ -89,5 +91,7 @@ public:
 	Vector2d w[2];	///< World coordinates (corners of parallel/meridian - oriented rectangle)
 	Vector3d p[4];	///< Virtual coordinates after projection to screen (in pixels)
 };
+
+} /* namespace gaia */
 
 #endif

@@ -23,6 +23,8 @@
 #include "Tile.h"
 #include "Texture.h"
 
+namespace gaia {
+
 class TextureTile;
 typedef SmartPtr<TextureTile> TextureTilePtr;
 
@@ -137,5 +139,7 @@ protected:
 private:
 	Texture		*m_Texture;	///< The texture itself
 };
+
+} /* namespace gaia */
 
 #endif

@@ -19,6 +19,8 @@
 
 #include "FlatEarthView.h"
 
+namespace gaia {
+
 FlatEarthView::FlatEarthView() {
 	m_CurrentMovementFlags = 0;
 }
@@ -200,3 +202,5 @@ double FlatEarthView::AspectCorrection(double y) {
 
 	return k;
 }
+
+} /* namespace gaia */

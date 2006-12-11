@@ -20,6 +20,8 @@
 #ifndef __GAIA__DATA_H__
 #define __GAIA__DATA_H__
 
+namespace gaia {
+
 enum {
 	TEXTURE_FONT
 };
@@ -30,5 +32,7 @@ enum {
 	new HudIcon(Vector2i(x, y), Vector2i(21, 21), Vector2i(10, 10), l, 0, Vector2d(1.0/256.0, 159.0/256.0), Vector2d(21.0/256.0, 21.0/256.0), TEXTURE_FONT)
 #define ICON_GPS_POINT(x, y, l) \
 	new HudIcon(Vector2i(x, y), Vector2i(7, 7), Vector2i(3, 3), l, 0, Vector2d(29.0/256.0, 114.0/256.0), Vector2d(7.0/256.0, 7.0/256.0), TEXTURE_FONT)
+
+} /* namespace gaia */
 
 #endif

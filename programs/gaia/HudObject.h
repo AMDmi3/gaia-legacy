@@ -26,6 +26,8 @@
 #define HUDFLAG_KILLUNDER	0x02
 #define HUDFLAG_FADEUNDER	0x04
 
+namespace gaia {
+
 /**
  * One object on hud
  *
@@ -87,5 +89,7 @@ protected:
 };
 
 int HudObject_Compare(const void *a, const void *b);
+
+} /* namespace gaia */
 
 #endif

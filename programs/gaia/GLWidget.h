@@ -22,6 +22,8 @@
 
 #include <qgl.h>
 
+namespace gaia {
+
 class GLWidget: public QGLWidget
 {
 	Q_OBJECT
@@ -35,8 +37,8 @@ protected:
 	void resizeGL(int w, int h);
 
 private:
-	GLuint object;
-	GLfloat xRot, yRot, zRot, scale;
 };
+
+} /* namespace gaia */
 
 #endif

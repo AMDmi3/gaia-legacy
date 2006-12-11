@@ -22,6 +22,8 @@
 
 #include "Tile.h"
 
+namespace gaia {
+
 /**
  * Abstract tile storage.
  *
@@ -46,5 +48,7 @@ public:
 	 */
 	virtual void Enqueue(TilePtr tile) = 0;
 };
+
+} /* namespace gaia */
 
 #endif

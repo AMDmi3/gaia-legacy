@@ -30,6 +30,8 @@
 #define MAX_SENTENCE_LENGTH 1024
 #define MAX_SENTENCE_FIELDS 64
 
+namespace gaia {
+
 /**
  * GPS source class that parses NMEA.
  *
@@ -86,5 +88,7 @@ private:
 private:
 	int	m_FD;		///< File descriptor
 };
+
+} /* namespace gaia */
 
 #endif

@@ -19,6 +19,8 @@
 
 #include "GPSSourceTest.h"
 
+namespace gaia {
+
 GPSSourceTest::GPSSourceTest() {
 	m_LastPoll = Timer::Instance()->GetTime();
 	m_Length = 0.0;
@@ -39,3 +41,5 @@ int GPSSourceTest::Poll(GPSData *target) {
 
 	return 1;
 }
+
+} /* namespace gaia */

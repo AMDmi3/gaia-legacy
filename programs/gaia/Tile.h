@@ -26,6 +26,8 @@
 #include "SmartPtr.h"
 #include "RawBuffer.h"
 
+namespace gaia {
+
 enum {
 	TILETYPE_NONE,
 	TILETYPE_TEXTURE
@@ -190,5 +192,7 @@ protected:
 	pthread_mutex_t	m_RefCountMutex;	///< Mutex to protect refcount
 	unsigned int	m_RefCount;	///< Reference counter, see SmartPtr
 };
+
+} /* namespace gaia */
 
 #endif

@@ -19,6 +19,8 @@
 
 #include "HudIcon.h"
 
+namespace gaia {
+
 void HudIcon::Render() {
 	Vector2i v0 = m_Pos - m_Center;
 	Vector2i v1 = m_Pos - m_Center + m_Size;
@@ -39,3 +41,5 @@ void HudIcon::Render() {
 	glVertex3i(v1.x, v0.y, 0);
 	glEnd();
 }
+
+} /* namespace gaia */

@@ -28,6 +28,8 @@
 #include "GPSSource.h"
 #include "Timer.h"
 
+namespace gaia {
+
 /**
  * Test GPS source.
  *
@@ -52,4 +54,7 @@ private:
 	int	m_LastPoll;
 	double	m_Length;
 };
+
+} /* namespace gaia */
+
 #endif

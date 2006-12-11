@@ -19,6 +19,8 @@
 
 #include "WorldWindTileManager.h"
 
+namespace gaia {
+
 WorldWindTileManager::WorldWindTileManager(TileStorage *ts): m_TextureRoot(new TextureTile(0, 0, 0, TextureTilePtr(0))) {
 	m_FirstTileStorage = ts;
 	m_nTextureTiles = 1;
@@ -104,3 +106,5 @@ int WorldWindTileManager::Cleanup() {
 
 	return 0;
 }
+
+} /* namespace gaia */

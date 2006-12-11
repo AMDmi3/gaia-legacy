@@ -24,6 +24,8 @@
 
 #include "SimpleTileStorage.h"
 
+namespace gaia {
+
 /**
  * Fetcher for NASA World Wind maps
  *
@@ -54,5 +56,7 @@ protected:
 private:
 	wwfetch		m_WWFetch;
 };
+
+} /* namespace gaia */
 
 #endif 

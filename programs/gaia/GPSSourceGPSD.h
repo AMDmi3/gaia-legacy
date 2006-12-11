@@ -27,6 +27,8 @@
 
 #include "GPSSource.h"
 
+namespace gaia {
+
 /**
  * GPSD GPS source.
  *
@@ -53,4 +55,7 @@ public:
 private:
 	gps_data_t	*m_GPS;		///< libgps data
 };
+
+} /* namespace gaia */
+
 #endif

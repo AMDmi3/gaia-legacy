@@ -27,6 +27,8 @@
 
 #define MIN_TEXTURE_DISTANCE 192.0
 
+namespace gaia {
+
 class WorldWindLayer: public Layer {
 public:
 	WorldWindLayer(std::string storageroot);
@@ -41,5 +43,7 @@ protected:
 	WorldWindFetcher        *m_ImageFetcher;
 	FilesystemStorage       *m_DiskCache;
 };
+
+} /* namespace gaia */
 
 #endif

@@ -25,6 +25,8 @@
 #include "PreloadedTextureManager.h"
 #include "EarthView.h"
 
+namespace gaia {
+
 /**
  * Flat representation of Earth.
  *
@@ -68,5 +70,7 @@ private:
 protected:
 	int	m_CurrentMovementFlags;
 };
+
+} /* namespace gaia */
 
 #endif

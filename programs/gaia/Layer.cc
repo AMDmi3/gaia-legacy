@@ -19,8 +19,12 @@
 
 #include "Layer.h"
 
+namespace gaia {
+
 Layer::Layer() {
 }
 
 Layer::~Layer() {
 }
+
+} /* namespace gaia */
