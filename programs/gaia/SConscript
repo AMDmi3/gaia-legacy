@@ -8,8 +8,8 @@ Import('*')
 env = env.Copy();
 
 env.Append(LIBS = [ 'z', 'm', 'jpeg', 'GL', 'GLU' ]);
-env.Prepend(CPPPATH = [ '../../lib/wwfetch' ]);
-env.Prepend(LIBPATH = [ '../../lib/wwfetch' ]);
+env.Prepend(CPPPATH = [ '../../lib/wwfetch', '../../lib/tiledb']);
+env.Prepend(LIBPATH = [ '../../lib/wwfetch', '../../lib/tiledb']);
 env.ParseConfig('sdl-config --cflags --libs');
 env.ParseConfig('curl-config --cflags --libs');
 env.ParseConfig('libpng-config --cflags --libs');
@@ -74,6 +74,7 @@ if not env.GetOption('clean'):
 #######################################
 srcs = Split("""EarthView.cc
 		FilesystemStorage.cc
+		IndexStorage.cc
 		FlatEarthView.cc
 		GPSLayer.cc
 		GPSSourceNMEA.cc
@@ -102,7 +103,7 @@ srcs = Split("""EarthView.cc
 if int(env['gpsd']):
 	srcs += ['GPSSourceGPSD.cc']
 
-env.Program('../../gaia', [srcs, libwwfetch])
+env.Program('../../gaia', [srcs, libwwfetch, libtiledb])
 
 if env['prefix'] != '.':
 	env.Install(env['prefix'] + "/" + env['bindir'], ['../../gaia']);
