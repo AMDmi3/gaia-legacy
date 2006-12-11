@@ -10,7 +10,7 @@ version="0.1.3"
 #######################################
 opts = Options(ARGUMENTS)
 # conditionally build parts of gaia
-#opts.Add(BoolOption('gaia', 'Compile gaia OpenGL client', 1));
+#opts.Add(BoolOption('gaia', 'Compile Qt gaia client', 1));
 
 # conditional features
 opts.Add(BoolOption('gpsd', 'Compile with gpsd support (libgps)', 0));

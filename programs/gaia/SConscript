@@ -5,19 +5,25 @@ Import('*')
 #######################################
 # ENVIRONMENT
 #######################################
-env = env.Copy( LIBS = [ 'z', 'm', 'jpeg', 'GL', 'GLU', 'qt-mt', 'pthread' ],
-		tools = [ 'default', 'qt' ] );
+env = env.Copy(QT_LIB = 'qt-mt', tools = ['qt'])
 
-env.Prepend(CPPPATH = [ '../../lib/wwfetch' ]);
-env.Prepend(LIBPATH = [ '../../lib/wwfetch' ]);
-env.ParseConfig('curl-config --cflags --libs');
-env.ParseConfig('libpng-config --cflags --libs');
+env.Append(LIBS = [ 'z', 'm', 'jpeg', 'GL', 'GLU', 'pthread' ])
+env.Prepend(CPPPATH = [ '../../lib/wwfetch' ])
+env.Prepend(LIBPATH = [ '../../lib/wwfetch' ])
+
+parseenv = Environment()
+parseenv.ParseConfig('curl-config --cflags --libs')
+parseenv.ParseConfig('libpng-config --cflags --libs')
+
+env.Append( LIBS = parseenv['LIBS'] )
+env.Append( CPPPATH = parseenv['LIBS'] )
+env.Append( LIBPATH = parseenv['LIBS'] )
 
 if int(env['gpsd']):
 	env.Append( LIBS = [ 'gps' ], CCFLAGS = [ '-DWITH_GPSD' ], CXXFLAGS = [ '-DWITH_GPSD' ] )
 
-env.Append(CCFLAGS = [ '-DDATADIR="\\"' + env['prefix'] + "/" + env['datadir'] + '\\""' ] );
-env.Append(CXXFLAGS = [ '-DDATADIR="\\"' + env['prefix'] + "/" + env['datadir'] + '\\""' ] );
+env.Append(CCFLAGS = [ '-DDATADIR="\\"' + env['prefix'] + "/" + env['datadir'] + '\\""' ] )
+env.Append(CXXFLAGS = [ '-DDATADIR="\\"' + env['prefix'] + "/" + env['datadir'] + '\\""' ] )
 
 #######################################
 # TARGETS
