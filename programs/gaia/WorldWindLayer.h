@@ -23,7 +23,7 @@
 #include "Layer.h"
 #include "WorldWindTileManager.h"
 #include "WorldWindFetcher.h"
-#include "FilesystemStorage.h"
+#include "IndexStorage.h"
 #include "WorldWindTileManager.h"
 
 #define MIN_TEXTURE_DISTANCE 192.0
@@ -40,7 +40,7 @@ public:
 protected:
 	WorldWindTileManager	*m_TileManager;
 	WorldWindFetcher        *m_ImageFetcher;
-	FilesystemStorage       *m_DiskCache;
+	IndexStorage       *m_DiskCache;
 };
 
 #endif

@@ -26,7 +26,7 @@ WorldWindLayer::WorldWindLayer(std::string storageroot) {
 
 	try {
 		/* create disk cache */
-		m_DiskCache = new FilesystemStorage(storageroot);
+		m_DiskCache = new IndexStorage(storageroot);
 		m_ImageFetcher = new WorldWindFetcher();
 
 		m_ImageFetcher->SetSaveStorage(m_DiskCache);
