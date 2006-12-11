@@ -8,22 +8,6 @@ Import('*')
 env = env.Copy();
 
 #######################################
-# CHECKS
-#######################################
-if not env.GetOption('clean'):
-	config = env.Configure(log_file = '/dev/null')
-	config_ok = True
-
-	if not config.CheckHeader('curl/curl.h'):
-		print "You need to install the cURL development libraries"
-		config_ok = False
-
-	if not config_ok:
-		Exit(1)
-
-	env = config.Finish()
-
-#######################################
 # TARGETS
 #######################################
 srcs = Split("""wwfetch_init.c

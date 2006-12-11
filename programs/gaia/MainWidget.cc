@@ -18,22 +18,15 @@
  */
 
 #include "MainWidget.h"
-#include <qapplication.h>
-#include <qgl.h>
+#include "GLWidget.h"
+#include "ControlWidget.h"
 
-int main( int argc, char **argv ) {
-	QApplication app(argc,argv);
+MainWidget::MainWidget(QWidget* parent, const char* name): QSplitter(Qt::Horizontal, parent, name) {
+	/* create control widget (left bar) */
+	ControlWidget *cw = new ControlWidget(this);
 
-	if (!QGLFormat::hasOpenGL()) {
-		qWarning( "This system has no OpenGL support. Exiting." );
-		return 1;
-	}
+	setResizeMode(cw, QSplitter::KeepSize);
 
-	MainWidget mainWidget;
-
-	mainWidget.resize(800, 600);
-	app.setMainWidget(&mainWidget);
-	mainWidget.show();
-
-	return app.exec();
+	/* create gl widget */
+	GLWidget* gl = new GLWidget(this);
 }

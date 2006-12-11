@@ -5,12 +5,11 @@ Import('*')
 #######################################
 # ENVIRONMENT
 #######################################
-env = env.Copy();
+env = env.Copy( LIBS = [ 'z', 'm', 'jpeg', 'GL', 'GLU', 'qt-mt', 'pthread' ],
+		tools = [ 'default', 'qt' ] );
 
-env.Append(LIBS = [ 'z', 'm', 'jpeg', 'GL', 'GLU' ]);
 env.Prepend(CPPPATH = [ '../../lib/wwfetch' ]);
 env.Prepend(LIBPATH = [ '../../lib/wwfetch' ]);
-env.ParseConfig('sdl-config --cflags --libs');
 env.ParseConfig('curl-config --cflags --libs');
 env.ParseConfig('libpng-config --cflags --libs');
 
@@ -21,58 +20,13 @@ env.Append(CCFLAGS = [ '-DDATADIR="\\"' + env['prefix'] + "/" + env['datadir'] +
 env.Append(CXXFLAGS = [ '-DDATADIR="\\"' + env['prefix'] + "/" + env['datadir'] + '\\""' ] );
 
 #######################################
-# CHECKS
-#######################################
-if not env.GetOption('clean'):
-	config = env.Configure(log_file = '/dev/null')
-	config_ok = True
-
-	if not config.CheckHeader('SDL.h'):
-		print "You need to install SDL development libraries"
-		config_ok = False
-
-	if not config.CheckHeader('GL/gl.h'):
-		print "You need to install GL development libraries"
-		config_ok = False
-
-	if not config.CheckHeader( [ 'stdio.h', 'jpeglib.h' ] ):
-		print "You need to install jpeg development libraries"
-		config_ok = False
-
-	if not config.CheckHeader('png.h'):
-		print "You need to install png development libraries"
-		config_ok = False
-
-	if int(env['gpsd']) and not config.CheckHeader('gps.h'):
-		print "You need to install libgps from gpsd package (http://gpsd.berlios.de/), or turn off gpsd support with `gpsd=0' option (you'll still be able to use GPS)"
-		config_ok = False
-
-
-	if not config.CheckLib('curl'):
-		print "You need to install libcurl development libraries"
-		config_ok = False
-
-	if not config.CheckLib('jpeg'):
-		print "You need to install jpeg development libraries"
-		config_ok = False
-
-	if not config.CheckLib('png'):
-		print "You need to install png development libraries"
-		config_ok = False
-
-	if int(env['gpsd']) and not config.CheckLib('gps'):
-		print "You need to install libgps from gpsd package (http://gpsd.berlios.de/), or turn off gpsd support with `gpsd=0' option (you'll still be able to use GPS)"
-		config_ok = False
-
-	if not config_ok:
-		Exit(1)
-
-	env = config.Finish()
-
-#######################################
 # TARGETS
 #######################################
-srcs = Split("""EarthView.cc
+srcs = Split("""Main.cc
+		MainWidget.cc
+		GLWidget.cc
+		ControlWidget.cc
+		EarthView.cc
 		FilesystemStorage.cc
 		FlatEarthView.cc
 		GPSLayer.cc
@@ -82,7 +36,6 @@ srcs = Split("""EarthView.cc
 		Hud.cc
 		HudIcon.cc
 		HudObject.cc
-		Main.cc
 		Messages.cc
 		PreloadedTextureManager.cc
 		RawBuffer.cc
@@ -98,6 +51,7 @@ srcs = Split("""EarthView.cc
 		WorldWindFetcher.cc
 		WorldWindLayer.cc
 		WorldWindTileManager.cc""")
+
 
 if int(env['gpsd']):
 	srcs += ['GPSSourceGPSD.cc']

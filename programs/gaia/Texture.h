@@ -23,7 +23,6 @@
 //#include "Messages.h"
 #include "Exceptions.h"
 
-#include <SDL.h>
 #include <GL/gl.h>
 #include <string>
 #include <stdarg.h>

@@ -17,23 +17,33 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "MainWidget.h"
-#include <qapplication.h>
-#include <qgl.h>
+#include "GLWidget.h"
 
-int main( int argc, char **argv ) {
-	QApplication app(argc,argv);
+GLWidget::GLWidget(QWidget* parent, const char* name): QGLWidget(parent, name) {
+}
 
-	if (!QGLFormat::hasOpenGL()) {
-		qWarning( "This system has no OpenGL support. Exiting." );
-		return 1;
-	}
+GLWidget::~GLWidget() {
+}
 
-	MainWidget mainWidget;
+void GLWidget::paintGL() {
+	glClear(GL_COLOR_BUFFER_BIT);
 
-	mainWidget.resize(800, 600);
-	app.setMainWidget(&mainWidget);
-	mainWidget.show();
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(1.0, 1.0, 0.0);
+	glVertex3f(1.0, -1.0, 0.0);
+	glVertex3f(-1.0, -1.0, 0.0);
+	glVertex3f(-1.0, 1.0, 0.0);
+	glEnd();
+}
 
-	return app.exec();
+void GLWidget::initializeGL() {
+	qglClearColor(black);
+}
+
+void GLWidget::resizeGL( int w, int h ) {
+	glViewport(0, 0, (GLint)w, (GLint)h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glFrustum(-1.0, 1.0, -1.0, 1.0, 5.0, 15.0);
+	glMatrixMode(GL_MODELVIEW);
 }

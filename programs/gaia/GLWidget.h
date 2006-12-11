@@ -17,23 +17,26 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "MainWidget.h"
-#include <qapplication.h>
+#ifndef __GAIA__GLWIDGET_H__
+#define __GAIA__GLWIDGET_H__
+
 #include <qgl.h>
 
-int main( int argc, char **argv ) {
-	QApplication app(argc,argv);
+class GLWidget: public QGLWidget
+{
+	Q_OBJECT
+public:
+	GLWidget(QWidget* parent, const char* name = 0);
+	~GLWidget();
 
-	if (!QGLFormat::hasOpenGL()) {
-		qWarning( "This system has no OpenGL support. Exiting." );
-		return 1;
-	}
+protected:
+	void initializeGL();
+	void paintGL();
+	void resizeGL(int w, int h);
 
-	MainWidget mainWidget;
+private:
+	GLuint object;
+	GLfloat xRot, yRot, zRot, scale;
+};
 
-	mainWidget.resize(800, 600);
-	app.setMainWidget(&mainWidget);
-	mainWidget.show();
-
-	return app.exec();
-}
+#endif

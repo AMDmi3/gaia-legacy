@@ -17,23 +17,31 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "MainWidget.h"
-#include <qapplication.h>
-#include <qgl.h>
+#include <qheader.h>
+#include <qlistview.h>
+#include <qradiobutton.h>
+#include <qhbuttongroup.h>
+#include <qlayout.h>
 
-int main( int argc, char **argv ) {
-	QApplication app(argc,argv);
+#include "ControlWidget.h"
+#include "GLWidget.h"
 
-	if (!QGLFormat::hasOpenGL()) {
-		qWarning( "This system has no OpenGL support. Exiting." );
-		return 1;
-	}
+ControlWidget::ControlWidget(QWidget* parent, const char* name): QWidget(parent, name) {
+	/* view model selector */
+	QHButtonGroup *group = new QHButtonGroup("View model", this);
 
-	MainWidget mainWidget;
+	new QRadioButton("Flat", group);
+	new QRadioButton("Globe", group);
 
-	mainWidget.resize(800, 600);
-	app.setMainWidget(&mainWidget);
-	mainWidget.show();
+	group->setButton(0);
 
-	return app.exec();
+	/* layer list */
+	QListView* listview = new QListView(this);
+	listview->header()->setClickEnabled(0);
+	listview->addColumn("Layer");
+
+	/* layout */
+	QVBoxLayout *layout = new QVBoxLayout(this, 2, 2);
+	layout->addWidget(group);
+	layout->addWidget(listview);
 }

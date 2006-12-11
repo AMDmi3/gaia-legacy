@@ -17,23 +17,17 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "MainWidget.h"
-#include <qapplication.h>
-#include <qgl.h>
+#ifndef __GAIA__CONTROLWIDGET_H__
+#define __GAIA__CONTROLWIDGET_H__
 
-int main( int argc, char **argv ) {
-	QApplication app(argc,argv);
+#include <qwidget.h>
+#include <qsplitter.h>
 
-	if (!QGLFormat::hasOpenGL()) {
-		qWarning( "This system has no OpenGL support. Exiting." );
-		return 1;
-	}
+class ControlWidget: public QWidget
+{
+	Q_OBJECT
+public:
+	ControlWidget(QWidget* parent = 0, const char* name = 0);
+};
 
-	MainWidget mainWidget;
-
-	mainWidget.resize(800, 600);
-	app.setMainWidget(&mainWidget);
-	mainWidget.show();
-
-	return app.exec();
-}
+#endif
