@@ -72,8 +72,9 @@ env.Append(CXXFLAGS = [ '-DGAIA_VERSION="\\"' + version + '\\""' ])
 #######################################
 
 libwwfetch = SConscript('lib/wwfetch/SConscript', exports = ['env'])
+libtiledb = SConscript('lib/tiledb/SConscript', exports = ['env'])
 
-SConscript('programs/gaia/SConscript', exports = ['env', 'libwwfetch'])
+SConscript('programs/gaia/SConscript', exports = ['env', 'libwwfetch', 'libtiledb'])
 
 if env['prefix'] != ".":
 	env.Alias('install', env['prefix'])
