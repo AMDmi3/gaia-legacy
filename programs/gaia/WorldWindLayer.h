@@ -24,7 +24,6 @@
 #include "WorldWindTileManager.h"
 #include "WorldWindFetcher.h"
 #include "FilesystemStorage.h"
-#include "WorldWindTileManager.h"
 
 #define MIN_TEXTURE_DISTANCE 192.0
 
