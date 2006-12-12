@@ -71,7 +71,7 @@ uint32_t get_next_offset_v0(tiledb_index_entry_v0 *entry, uint32_t start_level, 
 			}
 		}
 	}
-	offset = data_element_index + x + y*(1<<(current_node_level-start_level+1));
+	offset = data_element_index + x + y*(1<<(current_node_level-start_level));
 	printf("node found, using data_element index=%d\n", offset);
 	return offset;
 }
