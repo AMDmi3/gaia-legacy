@@ -1,8 +1,9 @@
-g++ -c tiledb_file_io.c -o tiledb_file_io.o
-g++ -c tiledb_file_locking.c -o tiledb_file_locking.o
-g++ -c tiledb_internal.c -o tiledb_internal.o
-g++ -c tiledb.c -o tiledb.o
-g++ -c test.cpp -o test.o
-g++ test.o tiledb_file_locking.o tiledb_file_io.o tiledb_internal.o tiledb.o -o a.out
+gcc -Wall -c tiledb_filesystem_import.c -o tiledb_filesystem_import.o
+gcc -Wall -c tiledb_file_io.c -o tiledb_file_io.o
+gcc -Wall -c tiledb_file_locking.c -o tiledb_file_locking.o
+gcc -Wall -c tiledb_internal.c -o tiledb_internal.o
+gcc -Wall -c tiledb.c -o tiledb.o
+gcc -Wall -c test.c -o test.o
+gcc -Wall test.o tiledb_file_locking.o tiledb_file_io.o tiledb_internal.o tiledb.o tiledb_filesystem_import.o -o a.out
 
 
