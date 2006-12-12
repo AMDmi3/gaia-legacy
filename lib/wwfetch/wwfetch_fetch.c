@@ -40,10 +40,6 @@ wwfetch_error wwfetch_fetch(wwfetch *handle, char *url) {
 	if (code == 200)
 		return WWFETCH_OK;
 
-	/* not found */
-	if (code == 404)
-		return WWFETCH_NOT_FOUND;
-
 	/* other result codes */
 	return WWFETCH_FETCH_FAILED;
 }
