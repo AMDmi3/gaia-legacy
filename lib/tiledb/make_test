@@ -1,0 +1,8 @@
+g++ -c tiledb_file_io.c -o tiledb_file_io.o
+g++ -c tiledb_file_locking.c -o tiledb_file_locking.o
+g++ -c tiledb_internal.c -o tiledb_internal.o
+g++ -c tiledb.c -o tiledb.o
+g++ -c test.cpp -o test.o
+g++ test.o tiledb_file_locking.o tiledb_file_io.o tiledb_internal.o tiledb.o -o a.out
+
+
