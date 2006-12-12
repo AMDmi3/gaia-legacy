@@ -48,31 +48,41 @@ uint32_t get_next_offset_v0(tiledb_index_entry_v0 *entry, uint32_t start_level, 
 	uint32_t data_element_index = 0;
 	for (; current_node_level<LEVELS_PER_PYRAMID+start_level && current_node_level < level; current_node_level++)
 	{
-		if (((current_node_level+1) % LEVELS_PER_PYRAMID) == 0) {
-			offset = current_node_x + current_node_y*(1<<(LEVELS_PER_PYRAMID));
-			printf("continue at child_entries index=%d\n", offset);
-			return offset;
-		}
 		if (current_node_level <LEVELS_PER_PYRAMID+start_level-1)
 		{
 			data_element_index += 1<<(2*(current_node_level-start_level));
-			uint32_t mask = 1 << (level-current_node_level-1);
-			if ((x & mask) == 0) {
-				current_node_x *= 2;
-			} else {
-				current_node_x *= 2;
-				current_node_x++;
+		}
+		uint32_t mask = 1 << (level-current_node_level-1);
+		if ((x & mask) == 0) {
+			current_node_x *= 2;
+		} else {
+			current_node_x *= 2;
+			current_node_x++;
+		}
+		if ((y & mask) == 0) {
+			current_node_y *= 2;
+		} else {
+			current_node_y *= 2;
+			current_node_y++;
+		}
+		if (((current_node_level+1) % LEVELS_PER_PYRAMID) == 0) {
+			offset = current_node_x + current_node_y*(1<<(LEVELS_PER_PYRAMID));
+			printf("i:%d->", offset);
+			//printf("continue at child_entries index=%d\n", offset);
+			if (offset >= 1024) {
+				db_error("index out of bounds");
+				exit(-1);
 			}
-			if ((y & mask) == 0) {
-				current_node_y *= 2;
-			} else {
-				current_node_y *= 2;
-				current_node_y++;
-			}
+			return offset;
 		}
 	}
-	offset = data_element_index + x + y*(1<<(current_node_level-start_level));
-	printf("node found, using data_element index=%d\n", offset);
+	offset = data_element_index + current_node_x + current_node_y*(1<<(current_node_level-start_level));
+	printf("d:%d\n", offset);
+	//printf("index node found, using data_element index=%d\n", offset);
+	if (offset >= 1+4+16+64+256) {
+		db_error("index out of bounds");
+		exit(-1);
+	}
 	return offset;
 }
 
@@ -82,6 +92,7 @@ tiledb_error tiledb_put_v0(DB_Handle* db_handle, uint32_t x, uint32_t y, uint32_
 	uint32_t current_node_level = 0;
 	uint32_t offset = 0;
 	uint32_t file_offset = sizeof(tiledb_index_header);
+	printf("i:0->");
 	uint32_t old_file_offset = 0;
 	while (current_node_level <= level) {
 		//file_offset is offset in bytes in index file
@@ -158,11 +169,13 @@ tiledb_error tiledb_get_v0(DB_Handle* db_handle, uint32_t x, uint32_t y, uint32_
 	uint32_t current_node_level = 0;
 	uint32_t offset = 0;
 	uint32_t file_offset = sizeof(tiledb_index_header);
+	printf("i:0->");
 	uint32_t old_file_offset = 0;
 	while (current_node_level <= level) {
 		//file_offset is offset in bytes in index file
 		if (file_offset == 0) { //next index entry does not exist yet
 			release_index_entry_lock(db_handle, old_file_offset, sizeof(tiledb_index_entry_v0));
+			printf("element not found\n");
 			return TILEDB_NOT_FOUND;
 		} else {
 			//read child index entry from file
@@ -171,6 +184,7 @@ tiledb_error tiledb_get_v0(DB_Handle* db_handle, uint32_t x, uint32_t y, uint32_
 
 			if (read_data_to_buffer(db_handle->index_file, file_offset, &entry, sizeof(entry)) != sizeof(entry)) {
 				release_index_entry_lock(db_handle, file_offset, sizeof(tiledb_index_entry_v0));
+				printf("read error\n");
 				return TILEDB_SYSCALL_ERROR;
 			}
 		}
@@ -191,8 +205,10 @@ tiledb_error tiledb_get_v0(DB_Handle* db_handle, uint32_t x, uint32_t y, uint32_
 
 		if (read_data_to_buffer(db_handle->data_file, entry.data_elements[offset].offset, db_handle->current_data, db_handle->current_size) == db_handle->current_size) {
 			release_index_entry_lock(db_handle, old_file_offset, sizeof(tiledb_index_entry_v0));
+			printf("tile found\n");
 			return TILEDB_OK;
 		}
+		printf("read error\n");
 		return TILEDB_SYSCALL_ERROR;
 	} else {
 		printf("element not found\n");
