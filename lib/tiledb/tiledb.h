@@ -5,6 +5,10 @@
 
 #include "tiledb_elements.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* error codes */
 typedef enum {
 	/* no error */
@@ -55,5 +59,9 @@ tiledb_error tiledb_get(DB_Handle* db_handle, uint32_t x, uint32_t y, uint32_t l
 size_t tiledb_get_data_size(DB_Handle* db_handle);
 
 unsigned char *tiledb_get_data_ptr(DB_Handle* db_handle);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
