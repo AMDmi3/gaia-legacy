@@ -20,12 +20,14 @@ DB_Handle *tiledb_open(char *path, int flags) {
 	DB_Handle *db_handle = (DB_Handle *)malloc(sizeof(DB_Handle));
 	memset(db_handle, 0, sizeof(DB_Handle));
 
-	if (flags | CLEAR_CACHE) {
+	if (flags & CLEAR_CACHE) {
+		printf("Clear cache\n");
 		tiledb_create_new_cache(""); // TODO name handling
 	}
 	db_handle->index_file = open("gaia_storage_cache.idx", O_RDWR | O_SYNC);
 	if (db_handle->index_file == -1) {
-		if (flags | CREATE_IF_NOT_EXISTS) {
+		if (flags & CREATE_IF_NOT_EXISTS) {
+			printf("Create cache\n");
 			tiledb_create_new_cache(""); // TODO name handling
 		}
 		db_handle->index_file = open("gaia_storage_cache.idx", O_RDWR | O_SYNC);
