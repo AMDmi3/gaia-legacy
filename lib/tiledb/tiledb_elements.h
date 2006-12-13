@@ -18,7 +18,7 @@ typedef struct tiledb_index_entry_ptr_v0 {
  */
 typedef struct tiledb_index_entry_v0 {
 	tiledb_index_entry_ptr_v0 data_elements[1+4+16+64+256];
-	uint32_t child_entries[1024]; //offset in index file with type IndexEntry; 0=>index entry does not exist
+	int32_t child_entries[1024]; //page ref in index file with type IndexEntry; -1=>index entry does not exist
 
 } tiledb_index_entry_v0;
 

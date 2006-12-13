@@ -8,12 +8,14 @@
 
 #define db_error(...) printf("DB-ERROR: ");					\
 			printf(__VA_ARGS__);						\
-			printf(" in File(%s:%d)\n", __FILE__, __LINE__);
+			printf(" (%s:%d)\n", __FILE__, __LINE__);
 
 typedef struct DB_Handle {
 	int index_file;
 	int data_file;
 	int version;
+
+	int index_page_size;
 
 	size_t		current_size;
 	unsigned char	*current_data;
@@ -22,5 +24,8 @@ typedef struct DB_Handle {
 typedef struct tiledb_index_header {
 	uint32_t version;
 } tiledb_index_header;
+
+typedef int tiledb_index_page_ref;
+typedef int tiledb_array_index;
 
 #endif

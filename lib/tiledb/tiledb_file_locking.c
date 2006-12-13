@@ -9,7 +9,7 @@
 #define lock_printf(...) while(0){}
 #endif
 
-void acquire_file_lock(int file, long offset, off_t size) {
+void acquire_file_lock(int file, off_t offset, off_t size) {
 	if (lseek(file, offset, 0) == -1) {
 		db_error("on lseek");
 		exit(-1);
@@ -20,7 +20,7 @@ void acquire_file_lock(int file, long offset, off_t size) {
 	}
 }
 
-void release_file_lock(int file, long offset, off_t size) {
+void release_file_lock(int file, off_t offset, off_t size) {
 	if (lseek(file, offset, 0) == -1) {
 		db_error("on lseek");
 		exit(-1);
@@ -51,14 +51,16 @@ void release_index_lock(DB_Handle* db_handle) {
 	release_file_lock(db_handle->index_file, 0, 1);
 }
 
-void acquire_index_entry_lock(DB_Handle* db_handle, long offset, size_t entry_size) {
-	if (offset == 0) return; //offset must be greater than zero, file begins with header
-	lock_printf("acquire_index_entry_lock(offset=%d)\n", offset);
-	acquire_file_lock(db_handle->index_file, offset, (off_t)entry_size);
+void acquire_index_page_lock(DB_Handle* db_handle, tiledb_index_page_ref page_ref) {
+	if (page_ref < 0) return; //page_ref must be greater equal zero
+	lock_printf("acquire_index_page_lock(page_ref=%d)\n", page_ref);
+	off_t offset = sizeof(tiledb_index_header) + page_ref*db_handle->index_page_size;
+	acquire_file_lock(db_handle->index_file, offset, (off_t)db_handle->index_page_size);
 }
 
-void release_index_entry_lock(DB_Handle* db_handle, long offset, size_t entry_size) {
-	if (offset == 0) return; //offset must be greater than zero, file begins with header
-	lock_printf("release_index_entry_lock(offset=%d)\n", offset);
-	release_file_lock(db_handle->index_file, offset, (off_t)entry_size);
+void release_index_page_lock(DB_Handle* db_handle, tiledb_index_page_ref page_ref) {
+	if (page_ref < 0) return; //page_ref must be greater equal zero
+	lock_printf("release_index_page_lock(page_ref=%d)\n", page_ref);
+	off_t offset = sizeof(tiledb_index_header) + page_ref*db_handle->index_page_size;
+	release_file_lock(db_handle->index_file, offset, (off_t)db_handle->index_page_size);
 }

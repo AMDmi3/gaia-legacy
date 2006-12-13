@@ -1,15 +1,34 @@
 #ifndef _INDEX_STORAGE_FILE_IO_
 #define _INDEX_STORAGE_FILE_IO_
 
-#include <stdint.h>
+#include <unistd.h>
 #include "tiledb_config.h"
 
 
+#include <stdlib.h>
+#include <stdio.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+
+#include "tiledb_file_io.h"
+
+#if LOG_IO
+#define io_printf(...) printf(__VA_ARGS__)
+#else
+#define io_printf(...) while(0){}
+#endif
+
 size_t tiledb_get_file_size(int file);
 
-void store_data_to_file(int file, uint32_t offset, void* data, size_t size);
-uint32_t read_data_to_buffer(int file, uint32_t offset, void* buffer, size_t size);
+off_t tiledb_page_ref_to_offset(DB_Handle *db_handle, tiledb_index_page_ref index_page_ref);
+tiledb_index_page_ref tiledb_get_free_index_page(DB_Handle* db_handle);
 
-uint32_t tiledb_get_version(DB_Handle* db_handle);
+void tiledb_store_data_to_file(int file, off_t offset, void* data, size_t size);
+void tiledb_store_index_page(DB_Handle *db_handle, tiledb_index_page_ref index_page_ref, void *index_entry);
+
+size_t tiledb_read_data_to_buffer(int file, off_t offset, void* buffer, size_t size);
+int tiledb_read_index_page(DB_Handle *db_handle, tiledb_index_page_ref index_page_ref, void *index_entry);
+
+int tiledb_get_version(DB_Handle* db_handle);
 
 #endif

@@ -6,19 +6,22 @@
 #include <fcntl.h>
 #include <string.h>
 
-void create_new_db(DB_Handle* db_handle) {
+void tiledb_create_new_db_v0(DB_Handle* db_handle) {
+	db_handle->version = 0;
+	db_handle->index_page_size = sizeof(tiledb_index_entry_v0);
+
 	//write header
 	tiledb_index_header header;
 	header.version = 0;
-	store_data_to_file(db_handle->index_file, 0, &header, sizeof(tiledb_index_header));
+	tiledb_store_data_to_file(db_handle->index_file, 0, &header, sizeof(tiledb_index_header));
 
 	//write root index entry
 	tiledb_index_entry_v0 index_entry;
-	init_index_entry_v0(&index_entry);
-	store_data_to_file(db_handle->index_file, sizeof(tiledb_index_header), &index_entry, sizeof(tiledb_index_entry_v0));
+	tiledb_init_index_entry_v0(&index_entry);
+	tiledb_store_index_page(db_handle, 0, &index_entry);
 }
 
-void init_index_entry_v0(tiledb_index_entry_v0 *entry)
+void tiledb_init_index_entry_v0(tiledb_index_entry_v0 *entry)
 {
 	int i;
 	for (i=0; i<sizeof(entry->data_elements)/sizeof(tiledb_index_entry_ptr_v0); i++)
@@ -29,13 +32,13 @@ void init_index_entry_v0(tiledb_index_entry_v0 *entry)
 	}
 	for (i=0; i<sizeof(entry->child_entries)/sizeof(uint32_t); i++)
 	{
-		entry->child_entries[i] = 0;
+		entry->child_entries[i] = -1;
 	}
 }
 
-uint32_t get_next_offset_v0(tiledb_index_entry_v0 *entry, unsigned int start_level, unsigned int x, unsigned int y, unsigned int level)
+tiledb_array_index tiledb_get_next_offset_v0(tiledb_index_entry_v0 *entry, unsigned int start_level, unsigned int x, unsigned int y, unsigned int level)
 {
-	unsigned int offset;
+	tiledb_array_index offset = -1;
 	unsigned int current_node_x = 0;
 	unsigned int current_node_y = 0;
 	unsigned int current_node_level = start_level;
@@ -80,75 +83,76 @@ uint32_t get_next_offset_v0(tiledb_index_entry_v0 *entry, unsigned int start_lev
 	return offset;
 }
 
-tiledb_error tiledb_get_index_entry_v0(DB_Handle* db_handle, unsigned int x, unsigned int y, unsigned int level, tiledb_index_entry_v0 *index_entry, unsigned int *locked_offset, unsigned int *data_element_index, int create_if_not_exists) {
+tiledb_error tiledb_get_index_page_v0(DB_Handle* db_handle, unsigned int x, unsigned int y, unsigned int level, tiledb_index_entry_v0 *index_entry, tiledb_index_page_ref *locked_page, tiledb_array_index *data_element_index, int create_if_not_exists) {
 	unsigned int current_node_level = 0;
-	unsigned int offset = 0;
-	unsigned int file_offset = sizeof(tiledb_index_header);
+	tiledb_array_index offset = 0;
+	tiledb_index_page_ref index_page_ref = 0;
 	printf("i:0->");
-	unsigned int old_file_offset = 0;
+	tiledb_index_page_ref parent_index_page_ref = -1;
 	while (current_node_level <= level) {
 		//file_offset is offset in bytes in index file
-		if (file_offset == 0 && !create_if_not_exists) {
+		if (index_page_ref == -1 && !create_if_not_exists) {
 			//next index entry does not exist yet, and should not be created
 
 			//old_file_offset is still lock
-			release_index_entry_lock(db_handle, old_file_offset, sizeof(tiledb_index_entry_v0));
+			release_index_page_lock(db_handle, parent_index_page_ref);
 
 			//all index entries are unlocked
-			*locked_offset = 0;
+			*locked_page = -1;
 			return TILEDB_INDEX_ENTRY_NOT_EXISTS;
-		} else if (file_offset == 0) { //next index entry does not exist yet
+		} else if (index_page_ref == -1) { //next index entry does not exist yet
 			//create new index entry
 			acquire_index_lock(db_handle);
 
-			file_offset = tiledb_get_file_size(db_handle->index_file);
+			index_page_ref = tiledb_get_free_index_page(db_handle);
 
-			acquire_index_entry_lock(db_handle, file_offset, sizeof(tiledb_index_entry_v0));
+			acquire_index_page_lock(db_handle, index_page_ref);
 
 			//store new index entry
-			tiledb_index_entry_v0 newIndex;
-			init_index_entry_v0(&newIndex);
-			store_data_to_file(db_handle->index_file, file_offset, &newIndex, sizeof(newIndex));
+			tiledb_index_entry_v0 new_index_entry;
+			tiledb_init_index_entry_v0(&new_index_entry);
+			tiledb_store_index_page(db_handle, index_page_ref, &new_index_entry);
 
 			//update parent index entry
-			index_entry->child_entries[offset] = file_offset;
-			store_data_to_file(db_handle->index_file, old_file_offset, index_entry, sizeof(tiledb_index_entry_v0)); //TODO Don't save total entry
+			index_entry->child_entries[offset] = index_page_ref;
+			tiledb_store_index_page(db_handle, parent_index_page_ref, index_entry); //TODO Don't save total entry
 
 			release_index_lock(db_handle);
-			release_index_entry_lock(db_handle, old_file_offset, sizeof(tiledb_index_entry_v0));
+			release_index_page_lock(db_handle, parent_index_page_ref);
 
 			//copy newIndex to current entry
-			memcpy(index_entry, &newIndex, sizeof(tiledb_index_entry_v0));
+			memcpy(index_entry, &new_index_entry, sizeof(tiledb_index_entry_v0));
 		} else {
 			//read child index entry from file
-			acquire_index_entry_lock(db_handle, file_offset, sizeof(tiledb_index_entry_v0));
-			release_index_entry_lock(db_handle, old_file_offset, sizeof(tiledb_index_entry_v0));
+			acquire_index_page_lock(db_handle, index_page_ref);
+			release_index_page_lock(db_handle, parent_index_page_ref);
 
-			if (read_data_to_buffer(db_handle->index_file, file_offset, index_entry, sizeof(tiledb_index_entry_v0)) != sizeof(tiledb_index_entry_v0)) {
-				release_index_entry_lock(db_handle, file_offset, sizeof(tiledb_index_entry_v0));
+			if (tiledb_read_index_page(db_handle, index_page_ref, index_entry)) {
+				release_index_page_lock(db_handle, index_page_ref);
+				db_error("on reading index page");
 				return TILEDB_SYSCALL_ERROR;
 			}
 		}
-		offset = get_next_offset_v0(index_entry, current_node_level, x, y, level);
-		old_file_offset = file_offset;
-		file_offset = index_entry->child_entries[offset];
+		offset = tiledb_get_next_offset_v0(index_entry, current_node_level, x, y, level);
+		parent_index_page_ref = index_page_ref;
+		index_page_ref = index_entry->child_entries[offset];
 		current_node_level += LEVELS_PER_PYRAMID;
 	}
 	// index_entry holds index entry for x/y/level
-	// index entry (locked_offset) is locked
+	// index entry (locked_page) is locked
 	// offset holds index for x/y/level in the index_entry->data_element field
-	*locked_offset = old_file_offset;
+	*locked_page = parent_index_page_ref;
 	*data_element_index = offset;
 	return TILEDB_OK;
 }
 
 tiledb_error tiledb_put_v0(DB_Handle* db_handle, unsigned int x, unsigned int y, unsigned int level, char* data, size_t size) {
 	tiledb_index_entry_v0 entry;
-	unsigned int locked_offset;
-	unsigned int data_element_index;
+	tiledb_index_page_ref locked_page;
+	tiledb_array_index data_element_index;
 
 	tiledb_error result;
-	if ((result = tiledb_get_index_entry_v0(db_handle, x, y, level, &entry, &locked_offset, &data_element_index, 1)) != TILEDB_OK) {
+	if ((result = tiledb_get_index_page_v0(db_handle, x, y, level, &entry, &locked_page, &data_element_index, 1)) != TILEDB_OK) {
 		//index entry for x/y/level could not be loaded
 		return result;
 	}
@@ -156,7 +160,7 @@ tiledb_error tiledb_put_v0(DB_Handle* db_handle, unsigned int x, unsigned int y,
 	//entry holds index for x/y/level and entry is locked(locked_offset)
 	//data_element_index holds index for x/y/level in the index_entry->data_element field
 
-	printf("locked_offset=%d\n", locked_offset);
+	printf("locked_page=%d\n", locked_page);
 
 	//lock data file for writing at the end
 	acquire_data_lock(db_handle);
@@ -164,7 +168,7 @@ tiledb_error tiledb_put_v0(DB_Handle* db_handle, unsigned int x, unsigned int y,
 	//allocate memory in data file
 	size_t data_file_offset = tiledb_get_file_size(db_handle->data_file);
 
-	store_data_to_file(db_handle->data_file, data_file_offset, data, size);
+	tiledb_store_data_to_file(db_handle->data_file, data_file_offset, data, size);
 
 	if (entry.data_elements[data_element_index].size > 0) { // data element is used
 		//TODO mark old data as invalid
@@ -178,19 +182,19 @@ tiledb_error tiledb_put_v0(DB_Handle* db_handle, unsigned int x, unsigned int y,
 	entry.data_elements[data_element_index].offset = data_file_offset;
 	entry.data_elements[data_element_index].last_modification_time = 0; //TODO include time
 	entry.data_elements[data_element_index].size = size;
-	store_data_to_file(db_handle->index_file, locked_offset, &entry, sizeof(entry)); //TODO Don't save total entry
+	tiledb_store_index_page(db_handle, locked_page, &entry); //TODO Don't save total entry
 
-	release_index_entry_lock(db_handle, locked_offset, sizeof(tiledb_index_entry_v0));
+	release_index_page_lock(db_handle, locked_page);
 	return TILEDB_OK;
 }
 
 tiledb_error tiledb_get_v0(DB_Handle* db_handle, unsigned int x, unsigned int y, unsigned int level) {
 	tiledb_index_entry_v0 entry;
-	unsigned int locked_offset;
-	unsigned int data_element_index;
+	tiledb_index_page_ref locked_page;
+	tiledb_array_index data_element_index;
 
 	tiledb_error result;
-	if ((result = tiledb_get_index_entry_v0(db_handle, x, y, level, &entry, &locked_offset, &data_element_index, 0)) != TILEDB_OK) {
+	if ((result = tiledb_get_index_page_v0(db_handle, x, y, level, &entry, &locked_page, &data_element_index, 0)) != TILEDB_OK) {
 		//index entry for x/y/level could not be loaded
 		printf("element not found or error occurred\n");
 		return result;
@@ -207,16 +211,16 @@ tiledb_error tiledb_get_v0(DB_Handle* db_handle, unsigned int x, unsigned int y,
 		db_handle->current_size = entry.data_elements[data_element_index].size;
 		db_handle->current_data = (unsigned char *)malloc(db_handle->current_size);
 
-		if (read_data_to_buffer(db_handle->data_file, entry.data_elements[data_element_index].offset, db_handle->current_data, db_handle->current_size) == db_handle->current_size) {
-			release_index_entry_lock(db_handle, locked_offset, sizeof(tiledb_index_entry_v0));
+		if (tiledb_read_data_to_buffer(db_handle->data_file, entry.data_elements[data_element_index].offset, db_handle->current_data, db_handle->current_size) == db_handle->current_size) {
+			release_index_page_lock(db_handle, locked_page);
 			printf("tile found\n");
 			return TILEDB_OK;
 		}
-		release_index_entry_lock(db_handle, locked_offset, sizeof(tiledb_index_entry_v0));
+		release_index_page_lock(db_handle, locked_page);
 		printf("read error\n");
 		return TILEDB_SYSCALL_ERROR;
 	} else {
-		release_index_entry_lock(db_handle, locked_offset, sizeof(tiledb_index_entry_v0));
+		release_index_page_lock(db_handle, locked_page);
 		printf("element not found\n");
 		return TILEDB_NOT_FOUND;
 	}
