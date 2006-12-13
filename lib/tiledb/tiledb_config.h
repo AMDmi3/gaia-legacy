@@ -13,9 +13,11 @@
 typedef struct DB_Handle {
 	int index_file;
 	int data_file;
-	int version;
 
+	int version;
 	int index_page_size;
+
+	int lazy_locking;
 
 	size_t		current_size;
 	unsigned char	*current_data;
