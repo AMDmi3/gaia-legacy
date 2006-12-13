@@ -32,6 +32,8 @@ typedef enum {
 	/* only big/little andian archs supported */
 	TILEDB_CORRUPT_DATABASE,
 
+	TILEDB_INDEX_ENTRY_NOT_EXISTS,
+
 	TILEDB_UNSUPPORTED_DB_VERSION,
 } tiledb_error;
 
@@ -51,13 +53,15 @@ void tiledb_create_new_cache(char *name);
 void tiledb_close(DB_Handle* db_handle);
 
 /* adds a tile to db */
-tiledb_error tiledb_put(DB_Handle* db_handle, uint32_t x, uint32_t y, uint32_t level, char* data, size_t size);
+tiledb_error tiledb_put(DB_Handle* db_handle, unsigned int x, unsigned int y, unsigned int level, char* data, size_t size);
 
 /* loads a tile from db */
-tiledb_error tiledb_get(DB_Handle* db_handle, uint32_t x, uint32_t y, uint32_t level);
+tiledb_error tiledb_get(DB_Handle* db_handle, unsigned int x, unsigned int y, unsigned int level);
 
+/* reads loaded data */
 size_t tiledb_get_data_size(DB_Handle* db_handle);
 
+/* reads loaded data size */
 unsigned char *tiledb_get_data_ptr(DB_Handle* db_handle);
 
 #ifdef __cplusplus
