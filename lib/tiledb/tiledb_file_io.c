@@ -4,6 +4,8 @@
 #include <sys/stat.h>
 
 #include "tiledb_file_io.h"
+#include "tiledb_config.h"
+#include "tiledb_endian.h"
 
 #if LOG_IO
 #define io_printf(...) printf(__VA_ARGS__)
@@ -67,15 +69,17 @@ int tiledb_read_index_page(DB_Handle *db_handle, tiledb_index_page_ref index_pag
 	return 0;
 }
 
-int tiledb_get_version(DB_Handle* db_handle) {
+void tiledb_read_settings(DB_Handle* db_handle) {
+	tiledb_index_header header;
 	if (lseek(db_handle->index_file, 0, 0) == -1) {
 		db_error("on lseek");
 		exit(-1);
 	}
-	int version;
-	if (read(db_handle->index_file, &version, sizeof(version)) != sizeof(version)) {
+	if (read(db_handle->index_file, &header, sizeof(tiledb_index_header)) != sizeof(tiledb_index_header)) {
 		db_error("on read");
 		exit(-1);
 	}
-	return version;
+	db_handle->version = header.version; //TODO take endianess into account
+	db_handle->db_endianess = header.endianess; //TODO take endianess into account
+	db_handle->pc_endianess = tiledb_get_endian();
 }

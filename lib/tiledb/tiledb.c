@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include "tiledb.h"
+#include "tiledb_endian.h"
 #include "tiledb_file_io.h"
 #include "tiledb_file_locking.h"
 #include "tiledb_internal.h"
@@ -43,7 +44,8 @@ DB_Handle *tiledb_open(char *path, int flags) {
 		db_error("on open data");
 		exit(-1);
 	}
-	db_handle->version = tiledb_get_version(db_handle);
+
+	tiledb_read_settings(db_handle);
 
 	if (db_handle->version == 0) {
 		db_handle->index_page_size = sizeof(tiledb_index_entry_v0);

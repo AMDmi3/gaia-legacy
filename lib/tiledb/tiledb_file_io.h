@@ -29,6 +29,6 @@ void tiledb_store_index_page(DB_Handle *db_handle, tiledb_index_page_ref index_p
 size_t tiledb_read_data_to_buffer(int file, off_t offset, void* buffer, size_t size);
 int tiledb_read_index_page(DB_Handle *db_handle, tiledb_index_page_ref index_page_ref, void *index_entry);
 
-int tiledb_get_version(DB_Handle* db_handle);
+void tiledb_read_settings(DB_Handle* db_handle);
 
 #endif
