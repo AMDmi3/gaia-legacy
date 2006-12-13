@@ -76,6 +76,8 @@ void tiledb_filesystem_import() {
 	cache = tiledb_open(".", CLEAR_CACHE);
 	char buf[1024];
 	snprintf((char*)&buf, 1024, "%s/.gaia/cache", getenv("HOME"));
+	tiledb_enable_lazylock(cache);
 	tiledb_import_directory(cache, (char*)&buf);
+	tiledb_disable_lazylock(cache);
 	tiledb_close(cache);
 }

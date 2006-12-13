@@ -5,6 +5,9 @@
 
 #include "tiledb_config.h"
 
+void acquire_file_lock(int file, off_t offset, off_t size);
+void release_file_lock(int file, off_t offset, off_t size);
+
 void acquire_data_lock(DB_Handle* db_handle);
 void release_data_lock(DB_Handle* db_handle);
 void acquire_index_lock(DB_Handle* db_handle);

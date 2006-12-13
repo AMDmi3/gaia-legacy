@@ -64,6 +64,12 @@ size_t tiledb_get_data_size(DB_Handle* db_handle);
 /* reads loaded data size */
 unsigned char *tiledb_get_data_ptr(DB_Handle* db_handle);
 
+/* locks database, put/get needs no locking, db is locked for other processes */
+tiledb_error tiledb_enable_lazylock(DB_Handle* db_handle);
+
+/* unlocks database */
+tiledb_error tiledb_disable_lazylock(DB_Handle* db_handle);
+
 #ifdef __cplusplus
 }
 #endif

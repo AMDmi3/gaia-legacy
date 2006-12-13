@@ -1,11 +1,13 @@
-#include "tiledb.h"
-#include "tiledb_file_io.h"
-#include "tiledb_internal.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
+
+#include "tiledb.h"
+#include "tiledb_file_io.h"
+#include "tiledb_file_locking.h"
+#include "tiledb_internal.h"
 
 
 size_t tiledb_get_data_size(DB_Handle* db_handle) {
@@ -118,4 +120,31 @@ tiledb_error tiledb_get(DB_Handle* db_handle, uint32_t x, uint32_t y, uint32_t l
 	} else {
 		return TILEDB_UNSUPPORTED_DB_VERSION;
 	}
+}
+
+tiledb_error tiledb_enable_lazylock(DB_Handle* db_handle) {
+	printf("tiledb_enable_lazylock\n");
+	//lock index page 0, put/get of other processes will block
+	acquire_index_page_lock(db_handle, 0);
+	//other processes, could have locked other pages in the index_file
+	//acquire lock on hole file
+	size_t size = tiledb_get_file_size(db_handle->index_file);
+	acquire_file_lock(db_handle->index_file, 0, size);
+
+	db_handle->lazy_locking = 1;
+	return TILEDB_OK;
+}
+
+tiledb_error tiledb_disable_lazylock(DB_Handle* db_handle) {
+	printf("tiledb_disable_lazylock\n");
+
+	db_handle->lazy_locking = 0;
+
+	//release hole file lock
+	size_t size = tiledb_get_file_size(db_handle->index_file);
+	acquire_file_lock(db_handle->index_file, 0, size);
+	//release index lock
+	release_index_page_lock(db_handle, 0);
+
+	return TILEDB_OK;
 }
