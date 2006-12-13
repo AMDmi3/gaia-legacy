@@ -42,6 +42,13 @@ DB_Handle *tiledb_open(char *path, int flags) {
 		exit(-1);
 	}
 	db_handle->version = tiledb_get_version(db_handle);
+
+	if (db_handle->version == 0) {
+		db_handle->index_page_size = sizeof(tiledb_index_entry_v0);
+	} else {
+		//TODO TILEDB_UNSUPPORTED_DB_VERSION;
+	}
+
 	return db_handle;
 }
 
@@ -79,7 +86,7 @@ void tiledb_create_new_cache(char *name)
 		exit(-1);
 	}
 
-	create_new_db(&handle);
+	tiledb_create_new_db_v0(&handle);
 
 	if (close(handle.index_file) == -1) {
 		db_error("on close index");
