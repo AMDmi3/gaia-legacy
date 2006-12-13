@@ -160,8 +160,6 @@ tiledb_error tiledb_put_v0(DB_Handle* db_handle, unsigned int x, unsigned int y,
 	//entry holds index for x/y/level and entry is locked(locked_offset)
 	//data_element_index holds index for x/y/level in the index_entry->data_element field
 
-	printf("locked_page=%d\n", locked_page);
-
 	//lock data file for writing at the end
 	acquire_data_lock(db_handle);
 
