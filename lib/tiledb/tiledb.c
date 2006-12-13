@@ -41,7 +41,7 @@ DB_Handle *tiledb_open(char *path, int flags) {
 		db_error("on open data");
 		exit(-1);
 	}
-	db_handle->version = get_cache_version(db_handle);
+	db_handle->version = tiledb_get_version(db_handle);
 	return db_handle;
 }
 
