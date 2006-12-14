@@ -79,7 +79,8 @@ void tiledb_read_settings(DB_Handle* db_handle) {
 		db_error("on read");
 		exit(-1);
 	}
-	db_handle->version = header.version; //TODO take endianess into account
-	db_handle->db_endianess = header.endianess; //TODO take endianess into account
 	db_handle->pc_endianess = tiledb_get_endian();
+	db_handle->version = (db_handle->pc_endianess == ENDIANESS_LITTLE)?header.version:SWAPBYTES_32(header.version);
+	db_handle->db_endianess =  (db_handle->pc_endianess == ENDIANESS_LITTLE)?header.endianess:SWAPBYTES_32(header.endianess);
+
 }

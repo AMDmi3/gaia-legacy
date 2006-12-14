@@ -16,8 +16,8 @@ void tiledb_create_new_db_v0(DB_Handle* db_handle) {
 
 	//write header
 	tiledb_index_header header;
-	header.version = 0; //TODO handle endianess
-	header.endianess = tiledb_get_endian(); //TODO handle endianess
+	header.version = (db_handle->pc_endianess == ENDIANESS_LITTLE)? 0: SWAPBYTES_32(0);
+	header.endianess = (db_handle->pc_endianess == ENDIANESS_LITTLE)? db_handle->db_endianess: SWAPBYTES_32(db_handle->db_endianess);
 	tiledb_store_data_to_file(db_handle->index_file, 0, &header, sizeof(tiledb_index_header));
 
 	//write root index entry

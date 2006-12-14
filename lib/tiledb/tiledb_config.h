@@ -34,8 +34,8 @@ typedef struct DB_Handle {
 } DB_Handle;
 
 typedef struct tiledb_index_header {
-	uint32_t version;
-	uint32_t endianess;
+	uint32_t version; //stored in little endian
+	uint32_t endianess; //stored in little endian
 } tiledb_index_header;
 
 typedef int tiledb_index_page_ref;
