@@ -44,10 +44,10 @@ typedef enum {
 } DB_Open_Flags;
 
 /* opens a tile db */
-DB_Handle *tiledb_open(char *path, int flags);
+DB_Handle *tiledb_open(char *filepath, int flags);
 
 /* internal */
-void tiledb_create_new_cache(char *name);
+void tiledb_create_new_cache(char *filepath);
 
 /* closes tile db */
 void tiledb_close(DB_Handle* db_handle);

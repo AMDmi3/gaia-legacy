@@ -10,7 +10,7 @@ int main(int argc, char** argv)
 	tiledb_filesystem_import();
 	exit(0);
 
-	DB_Handle *cache = tiledb_open(".", CREATE_IF_NOT_EXISTS);
+	DB_Handle *cache = tiledb_open("gaia_storage_table", CREATE_IF_NOT_EXISTS);
 
 	char* hello = "HELLO WORLD ;-) ";
 	tiledb_put(cache, 0, 0, 15, hello, strlen(hello));
