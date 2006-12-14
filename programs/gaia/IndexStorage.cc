@@ -22,7 +22,9 @@
 #include <tiledb.h>
 
 IndexStorage::IndexStorage(std::string root) {
-	db_handle = tiledb_open(".", CREATE_IF_NOT_EXISTS);
+	char buf[1024];
+	snprintf((char*)&buf, 1024, "%s/../gaia_storage_table", root.c_str());
+	db_handle = tiledb_open((char*)&buf, CREATE_IF_NOT_EXISTS);
 }
 
 IndexStorage::~IndexStorage() {
