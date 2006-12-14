@@ -8,6 +8,12 @@
 #include <string.h>
 #include <time.h>
 
+#if LOG_DB
+#define db_printf(...) printf(__VA_ARGS__)
+#else
+#define db_printf(...) while(0){}
+#endif
+
 void tiledb_create_new_db_v0(DB_Handle* db_handle) {
 	db_handle->version = 0;
 	db_handle->index_page_size = sizeof(tiledb_index_entry_v0);
@@ -69,7 +75,7 @@ tiledb_array_index tiledb_get_next_offset_v0(unsigned int start_level, unsigned 
 		}
 		if (((current_node_level+1) % LEVELS_PER_PYRAMID) == 0) {
 			offset = current_node_x + current_node_y*(1<<(LEVELS_PER_PYRAMID));
-			printf("i:%d->", offset);
+			//printf("i:%d->", offset);
 			//printf("continue at child_entries index=%d\n", offset);
 			if (offset >= 1024) {
 				db_error("index out of bounds");
@@ -79,7 +85,7 @@ tiledb_array_index tiledb_get_next_offset_v0(unsigned int start_level, unsigned 
 		}
 	}
 	offset = data_element_index + current_node_x + current_node_y*(1<<(current_node_level-start_level));
-	printf("d:%d\n", offset);
+	//printf("d:%d\n", offset);
 	//printf("index node found, using data_element index=%d\n", offset);
 	if (offset >= 1+4+16+64+256) {
 		db_error("index out of bounds");
@@ -92,7 +98,7 @@ tiledb_error tiledb_get_index_page_v0(DB_Handle* db_handle, unsigned int x, unsi
 	unsigned int current_node_level = 0;
 	tiledb_array_index offset = 0;
 	tiledb_index_page_ref index_page_ref = 0;
-	printf("i:0->");
+	//printf("i:0->");
 	tiledb_index_page_ref parent_index_page_ref = -1;
 	while (current_node_level <= level) {
 		//file_offset is offset in bytes in index file
@@ -198,7 +204,7 @@ tiledb_error tiledb_get_v0(DB_Handle* db_handle, unsigned int x, unsigned int y,
 	tiledb_error result;
 	if ((result = tiledb_get_index_page_v0(db_handle, x, y, level, &entry, &locked_page, &data_element_index, 0)) != TILEDB_OK) {
 		//index entry for x/y/level could not be loaded
-		printf("element not found or error occurred\n");
+		db_printf("element not found or error occurred\n");
 		return result;
 	}
 
@@ -208,7 +214,7 @@ tiledb_error tiledb_get_v0(DB_Handle* db_handle, unsigned int x, unsigned int y,
 	if (entry.data_elements[data_element_index].size == tiledb_switch_int(db_handle, 0)) {
 		 // data element not found or nodata is stored
 		release_index_page_lock(db_handle, locked_page);
-		printf("element not found\n");
+		db_printf("element not found\n");
 		return TILEDB_NOT_FOUND;
 	}
 
@@ -222,11 +228,11 @@ tiledb_error tiledb_get_v0(DB_Handle* db_handle, unsigned int x, unsigned int y,
 	off_t offset = tiledb_switch_int(db_handle, entry.data_elements[data_element_index].offset);
 	if (tiledb_read_data_to_buffer(db_handle->data_file, offset, db_handle->current_data, db_handle->current_size) != db_handle->current_size) {
 		release_index_page_lock(db_handle, locked_page);
-		printf("read error\n");
+		db_printf("read error\n");
 		return TILEDB_SYSCALL_ERROR;
 	}
 
 	release_index_page_lock(db_handle, locked_page);
-	printf("tile found\n");
+	db_printf("tile found\n");
 	return TILEDB_OK;
 }

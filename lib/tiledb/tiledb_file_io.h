@@ -12,12 +12,6 @@
 
 #include "tiledb_file_io.h"
 
-#if LOG_IO
-#define io_printf(...) printf(__VA_ARGS__)
-#else
-#define io_printf(...) while(0){}
-#endif
-
 size_t tiledb_get_file_size(int file);
 
 off_t tiledb_page_ref_to_offset(DB_Handle *db_handle, tiledb_index_page_ref index_page_ref);
