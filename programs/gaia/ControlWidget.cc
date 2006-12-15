@@ -20,6 +20,7 @@
 #include <qheader.h>
 #include <qlistview.h>
 #include <qradiobutton.h>
+#include <qpushbutton.h>
 #include <qhbuttongroup.h>
 #include <qlayout.h>
 
@@ -28,24 +29,35 @@
 
 namespace gaia {
 
-ControlWidget::ControlWidget(QWidget* parent, const char* name): QWidget(parent, name) {
+ControlWidget::ControlWidget(GLWidget* target, QWidget* parent, const char* name): QWidget(parent, name) {
+	/* target GLWidget to control */
+	m_GLWidget = target;
+
 	/* view model selector */
 	QHButtonGroup *group = new QHButtonGroup("View model", this);
 
-	new QRadioButton("Flat", group);
-	new QRadioButton("Globe", group);
+	QRadioButton *rflat = new QRadioButton("Flat", group);
+	QRadioButton *rglobe = new QRadioButton("Globe", group);
 
 	group->setButton(0);
+
+	QObject::connect(rflat, SIGNAL(clicked()), target, SLOT(SetFlatEarthView()));
+	QObject::connect(rglobe, SIGNAL(clicked()), target, SLOT(SetGlobeEarthView()));
 
 	/* layer list */
 	QListView* listview = new QListView(this);
 	listview->header()->setClickEnabled(0);
 	listview->addColumn("Layer");
 
+	/* reorder button */
+	QPushButton *reorder = new QPushButton("Reorder...", this);
+	reorder->setFixedHeight(reorder->fontMetrics().height() + 4);
+
 	/* layout */
 	QVBoxLayout *layout = new QVBoxLayout(this, 2, 2);
 	layout->addWidget(group);
 	layout->addWidget(listview);
+	layout->addWidget(reorder);
 }
 
 } /* namespace gaia */

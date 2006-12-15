@@ -24,13 +24,14 @@
 namespace gaia {
 
 MainWidget::MainWidget(QWidget* parent, const char* name): QSplitter(Qt::Horizontal, parent, name) {
-	/* create control widget (left bar) */
-	ControlWidget *cw = new ControlWidget(this);
-
-	setResizeMode(cw, QSplitter::KeepSize);
-
 	/* create gl widget */
 	GLWidget* gl = new GLWidget(this);
+
+	/* create control widget (left bar) */
+	ControlWidget *cw = new ControlWidget(gl, this);
+
+	setResizeMode(cw, QSplitter::KeepSize);
+	moveToFirst(cw);
 }
 
 } /* namespace gaia */

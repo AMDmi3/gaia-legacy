@@ -23,13 +23,18 @@
 #include <qwidget.h>
 #include <qsplitter.h>
 
+#include "GLWidget.h"
+
 namespace gaia {
 
 class ControlWidget: public QWidget
 {
 	Q_OBJECT
 public:
-	ControlWidget(QWidget* parent = 0, const char* name = 0);
+	ControlWidget(GLWidget* target, QWidget* parent = 0, const char* name = 0);
+
+private:
+	GLWidget	*m_GLWidget;
 };
 
 } /* namespace gaia */

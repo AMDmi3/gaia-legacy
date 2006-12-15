@@ -20,32 +20,55 @@
 #include "GLWidget.h"
 
 #include "FlatEarthView.h"
+#include "GlobeEarthView.h"
+
 #include "TestLayer.h"
 
 namespace gaia {
 
 GLWidget::GLWidget(QWidget* parent, const char* name): QGLWidget(parent, name) {
+	m_EarthView = new FlatEarthView();
+	m_EarthView->BindLayer(new TestLayer);
 }
 
 GLWidget::~GLWidget() {
 }
 
 void GLWidget::paintGL() {
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	FlatEarthView	ew;
-	TestLayer	tl;
-
-	ew.BindLayer(&tl);
-	ew.Resize(100, 100);
-	ew.Render();
+	if (m_EarthView) {
+		m_EarthView->Resize(width(), height());
+		m_EarthView->Render();
+	}
 }
 
 void GLWidget::initializeGL() {
 	qglClearColor(black);
 }
 
-void GLWidget::resizeGL( int w, int h ) {
+void GLWidget::SetFlatEarthView() {
+	EarthView *newearthview = new FlatEarthView();
+
+	if (m_EarthView)
+		delete m_EarthView;
+
+	m_EarthView = newearthview;
+	m_EarthView->BindLayer(new TestLayer);
+
+	updateGL();
+}
+
+void GLWidget::SetGlobeEarthView() {
+	EarthView *newearthview = new GlobeEarthView();
+
+	if (m_EarthView)
+		delete m_EarthView;
+
+	m_EarthView = newearthview;
+	m_EarthView->BindLayer(new TestLayer);
+
+	updateGL();
 }
 
 } /* namespace gaia */

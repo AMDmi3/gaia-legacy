@@ -22,6 +22,8 @@
 
 #include <qgl.h>
 
+#include "EarthView.h"
+
 namespace gaia {
 
 class GLWidget: public QGLWidget
@@ -34,9 +36,14 @@ public:
 protected:
 	void initializeGL();
 	void paintGL();
-	void resizeGL(int w, int h);
+//	void resizeGL(int w, int h);
+
+public slots:
+	void SetFlatEarthView();
+	void SetGlobeEarthView();
 
 private:
+	EarthView	*m_EarthView;
 };
 
 } /* namespace gaia */

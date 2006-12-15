@@ -46,7 +46,7 @@ srcs = Split("""Main.cc
 		PreloadedTextureManager.cc
 		RawBuffer.cc
 		SimpleTileStorage.cc
-		SphereEarthView.cc
+		GlobeEarthView.cc
 		Layer.cc
 		TestLayer.cc
 		Texture.cc
