@@ -15,7 +15,7 @@ opts = Options(ARGUMENTS)
 # conditional features
 opts.Add(BoolOption('gpsd', 'Compile with gpsd support (libgps)', 0));
 opts.Add(BoolOption('extras', 'Compile examples and tests', 0));
-opts.Add(BoolOption('use_env', 'Use environment variables (CC, CXX, CCFLAGS, CXXFLAGS, CPPPATH, LIBPATH)', 0));
+opts.Add(BoolOption('use_env', 'Use environment variables (CC, CXX, CCFLAGS, CXXFLAGS, CPPPATH, LIBPATH, QTDIR)', 0));
 
 # paths
 opts.Add(('prefix', 'Install prefix', ''));
@@ -27,6 +27,7 @@ opts.Add(('datadir', 'Path (relative to prefix) where to install read-only data 
 #######################################
 env = Environment( CCFLAGS = [ '-Wall', '-g' ],
 		   CXXFLAGS = [ '-Wall', '-g' ],
+		   QTDIR = '/usr/X11R6',
 		   options = opts )
 
 if env['prefix'] == "":
@@ -35,6 +36,11 @@ if env['prefix'] == "":
 	env['datadir'] = 'data'
 
 SConsignFile()
+
+if os.path.exists("/usr/local/bin/moc"):
+	env['QTDIR'] = '/usr/local'
+elif os.path.exists("/usr/bin/moc"):
+	env['QTDIR'] = '/usr'
 
 if not env.GetOption('clean'):
 	if sys.platform.startswith('freebsd'):
@@ -56,7 +62,7 @@ if not env.GetOption('clean'):
 		env.Append(LIBPATH = [ '/usr/local/lib', '/usr/X11R6/lib' ])
 
 if int(env['use_env']):
-	for key in ['CC', 'CCFLAGS', 'CXX', 'CXXFLAGS', 'CPPPATH', 'LIBPATH' ]:
+	for key in ['CC', 'CCFLAGS', 'CXX', 'CXXFLAGS', 'CPPPATH', 'LIBPATH', 'QTDIR' ]:
 		if os.environ.has_key(key):
 			env.Replace( **{key: os.environ[key].split(' ')} )
 
