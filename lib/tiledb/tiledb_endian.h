@@ -32,7 +32,7 @@
 tiledb_endianess tiledb_get_endian();
 
 #define tiledb_switch_int(db_handle, value) (				\
-	((db_handle)->db_endianess != (db_handle)->pc_endianess)?	\
+	((db_handle)->db_endianess == (db_handle)->pc_endianess)?	\
 		(value):SWAPBYTES_32(value))
 
 #endif
