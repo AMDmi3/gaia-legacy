@@ -28,14 +28,14 @@ void tiledb_create_new_db_v0(DB_Handle* db_handle) {
 
 	//write root index entry
 	tiledb_index_entry_v0 index_entry;
-	tiledb_init_index_entry_v0(db_handle, &index_entry, 0);
+	tiledb_init_index_entry_v0(db_handle, &index_entry, 0, -1);
 	tiledb_store_index_page(db_handle, 0, &index_entry);
 }
 
-void tiledb_init_index_entry_v0(DB_Handle* db_handle, tiledb_index_entry_v0 *entry, tiledb_index_page_ref parent)
-{
+void tiledb_init_index_entry_v0(DB_Handle* db_handle, tiledb_index_entry_v0 *entry, tiledb_index_page_ref parent, tiledb_array_index index) {
 	int i;
 	entry->parent_index_page = tiledb_switch_int(db_handle, parent);
+	entry->parent_index_page = tiledb_switch_int(db_handle, index);
 
 	for (i=0; i<sizeof(entry->objects)/sizeof(tiledb_index_object_v0); i++)
 	{
@@ -123,7 +123,7 @@ tiledb_error tiledb_get_index_page_v0(DB_Handle* db_handle, unsigned int x, unsi
 
 			//store new index entry
 			tiledb_index_entry_v0 new_index_entry;
-			tiledb_init_index_entry_v0(db_handle, &new_index_entry, parent_index_page_ref);
+			tiledb_init_index_entry_v0(db_handle, &new_index_entry, parent_index_page_ref, offset);
 			tiledb_store_index_page(db_handle, index_page_ref, &new_index_entry);
 
 			//update parent index entry
