@@ -104,6 +104,73 @@ void GLWidget::mouseMoveEvent(QMouseEvent *e) {
 	updateGL();
 }
 
+void GLWidget::wheelEvent(QWheelEvent *e) {
+	if (e->delta() > 0)
+		m_EarthView->SingleMovement(NAV_ZOOM_IN);
+	else
+		m_EarthView->SingleMovement(NAV_ZOOM_OUT);
+
+	updateGL();
+}
+
+void GLWidget::keyPressEvent(QKeyEvent *e) {
+	switch(e->key()) {
+		case Key_Left:
+			m_EarthView->StartMovement(NAV_PAN_LEFT);
+			break;
+		case Key_Right:
+			m_EarthView->StartMovement(NAV_PAN_RIGHT);
+			break;
+		case Key_Down:
+			m_EarthView->StartMovement(NAV_PAN_DOWN);
+			break;
+		case Key_Up:
+			m_EarthView->StartMovement(NAV_PAN_UP);
+			break;
+		case Key_PageUp:
+		case Key_Equal:
+			m_EarthView->StartMovement(NAV_ZOOM_IN);
+			break;
+		case Key_PageDown:
+		case Key_Minus:
+			m_EarthView->StartMovement(NAV_ZOOM_OUT);
+			break;
+		default:
+			break;
+	}
+
+	updateGL();
+}
+
+void GLWidget::keyReleaseEvent(QKeyEvent *e) {
+	switch(e->key()) {
+		case Key_Left:
+			m_EarthView->StartMovement(NAV_PAN_LEFT);
+			break;
+		case Key_Right:
+			m_EarthView->StartMovement(NAV_PAN_RIGHT);
+			break;
+		case Key_Down:
+			m_EarthView->StartMovement(NAV_PAN_DOWN);
+			break;
+		case Key_Up:
+			m_EarthView->StartMovement(NAV_PAN_UP);
+			break;
+		case Key_PageUp:
+		case Key_Equal:
+			m_EarthView->StartMovement(NAV_ZOOM_IN);
+			break;
+		case Key_PageDown:
+		case Key_Minus:
+			m_EarthView->StartMovement(NAV_ZOOM_OUT);
+			break;
+		default:
+			break;
+	}
+
+	updateGL();
+}
+
 /* slots */
 void GLWidget::SetFlatEarthView() {
 	EarthView *newearthview = new FlatEarthView();
