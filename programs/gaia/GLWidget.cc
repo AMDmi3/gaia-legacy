@@ -47,6 +47,10 @@ void GLWidget::initializeGL() {
 	qglClearColor(black);
 }
 
+void GLWidget::resizeGL(int w, int h) {
+	glViewport(0, 0, w, h);
+}
+
 void GLWidget::SetFlatEarthView() {
 	EarthView *newearthview = new FlatEarthView();
 
