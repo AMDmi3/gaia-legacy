@@ -9,34 +9,6 @@
 extern "C" {
 #endif
 
-/* error codes */
-typedef enum {
-	/* no error */
-	TILEDB_OK = 0,
-
-	/* malloc failed */
-	TILEDB_MALLOC_FAILED,
-
-	/* internal buffer too small */
-	TILEDB_SMALL_BUFFER,
-
-	/* syscall error */
-	TILEDB_SYSCALL_ERROR,
-
-	/* requested data was not found */
-	TILEDB_NOT_FOUND,
-
-	/* only big/little andian archs supported */
-	TILEDB_UNSUPPORTED_ENDIANESS,
-
-	/* only big/little andian archs supported */
-	TILEDB_CORRUPT_DATABASE,
-
-	TILEDB_INDEX_ENTRY_NOT_EXISTS,
-
-	TILEDB_UNSUPPORTED_DB_VERSION,
-} tiledb_error;
-
 typedef enum {
 	DUMMY = 0,
 	CREATE_IF_NOT_EXISTS = 1,
@@ -58,6 +30,9 @@ tiledb_error tiledb_put(DB_Handle* db_handle, unsigned int x, unsigned int y, un
 /* loads a tile from db */
 tiledb_error tiledb_get(DB_Handle* db_handle, unsigned int x, unsigned int y, unsigned int level);
 
+/* deletes a tile from db */
+tiledb_error tiledb_remove(DB_Handle* db_handle, unsigned int x, unsigned int y, unsigned int level);
+
 /* reads loaded data */
 size_t tiledb_get_data_size(DB_Handle* db_handle);
 
@@ -69,6 +44,9 @@ tiledb_error tiledb_enable_lazylock(DB_Handle* db_handle);
 
 /* unlocks database */
 tiledb_error tiledb_disable_lazylock(DB_Handle* db_handle);
+
+/* defragment data file */
+tiledb_error tiledb_defragment_data_file(DB_Handle* db_handle);
 
 #ifdef __cplusplus
 }

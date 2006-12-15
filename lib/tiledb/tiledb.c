@@ -60,10 +60,14 @@ DB_Handle *tiledb_open(char *filepath, int flags) {
 		exit(-1);
 	}
 
-	tiledb_read_settings(db_handle);
+	if (tiledb_read_settings(db_handle) != TILEDB_OK) {
+		tiledb_close(db_handle);
+		return NULL;
+	}
 
 	if (db_handle->version == 0) {
 		db_handle->index_page_size = sizeof(tiledb_index_entry_v0);
+		db_handle->data_page_size = 512;
 	} else {
 		//TODO TILEDB_UNSUPPORTED_DB_VERSION;
 	}
@@ -145,6 +149,16 @@ tiledb_error tiledb_get(DB_Handle* db_handle, uint32_t x, uint32_t y, uint32_t l
 	}
 }
 
+tiledb_error tiledb_remove(DB_Handle* db_handle, unsigned int x, unsigned int y, unsigned int level) {
+	db_printf("tiledb_remove(x=%d, y=%d, level=%d)\n", x, y, level);
+
+	if (db_handle->version == 0) {
+		return tiledb_remove_v0(db_handle, x, y, level);
+	} else {
+		return TILEDB_UNSUPPORTED_DB_VERSION;
+	}
+}
+
 tiledb_error tiledb_enable_lazylock(DB_Handle* db_handle) {
 	db_printf("tiledb_enable_lazylock\n");
 	//lock index page 0, put/get of other processes will block
@@ -169,5 +183,27 @@ tiledb_error tiledb_disable_lazylock(DB_Handle* db_handle) {
 	//release index lock
 	release_index_page_lock(db_handle, 0);
 
+	return TILEDB_OK;
+}
+
+tiledb_error tiledb_defragment_data_file(DB_Handle* db_handle) {
+	//TODO
+	// 	lock_complete_database();
+	// 	data_entry = 0;
+	// 	next_data_entry = 0;
+	// 	while (next_data_entry < filesize(db_handle->data_file)) {
+	// 		if (next_data_entry->mtime == 0 || (next_data_entry->index_page->objects[next_data_entry->index].offset != next_data_entry) {
+	// 			//data_entry is garbage
+	// 			next_data_entry = search_next_non_garbage_entry_starting_with(next_data_entry);
+	// 			filecpy(data_entry, next_data_entry); //entry must not overlap
+	// 			//update index
+	// 			data_entry->index_page->objects[data_entry->index].offset = data_entry;
+	// 			store_index();
+	// 			next_data_entry += data_entry.size + padding;
+	// 		}
+	// 		data_entry += data_entry.size + padding;
+	// 	}
+	// 	delete_file_space_after(data_entry)
+	// 	unlock complete database
 	return TILEDB_OK;
 }

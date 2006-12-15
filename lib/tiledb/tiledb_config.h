@@ -5,10 +5,8 @@
 #include <stdio.h>
 
 #define LOG_LOCKING 0
-#define LOG_IO 0
-#define LOG_DB 0
-
-
+#define LOG_IO 1
+#define LOG_DB 1
 
 #define db_error(...) printf("DB-ERROR: ");					\
 			printf(__VA_ARGS__);						\
@@ -21,12 +19,41 @@ typedef enum {
 	ENDIANESS_OTHER,
 } tiledb_endianess;
 
+/* error codes */
+typedef enum {
+	/* no error */
+	TILEDB_OK = 0,
+
+	/* malloc failed */
+	TILEDB_MALLOC_FAILED,
+
+	/* internal buffer too small */
+	TILEDB_SMALL_BUFFER,
+
+	/* syscall error */
+	TILEDB_SYSCALL_ERROR,
+
+	/* requested data was not found */
+	TILEDB_NOT_FOUND,
+
+	/* only big/little andian archs supported */
+	TILEDB_UNSUPPORTED_ENDIANESS,
+
+	/* only big/little andian archs supported */
+	TILEDB_CORRUPT_DATABASE,
+
+	TILEDB_INDEX_ENTRY_NOT_EXISTS,
+
+	TILEDB_UNSUPPORTED_DB_VERSION,
+} tiledb_error;
+
 typedef struct DB_Handle {
 	int index_file;
 	int data_file;
 
 	int version;
 	int index_page_size;
+	int data_page_size;
 	tiledb_endianess db_endianess;
 	tiledb_endianess pc_endianess;
 
