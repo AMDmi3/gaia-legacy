@@ -69,7 +69,8 @@ DB_Handle *tiledb_open(char *filepath, int flags) {
 		db_handle->index_page_size = sizeof(tiledb_index_entry_v0);
 		db_handle->data_page_size = 512;
 	} else {
-		//TODO TILEDB_UNSUPPORTED_DB_VERSION;
+		tiledb_close(db_handle);
+		return NULL;
 	}
 
 	return db_handle;
@@ -187,7 +188,7 @@ tiledb_error tiledb_disable_lazylock(DB_Handle* db_handle) {
 }
 
 tiledb_error tiledb_defragment_data_file(DB_Handle* db_handle) {
-	//TODO
+	//TODO implement defragment
 	// 	lock_complete_database();
 	// 	data_entry = 0;
 	// 	next_data_entry = 0;
