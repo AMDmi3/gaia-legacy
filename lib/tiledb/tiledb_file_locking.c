@@ -16,7 +16,7 @@ void acquire_file_lock(int file, off_t offset, off_t size) {
 	}
 	if (lockf(file, F_LOCK, size) != 0) {
 		db_error("on lock data");
-		exit(-1);
+ 		exit(-1);
 	}
 }
 
