@@ -29,6 +29,10 @@ namespace gaia {
 GLWidget::GLWidget(QWidget* parent, const char* name): QGLWidget(parent, name) {
 	m_EarthView = new FlatEarthView();
 	m_EarthView->BindLayer(new TestLayer);
+
+	m_MouseDownMask = 0;
+
+//	SetMouseTracking(1);
 }
 
 GLWidget::~GLWidget() {
@@ -51,11 +55,60 @@ void GLWidget::resizeGL(int w, int h) {
 	glViewport(0, 0, w, h);
 }
 
+/* events */
+void GLWidget::mousePressEvent(QMouseEvent *e) {
+	m_MouseDownMask |= e->button();
+
+	switch(e->button()) {
+	case LeftButton:
+		m_MouseLeftAnchor = e->pos();
+		m_EarthView->StartDrag(e->x(), e->y(), NAV_DRAG_PAN);
+		break;
+	case MidButton:
+		m_MouseMidAnchor = e->pos();
+		break;
+	case RightButton:
+		m_MouseRightAnchor = e->pos();
+		m_EarthView->StartDrag(e->x(), e->y(), NAV_DRAG_ZOOM);
+		break;
+	default:
+		break;
+	}
+
+	updateGL();
+}
+
+void GLWidget::mouseReleaseEvent(QMouseEvent *e) {
+	m_MouseDownMask &= ~e->button();
+
+	switch(e->button()) {
+	case LeftButton:
+		break;
+	case MidButton:
+		break;
+	case RightButton:
+		break;
+	default:
+		break;
+	}
+
+	updateGL();
+}
+
+void GLWidget::mouseMoveEvent(QMouseEvent *e) {
+	if (m_MouseDownMask & LeftButton)
+		m_EarthView->Drag(m_MouseLeftAnchor.x(), m_MouseLeftAnchor.y(), e->x(), e->y(), NAV_DRAG_PAN);
+	if (m_MouseDownMask & RightButton)
+		m_EarthView->Drag(m_MouseRightAnchor.x(), m_MouseRightAnchor.y(), e->x(), e->y(), NAV_DRAG_ZOOM);
+
+	updateGL();
+}
+
+/* slots */
 void GLWidget::SetFlatEarthView() {
 	EarthView *newearthview = new FlatEarthView();
 
-	if (m_EarthView)
-		delete m_EarthView;
+	delete m_EarthView;
 
 	m_EarthView = newearthview;
 	m_EarthView->BindLayer(new TestLayer);
@@ -66,8 +119,7 @@ void GLWidget::SetFlatEarthView() {
 void GLWidget::SetGlobeEarthView() {
 	EarthView *newearthview = new GlobeEarthView();
 
-	if (m_EarthView)
-		delete m_EarthView;
+	delete m_EarthView;
 
 	m_EarthView = newearthview;
 	m_EarthView->BindLayer(new TestLayer);

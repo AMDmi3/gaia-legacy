@@ -33,9 +33,6 @@ void FlatEarthView::Render() {
 	double yspan = m_Eye.yspan((double)m_ViewportWidth/(double)m_ViewportHeight);
 	double xspan = m_Eye.xspan((double)m_ViewportWidth/(double)m_ViewportHeight);
 
-	printf("Viewport: %d %d\n", m_ViewportWidth, m_ViewportHeight);
-	printf("Span: %f %f\n", xspan, yspan);
-
 	xspan *= AspectCorrection();
 
 	/* setup projection */

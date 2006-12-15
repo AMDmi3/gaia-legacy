@@ -24,6 +24,10 @@
 
 #include "EarthView.h"
 
+#define MASK_LEFTBUTTON		0x01
+#define MASK_MIDDLEBUTTON	0x02
+#define MASK_RIGHTBUTTON	0x04
+
 namespace gaia {
 
 class GLWidget: public QGLWidget
@@ -37,6 +41,9 @@ protected:
 	void initializeGL();
 	void paintGL();
 	void resizeGL(int w, int h);
+	void mousePressEvent(QMouseEvent *e);
+	void mouseReleaseEvent(QMouseEvent *e);
+	void mouseMoveEvent(QMouseEvent *e);
 
 public slots:
 	void SetFlatEarthView();
@@ -44,6 +51,10 @@ public slots:
 
 private:
 	EarthView	*m_EarthView;
+	int		m_MouseDownMask;
+	QPoint		m_MouseLeftAnchor;
+	QPoint		m_MouseMidAnchor;
+	QPoint		m_MouseRightAnchor;
 };
 
 } /* namespace gaia */
