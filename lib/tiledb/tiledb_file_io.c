@@ -28,59 +28,55 @@ tiledb_index_page_ref tiledb_get_free_index_page(DB_Handle* db_handle) {
 	return (index_size - sizeof(tiledb_index_header)) / db_handle->index_page_size;
 }
 
-void tiledb_store_data_to_file(int file, off_t offset, void* data, size_t size)
-{
+tiledb_error tiledb_store_data_to_file(int file, off_t offset, void* data, size_t size) {
 	io_printf("store_data_to_file(offset=%d, size=%d)\n", (int)offset, size);
 	if (lseek(file, offset, 0) == -1) {
 		db_error("on lseek");
-		exit(-1);
+		return TILEDB_SYSCALL_ERROR;
 	}
 	if (write(file, data, size) != size) {
 		db_error("on write");
-		exit(-1);
+		return TILEDB_SYSCALL_ERROR;
 	}
+	return TILEDB_OK;
 }
 
-void tiledb_store_index_page(DB_Handle *db_handle, tiledb_index_page_ref index_page_ref, void *index_entry) {
+tiledb_error tiledb_store_index_page(DB_Handle *db_handle, tiledb_index_page_ref index_page_ref, void *index_entry) {
 	off_t offset = tiledb_page_ref_to_offset(db_handle, index_page_ref);
-	tiledb_store_data_to_file(db_handle->index_file, offset, index_entry, db_handle->index_page_size);
+	return tiledb_store_data_to_file(db_handle->index_file, offset, index_entry, db_handle->index_page_size);
 }
 
-size_t tiledb_read_data_to_buffer(int file, off_t offset, void* buffer, size_t size)
+tiledb_error tiledb_read_data_to_buffer(int file, off_t offset, void* buffer, size_t size)
 {
-	io_printf("read_data_to_buffer(offset=%d, size=%d) %s:%d\n", (int)offset, size, __FILE__, __LINE__);
+	io_printf("read_data_to_buffer(offset=%d, size=%d)\n", (int)offset, size);
 	if (lseek(file, offset, 0) == -1) {
 		db_error("on lseek");
-		exit(-1);
+		return TILEDB_SYSCALL_ERROR;
 	}
 	if (read(file, buffer, size) != size) {
 		db_error("on read");
-		exit(-1);
+		return TILEDB_SYSCALL_ERROR;
 	}
-	return size;
+	return TILEDB_OK;
 }
 
-int tiledb_read_index_page(DB_Handle *db_handle, tiledb_index_page_ref index_page_ref, void *index_entry) {
+tiledb_error tiledb_read_index_page(DB_Handle *db_handle, tiledb_index_page_ref index_page_ref, void *index_entry) {
 	off_t offset = tiledb_page_ref_to_offset(db_handle, index_page_ref);
-	size_t size = tiledb_read_data_to_buffer(db_handle->index_file, offset, index_entry, db_handle->index_page_size);
-	if (size != db_handle->index_page_size) {
-		return 1;
-	}
-	return 0;
+	return tiledb_read_data_to_buffer(db_handle->index_file, offset, index_entry, db_handle->index_page_size);
 }
 
-void tiledb_read_settings(DB_Handle* db_handle) {
+tiledb_error tiledb_read_settings(DB_Handle* db_handle) {
 	tiledb_index_header header;
 	if (lseek(db_handle->index_file, 0, 0) == -1) {
 		db_error("on lseek");
-		exit(-1);
+		return TILEDB_SYSCALL_ERROR;
 	}
 	if (read(db_handle->index_file, &header, sizeof(tiledb_index_header)) != sizeof(tiledb_index_header)) {
 		db_error("on read");
-		exit(-1);
+		return TILEDB_SYSCALL_ERROR;
 	}
 	db_handle->pc_endianess = tiledb_get_endian();
 	db_handle->version = (db_handle->pc_endianess == ENDIANESS_LITTLE)?header.version:SWAPBYTES_32(header.version);
 	db_handle->db_endianess =  (db_handle->pc_endianess == ENDIANESS_LITTLE)?header.endianess:SWAPBYTES_32(header.endianess);
-
+	return TILEDB_OK;
 }
