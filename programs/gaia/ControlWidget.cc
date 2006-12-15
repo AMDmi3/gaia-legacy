@@ -48,6 +48,17 @@ ControlWidget::ControlWidget(GLWidget* target, QWidget* parent, const char* name
 	QListView* listview = new QListView(this);
 	listview->header()->setClickEnabled(0);
 	listview->addColumn("Layer");
+	listview->setRootIsDecorated(1);
+	//listview->setSorting(-1);
+
+	QListViewItem *il = new QListViewItem(listview, "Imagery");
+	QListViewItem *nav = new QListViewItem(listview, "Navigation");
+	QListViewItem *oth = new QListViewItem(listview, "Other");
+
+	new QCheckListItem(il, "World Wind", QCheckListItem::CheckBox);
+	new QCheckListItem(oth, "Test", QCheckListItem::CheckBox);
+	new QCheckListItem(nav, "GPS", QCheckListItem::CheckBox);
+	new QCheckListItem(nav, "Grid", QCheckListItem::CheckBox);
 
 	/* reorder button */
 	QPushButton *reorder = new QPushButton("Reorder...", this);
