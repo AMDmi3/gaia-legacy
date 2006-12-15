@@ -17,8 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __GAIA__SPHEREEARTHVIEW_H__
-#define __GAIA__SPHEREEARTHVIEW_H__
+#ifndef __GAIA__GLOBEEARTHVIEW_H__
+#define __GAIA__GLOBEEARTHVIEW_H__
 
 #include "Viewpoint.h"
 #include "Layer.h"
@@ -33,17 +33,17 @@ namespace gaia {
  * Simplest possible earth representation. Orthogonal projection, pitch
  * cannot be changed and north is always 'up'.
  */
-class SphereEarthView: public EarthView {
+class GlobeEarthView: public EarthView {
 public:
 	/**
 	 * Constructor.
 	 */
-	SphereEarthView();
+	GlobeEarthView();
 
 	/**
 	 * Destructor.
 	 */
-	virtual ~SphereEarthView();
+	virtual ~GlobeEarthView();
 
 	/**
 	 * Render one frame.

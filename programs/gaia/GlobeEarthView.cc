@@ -17,20 +17,20 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "SphereEarthView.h"
+#include "GlobeEarthView.h"
 
 namespace gaia {
 
-SphereEarthView::SphereEarthView() {
+GlobeEarthView::GlobeEarthView() {
 }
 
-SphereEarthView::~SphereEarthView() {
+GlobeEarthView::~GlobeEarthView() {
 }
 
 #define XSTEP 15
 #define YSTEP 15
 
-void SphereEarthView::Render() {
+void GlobeEarthView::Render() {
 	/* setup projection */
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -86,7 +86,7 @@ void SphereEarthView::Render() {
 	}
 }
 
-void SphereEarthView::Animate(double delta) {
+void GlobeEarthView::Animate(double delta) {
 	if (m_CurrentMovementFlags & NAV_ZOOM_IN)
 		m_Eye.h *= delta < 1.0 ? 1.0 - delta : 0.1;
 	if (m_CurrentMovementFlags & NAV_ZOOM_OUT)
@@ -105,17 +105,17 @@ void SphereEarthView::Animate(double delta) {
 }
 
 /* keyboard navigation */
-int SphereEarthView::StartMovement(int flags) {
+int GlobeEarthView::StartMovement(int flags) {
 	m_CurrentMovementFlags |= flags;
 	return 1;
 }
 
-int SphereEarthView::StopMovement(int flags) {
+int GlobeEarthView::StopMovement(int flags) {
 	m_CurrentMovementFlags &= ~flags;
 	return 1;
 }
 
-int SphereEarthView::SingleMovement(int flags) {
+int GlobeEarthView::SingleMovement(int flags) {
 	if (flags & NAV_ZOOM_IN)
 		m_Eye.h /= 1.3;
 
@@ -128,7 +128,7 @@ int SphereEarthView::SingleMovement(int flags) {
 }
 
 /* private sphere-specific functions */
-void SphereEarthView::NormalizeEye() {
+void GlobeEarthView::NormalizeEye() {
 	for (; m_Eye.x < -0.5; m_Eye.x += 1.0);
 	for (; m_Eye.x > 0.5; m_Eye.x -= 1.0);
 
