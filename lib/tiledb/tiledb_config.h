@@ -42,6 +42,8 @@ typedef enum {
 	/* only big/little andian archs supported */
 	TILEDB_CORRUPT_DATABASE,
 
+	TILEDB_INVALID_HANDLE,
+
 	TILEDB_INDEX_ENTRY_NOT_EXISTS,
 
 	TILEDB_UNSUPPORTED_DB_VERSION,

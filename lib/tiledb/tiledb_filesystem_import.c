@@ -47,11 +47,16 @@ void tiledb_import_tile(DB_Handle *cache, char *filepath) {
 	int x, y, level;
 	tiledb_extract_xyl_from_path(filepath, &x, &y, &level);
 
-	printf("import file %s x=%d, y=%d, level=%d, size=%d\n",
-		filepath, x, y, level, file_size);
-
-	if (file_size > 0)
-		tiledb_put(cache, x, y, level, (char*)&buf, file_size);
+	if (file_size > 0) {
+		if (tiledb_exists(cache, x, y, level) != TILEDB_OK) {
+			printf("import file %s x=%d, y=%d, level=%d, size=%d\n",
+				filepath, x, y, level, file_size);
+			tiledb_put(cache, x, y, level, (unsigned char*)&buf, file_size);
+		} else {
+			printf("ignore file %s x=%d, y=%d, level=%d, size=%d\n",
+				filepath, x, y, level, file_size);
+		}
+	}
 }
 
 void tiledb_import_directory(DB_Handle *cache, char *directoy) {
@@ -72,16 +77,16 @@ void tiledb_import_directory(DB_Handle *cache, char *directoy) {
 }
 
 void tiledb_filesystem_import() {
-	DB_Handle *cache;
+	DB_Handle cache;
 
 	char db_path[1024];
 	snprintf((char*)&db_path, 1024, "%s/.gaia/gaia_storage_table", getenv("HOME"));
 
-	cache = tiledb_open((char*)&db_path, CLEAR_CACHE);
+	tiledb_open(&cache, (char*)&db_path, CREATE_IF_NOT_EXISTS);
 	char buf[1024];
 	snprintf((char*)&buf, 1024, "%s/.gaia/cache", getenv("HOME"));
-	tiledb_enable_lazylock(cache);
-	tiledb_import_directory(cache, (char*)&buf);
-	tiledb_disable_lazylock(cache);
-	tiledb_close(cache);
+	tiledb_enable_lazylock(&cache);
+	tiledb_import_directory(&cache, (char*)&buf);
+	tiledb_disable_lazylock(&cache);
+	tiledb_close(&cache);
 }

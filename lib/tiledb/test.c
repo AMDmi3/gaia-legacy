@@ -14,22 +14,24 @@ int main(int argc, char** argv)
 	char db_path[1024];
 	snprintf((char*)&db_path, 1024, "%s/.gaia/gaia_storage_table", getenv("HOME"));
 
-	DB_Handle* db_handle = tiledb_open((char*)&db_path, CREATE_IF_NOT_EXISTS);
-	tiledb_remove(db_handle, 0, 1, 1);
-	tiledb_close(db_handle);
+	DB_Handle db_handle;
+	tiledb_open(&db_handle, (char*)&db_path, CREATE_IF_NOT_EXISTS);
+	tiledb_remove(&db_handle, 0, 1, 1);
+	tiledb_close(&db_handle);
 
 	exit(0);
 
-	DB_Handle *cache = tiledb_open("gaia_storage_table", CREATE_IF_NOT_EXISTS);
+	DB_Handle cache;
+	tiledb_open(&cache, "gaia_storage_table", CREATE_IF_NOT_EXISTS);
 
 	char* hello = "HELLO WORLD ;-) ";
-	tiledb_put(cache, 0, 0, 15, hello, strlen(hello));
+	tiledb_put(&cache, 0, 0, 15, (unsigned char *)hello, strlen(hello));
 	printf("\n");
 
-	if (tiledb_get(cache, 0, 0, 15) == TILEDB_OK) {
-		tiledb_get_data_ptr(cache)[tiledb_get_data_size(cache)-1] = 0;
-		printf("%s\n", tiledb_get_data_ptr(cache));
+	if (tiledb_get(&cache, 0, 0, 15) == TILEDB_OK) {
+		tiledb_get_data_ptr(&cache)[tiledb_get_data_size(&cache)-1] = 0;
+		printf("%s\n", tiledb_get_data_ptr(&cache));
 	}
 
-	tiledb_close(cache);
+	tiledb_close(&cache);
 }

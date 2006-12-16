@@ -5,14 +5,14 @@
 
 #include "tiledb_config.h"
 
-void acquire_file_lock(int file, off_t offset, off_t size);
-void release_file_lock(int file, off_t offset, off_t size);
+tiledb_error acquire_file_lock(int file, off_t offset, off_t size);
+tiledb_error release_file_lock(int file, off_t offset, off_t size);
 
-void acquire_data_lock(DB_Handle* db_handle);
-void release_data_lock(DB_Handle* db_handle);
-void acquire_index_lock(DB_Handle* db_handle);
-void release_index_lock(DB_Handle* db_handle);
-void acquire_index_page_lock(DB_Handle* db_handle, tiledb_index_page_ref page_ref);
-void release_index_page_lock(DB_Handle* db_handle, tiledb_index_page_ref page_ref);
+tiledb_error acquire_data_lock(DB_Handle* db_handle);
+tiledb_error release_data_lock(DB_Handle* db_handle);
+tiledb_error acquire_index_lock(DB_Handle* db_handle);
+tiledb_error release_index_lock(DB_Handle* db_handle);
+tiledb_error acquire_index_page_lock(DB_Handle* db_handle, tiledb_index_page_ref page_ref);
+tiledb_error release_index_page_lock(DB_Handle* db_handle, tiledb_index_page_ref page_ref);
 
 #endif
