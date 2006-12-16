@@ -50,7 +50,7 @@ protected:
 	 */
 	void Process(TilePtr tile);
 private:
-	DB_Handle *db_handle;
+	DB_Handle db_handle;
 };
 
 #endif

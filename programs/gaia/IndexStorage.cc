@@ -24,21 +24,21 @@
 IndexStorage::IndexStorage(std::string root) {
 	char buf[1024];
 	snprintf((char*)&buf, 1024, "%s/../gaia_storage_table", root.c_str());
-	db_handle = tiledb_open((char*)&buf, CREATE_IF_NOT_EXISTS);
+	tiledb_open(&db_handle, (char*)&buf, CREATE_IF_NOT_EXISTS);
 }
 
 IndexStorage::~IndexStorage() {
-	tiledb_close(db_handle);
+	tiledb_close(&db_handle);
 }
 
 void IndexStorage::Process(TilePtr tile) {
 	if (!tile->IsLoaded()) { /* loading */
 		try {
-			if (tiledb_get(db_handle, tile->GetX(), tile->GetY(), tile->GetLevel()) != TILEDB_OK) {
+			if (tiledb_get(&db_handle, tile->GetX(), tile->GetY(), tile->GetLevel()) != TILEDB_OK) {
 				throw std::exception();
 			}
 
-			RawBuffer *buf = new RawBuffer(tiledb_get_data_ptr(db_handle), tiledb_get_data_size(db_handle));
+			RawBuffer *buf = new RawBuffer(tiledb_get_data_ptr(&db_handle), tiledb_get_data_size(&db_handle));
 
 			try {
 				tile->Load(buf, m_pSaveStorage != 0);
@@ -53,7 +53,7 @@ void IndexStorage::Process(TilePtr tile) {
 	} else if (tile->IsSaveable()) { /* saving */
 		if (!tile->IsNull()) {
 			RawBuffer *buf = tile->ReleaseRawData();
-			tiledb_put(db_handle, tile->GetX(), tile->GetY(), tile->GetLevel(), (char*)buf->Data(), buf->Size());
+			tiledb_put(&db_handle, tile->GetX(), tile->GetY(), tile->GetLevel(), (unsigned char*)buf->Data(), buf->Size());
 			return;
 		}
 		throw Exception("shouldn't get here");
