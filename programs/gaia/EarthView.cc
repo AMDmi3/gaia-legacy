@@ -28,8 +28,12 @@ EarthView::EarthView() {
 EarthView::~EarthView() {
 }
 
-void EarthView::BindLayer(Layer *layer) {
+void EarthView::AttachLayer(Layer *layer) {
 	m_Layers.push_back(layer);
+}
+
+void EarthView::DetachAllLayers() {
+	m_Layers.clear();
 }
 
 void EarthView::Resize(int width, int height) {

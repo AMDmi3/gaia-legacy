@@ -7,6 +7,9 @@ Import('*')
 #######################################
 env = env.Copy(QT_LIB = 'qt-mt', tools = ['qt'])
 
+env.Append(CCFLAGS = [ '-DQT_NO_DEBUG', '-DQT_THREAD_SUPPORT', '-DQT_SHARED', '-DQT_TABLET_SUPPORT' ] )
+env.Append(CXXFLAGS = [ '-DQT_NO_DEBUG', '-DQT_THREAD_SUPPORT', '-DQT_SHARED', '-DQT_TABLET_SUPPORT' ] )
+
 env.Append(LIBS = [ 'z', 'm', 'jpeg', 'GL', 'GLU', 'pthread' ])
 env.Prepend(CPPPATH = [ '../../lib/wwfetch' ])
 env.Prepend(LIBPATH = [ '../../lib/wwfetch' ])

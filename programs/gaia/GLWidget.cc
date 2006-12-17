@@ -28,8 +28,6 @@ namespace gaia {
 
 GLWidget::GLWidget(QWidget* parent, const char* name): QGLWidget(parent, name) {
 	m_EarthView = new FlatEarthView();
-	m_EarthView->BindLayer(new TestLayer);
-
 	m_MouseDownMask = 0;
 
 //	SetMouseTracking(1);
@@ -53,6 +51,15 @@ void GLWidget::initializeGL() {
 
 void GLWidget::resizeGL(int w, int h) {
 	glViewport(0, 0, w, h);
+}
+
+/* public methods for ControlWidget */
+void GLWidget::AttachLayer(Layer *layer) {
+	m_EarthView->AttachLayer(layer);
+}
+
+void GLWidget::DetachAllLayers() {
+	m_EarthView->DetachAllLayers();
 }
 
 /* events */
@@ -178,9 +185,6 @@ void GLWidget::SetFlatEarthView() {
 	delete m_EarthView;
 
 	m_EarthView = newearthview;
-	m_EarthView->BindLayer(new TestLayer);
-
-	updateGL();
 }
 
 void GLWidget::SetGlobeEarthView() {
@@ -189,9 +193,6 @@ void GLWidget::SetGlobeEarthView() {
 	delete m_EarthView;
 
 	m_EarthView = newearthview;
-	m_EarthView->BindLayer(new TestLayer);
-
-	updateGL();
 }
 
 } /* namespace gaia */

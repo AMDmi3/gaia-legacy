@@ -31,6 +31,8 @@ namespace gaia {
 
 class WorldWindLayer: public Layer {
 public:
+	/* XXX: layer ctor should have no parameters
+	 * think of config system instead */
 	WorldWindLayer(std::string storageroot);
 	virtual ~WorldWindLayer();
 

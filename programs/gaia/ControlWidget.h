@@ -21,19 +21,35 @@
 #define __GAIA__CONTROLWIDGET_H__
 
 #include <qwidget.h>
-#include <qsplitter.h>
+#include <qlistview.h>
 
 #include "GLWidget.h"
 
 namespace gaia {
 
-class ControlWidget: public QWidget
-{
+class LayerListItem: public QCheckListItem {
+public:
+	LayerListItem(QListView *parent, QListViewItem *after, const QString &name, Layer *layer, int on) : QCheckListItem(parent, after, name, QCheckListItem::CheckBox), m_Layer(layer) { setOn(on); }
+	~LayerListItem() { delete m_Layer; }
+
+	Layer	*GetLayer() { return m_Layer; }
+
+protected:
+	Layer	*m_Layer;
+};
+
+class ControlWidget: public QWidget {
 	Q_OBJECT
 public:
 	ControlWidget(GLWidget* target, QWidget* parent = 0, const char* name = 0);
 
+private slots:
+	void SetFlatEarthView();
+	void SetGlobeEarthView();
+	void UpdateLayers();
+
 private:
+	QPtrList<LayerListItem>	m_LayerItems;
 	GLWidget	*m_GLWidget;
 };
 

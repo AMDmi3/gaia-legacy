@@ -23,19 +23,20 @@
 #include <qgl.h>
 
 #include "EarthView.h"
-
-#define MASK_LEFTBUTTON		0x01
-#define MASK_MIDDLEBUTTON	0x02
-#define MASK_RIGHTBUTTON	0x04
+#include "Layer.h"
 
 namespace gaia {
 
-class GLWidget: public QGLWidget
-{
+class GLWidget: public QGLWidget {
 	Q_OBJECT
 public:
 	GLWidget(QWidget* parent, const char* name = 0);
 	~GLWidget();
+
+	void SetFlatEarthView();
+	void SetGlobeEarthView();
+	void AttachLayer(Layer *layer);
+	void DetachAllLayers();
 
 protected:
 	void initializeGL();
@@ -47,10 +48,6 @@ protected:
 	void wheelEvent(QWheelEvent *e);
 	void keyPressEvent(QKeyEvent *e);
 	void keyReleaseEvent(QKeyEvent *e);
-
-public slots:
-	void SetFlatEarthView();
-	void SetGlobeEarthView();
 
 private:
 	EarthView	*m_EarthView;
