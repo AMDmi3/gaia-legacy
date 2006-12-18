@@ -41,6 +41,8 @@ if os.path.exists("/usr/local/bin/moc"):
 	env['QTDIR'] = '/usr/local'
 elif os.path.exists("/usr/bin/moc"):
 	env['QTDIR'] = '/usr'
+elif os.path.exists("/opt/qt"):
+	env['QTDIR'] = '/opt/qt'	# Arch Linux
 
 if not env.GetOption('clean'):
 	if sys.platform.startswith('freebsd'):
