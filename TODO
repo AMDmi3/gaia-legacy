@@ -7,9 +7,8 @@ Graphics/user interface:
     * Bar with current geographical coordinates and statistics
     * Freetype font renderer (will also allow internationalization
       of HUD)
-* GUI (most probably Qt)
 * Ability to set initial viewer's coordinates, possibly with location
-  catalogue (patch available)
+  catalogue (patch by Andreas Grau available)
 * gaia-mkmap utility; tell it corner coordinates, dimensions, dpi, and
   it'll make you map in single JPEG, ready for printing or whatever.
   (should be also available from gaia itself). XXX: wtf is geotiffs?
@@ -18,12 +17,13 @@ Graphics/user interface:
   visible, then you stop navigating and the view is rendered in 3D.
   Anyone can tell me, is software OpenGL available in Windows Mobile
   devices?
+* Re-implement Qt'less client
 
 Caching:
 * Implement tile cache. It'll be compatible with NASA layer, but
-  generally multi-purpose.
+  generally multi-purpose (Andreas Grau is working on it)
 * Add utility to control it (read and write dumps, read and write
-  separate files, delete areas etc.).
+  separate files, delete areas etc.) (Andreas Grau is working on it)
 
 Additional layers:
 * GPS: Render path in lines, instead of HUD dots
@@ -45,6 +45,9 @@ Additional layers:
   Most probably, that'll be available only ofter GUI is done, it's
   to clumsy to control from command line.
 * Country borders (patch avilable)
+* Layers based on WorldWind addons (warning! what license are these
+  under?): http://www.dynagis.net/wwdownload/free_addons.html, patches
+  for some by Andreas Grau are available)
 
 Other:
 * Windows port
