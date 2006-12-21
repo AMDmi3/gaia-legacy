@@ -5,10 +5,46 @@
 #include "tiledb_filesystem_import.h"
 #include "tiledb.h"
 
+void import() {
+	printf("import\n");
+	DB_Handle db_handle;
+	char buf[10240];
+	int x, y, l;
+	tiledb_open(&db_handle, "test_db", CREATE_IF_NOT_EXISTS);
+	for (l=0; l<6; l++)
+		for (x=0; x<(1<<l); x++)
+			for (y=0; y<(1<<l); y++) {
+				if (tiledb_put(&db_handle, x, y, l, (unsigned char*)&buf, 10240) != TILEDB_OK) {
+					printf("error put %d/%d/%d\n", x, y, l);
+				}
+			}
+	tiledb_close(&db_handle);
+}
+
+void export() {
+	printf("export\n");
+	DB_Handle db_handle;
+	int x, y, l;
+	tiledb_open(&db_handle, "test_db", CREATE_IF_NOT_EXISTS);
+	for (l=0; l<6; l++)
+		for (x=0; x<(1<<l); x++)
+			for (y=0; y<(1<<l); y++) {
+				if (tiledb_get(&db_handle, x, y, l) == TILEDB_OK) {
+					if (tiledb_get_data_size(&db_handle) != 10240) {
+						printf("error load %d/%d/%d\n", x, y, l);
+					}
+				}
+			}
+	tiledb_close(&db_handle);
+}
+
 int main(int argc, char** argv)
 {
-	tiledb_filesystem_import();
+	import();
+	export();
+	exit(0);
 
+	tiledb_filesystem_import();
 	exit(0);
 
 	char db_path[1024];
