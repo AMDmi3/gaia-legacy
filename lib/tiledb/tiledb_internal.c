@@ -167,17 +167,17 @@ tiledb_error tiledb_read_index_page_child_entry_v0(DB_Handle *db_handle, tiledb_
 
 	uint32_t db_offset;
 	tiledb_error result;
-	if ((result == tiledb_read_data_to_buffer(db_handle->index_file, offset, &db_offset, sizeof(uint32_t)))) {
+	if ((result = tiledb_read_data_to_buffer(db_handle->index_file, offset, &db_offset, sizeof(int32_t))) != TILEDB_OK) {
 		return result;
 	}
-	*index_offset = db_offset;
+	*index_offset = tiledb_switch_int(db_handle, db_offset);
 	return TILEDB_OK;
 }
 
 tiledb_error tiledb_store_index_page_child_entry_v0(DB_Handle *db_handle, tiledb_index_page_ref page, tiledb_array_index index, tiledb_index_page_ref child_page) {
 	off_t child_entries_offset = sizeof(tiledb_index_entry_v0) - 4*(1024-index);  //int32_t child_entries[1024]
 	off_t offset = tiledb_page_ref_to_offset(db_handle, page) + child_entries_offset;
-	uint32_t db_child_page = tiledb_switch_int(db_handle, child_page);
+	int32_t db_child_page = tiledb_switch_int(db_handle, child_page);
 	return tiledb_store_data_to_file(db_handle->index_file, offset, &db_child_page, sizeof(db_child_page));
 }
 
@@ -258,11 +258,13 @@ tiledb_error tiledb_get_index_object_v0(DB_Handle *db_handle, unsigned int x, un
 
 			parent_index_page_ref = index_page_ref;
 			offset = tiledb_get_next_offset_v0(current_node_level, x, y, level);
-
-			if (tiledb_read_index_page_child_entry_v0(db_handle, index_page_ref, offset, &index_page_ref) != TILEDB_OK) {
-				release_index_page_lock(db_handle, parent_index_page_ref);
-				db_error("on reading index page");
-				return TILEDB_SYSCALL_ERROR;
+			if (current_node_level + LEVELS_PER_PYRAMID <= level) {
+				//final index entry not reached
+				if (tiledb_read_index_page_child_entry_v0(db_handle, index_page_ref, offset, &index_page_ref) != TILEDB_OK) {
+					release_index_page_lock(db_handle, parent_index_page_ref);
+					db_error("on reading index page");
+					return TILEDB_SYSCALL_ERROR;
+				}
 			}
 		}
 		current_node_level += LEVELS_PER_PYRAMID;
