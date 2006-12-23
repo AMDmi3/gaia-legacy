@@ -1,7 +1,7 @@
 #ifndef _INDEX_STORAGE_PRIVATE_
 #define _INDEX_STORAGE_PRIVATE_
 
-#include "tiledb_elements.h"
+#include "tiledb_config.h"
 #include "tiledb.h"
 
 tiledb_error tiledb_create_new_cache(char *filepath);

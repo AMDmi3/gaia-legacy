@@ -2,6 +2,7 @@
 #include "tiledb_file_io.h"
 #include "tiledb_internal.h"
 #include "tiledb_endian.h"
+#include "tiledb_cache.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <fcntl.h>
@@ -148,33 +149,74 @@ tiledb_array_index tiledb_get_next_offset_v0(unsigned int start_level, unsigned 
 }
 
 tiledb_error tiledb_read_index_object_v0(DB_Handle *db_handle, tiledb_index_object_v0 *index_object, tiledb_index_page_ref page, tiledb_array_index index) {
-	off_t objects_offset = 8 + index*sizeof(tiledb_index_object_v0); //8 = int32_t parent_index_page + parent_index;
-	off_t offset = tiledb_page_ref_to_offset(db_handle, page) + objects_offset;
-	return tiledb_read_data_to_buffer(db_handle->index_file, offset, index_object, sizeof(tiledb_index_object_v0));
+	if (db_handle->lazy_locking) { //cache index files
+		tiledb_error result;
+
+		tiledb_index_entry_v0 *entry;
+		if (!tiledb_get_from_cache(db_handle, page, &entry)) {
+			if ((result == tiledb_read_index_page(db_handle, page, entry)) != TILEDB_OK) {
+				return result;
+			}
+		}
+		memcpy(index_object, &(entry->objects[index]), sizeof(tiledb_index_object_v0));
+
+		return TILEDB_OK;
+	} else { //no lazy_locking, other process can access same db, limit file readings
+		off_t objects_offset = 8 + index*sizeof(tiledb_index_object_v0); //8 = int32_t parent_index_page + parent_index;
+		off_t offset = tiledb_page_ref_to_offset(db_handle, page) + objects_offset;
+		return tiledb_read_data_to_buffer(db_handle->index_file, offset, index_object, sizeof(tiledb_index_object_v0));
+	}
 }
 
 tiledb_error tiledb_store_index_object_v0(DB_Handle *db_handle, tiledb_index_object_v0 *index_object, tiledb_index_page_ref page, tiledb_array_index index) {
+
+	if (db_handle->lazy_locking) { //cache index files, keep cache consistent
+		tiledb_index_entry_v0 *entry;
+		if (tiledb_get_from_cache(db_handle, page, &entry)) {
+			memcpy(&(entry->objects[index]), index_object, sizeof(tiledb_index_object_v0));
+		}
+	}
+
 	off_t objects_offset = 8 + index*sizeof(tiledb_index_object_v0); //8 = int32_t parent_index_page + parent_index;
 	off_t offset = tiledb_page_ref_to_offset(db_handle, page) + objects_offset;
 	return tiledb_store_data_to_file(db_handle->index_file, offset, index_object, sizeof(tiledb_index_object_v0));
 }
 
 tiledb_error tiledb_read_index_page_child_entry_v0(DB_Handle *db_handle, tiledb_index_page_ref page, tiledb_array_index index, tiledb_index_page_ref *index_offset) {
+	tiledb_error result = TILEDB_OK;
 	*index_offset = -1;
 
-	off_t child_entries_offset = sizeof(tiledb_index_entry_v0) - 4*(1024-index);  //int32_t child_entries[1024]
-	off_t offset = tiledb_page_ref_to_offset(db_handle, page) + child_entries_offset;
+	if (db_handle->lazy_locking) { //cache index files
+		tiledb_index_entry_v0 *entry;
+		if (!tiledb_get_from_cache(db_handle, page, &entry)) {
+			if ((result == tiledb_read_index_page(db_handle, page, entry)) != TILEDB_OK) {
+				return result;
+			}
+		}
+		*index_offset = tiledb_switch_int(db_handle, entry->child_entries[index]);
+	} else { //no lazy_locking, other process can access same db, limit file readings
+		off_t child_entries_offset = sizeof(tiledb_index_entry_v0) - 4*(1024-index);  //int32_t child_entries[1024]
+		off_t offset = tiledb_page_ref_to_offset(db_handle, page) + child_entries_offset;
 
-	uint32_t db_offset;
-	tiledb_error result;
-	if ((result = tiledb_read_data_to_buffer(db_handle->index_file, offset, &db_offset, sizeof(int32_t))) != TILEDB_OK) {
-		return result;
+		uint32_t db_offset;
+		if ((result = tiledb_read_data_to_buffer(db_handle->index_file, offset, &db_offset, sizeof(int32_t))) != TILEDB_OK) {
+			return result;
+		}
+		*index_offset = tiledb_switch_int(db_handle, db_offset);
 	}
-	*index_offset = tiledb_switch_int(db_handle, db_offset);
-	return TILEDB_OK;
+
+	return result;
 }
 
 tiledb_error tiledb_store_index_page_child_entry_v0(DB_Handle *db_handle, tiledb_index_page_ref page, tiledb_array_index index, tiledb_index_page_ref child_page) {
+
+	if (db_handle->lazy_locking) { //cache index files, keep cache consistent
+		tiledb_index_entry_v0 *entry;
+		if (tiledb_get_from_cache(db_handle, page, &entry)) {
+			entry->child_entries[index] = tiledb_switch_int(db_handle, child_page);
+		}
+	}
+
 	off_t child_entries_offset = sizeof(tiledb_index_entry_v0) - 4*(1024-index);  //int32_t child_entries[1024]
 	off_t offset = tiledb_page_ref_to_offset(db_handle, page) + child_entries_offset;
 	int32_t db_child_page = tiledb_switch_int(db_handle, child_page);

@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 
-#include "tiledb_elements.h"
+#include "tiledb_config.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -47,6 +47,9 @@ tiledb_error tiledb_disable_lazylock(DB_Handle *db_handle);
 
 /* defragment data file */
 tiledb_error tiledb_defragment_data_file(DB_Handle *db_handle);
+
+/* error  as string */
+const char *tiledb_strerror(int err);
 
 #ifdef __cplusplus
 }

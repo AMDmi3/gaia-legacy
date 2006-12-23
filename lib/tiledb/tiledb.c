@@ -9,6 +9,7 @@
 #include "tiledb_file_io.h"
 #include "tiledb_file_locking.h"
 #include "tiledb_internal.h"
+#include "tiledb_cache.h"
 
 #if LOG_DB
 #define db_printf(...) printf(__VA_ARGS__)
@@ -75,6 +76,8 @@ tiledb_error tiledb_open(DB_Handle *db_handle, char *filepath, int flags) {
 		return TILEDB_UNSUPPORTED_DB_VERSION;
 	}
 
+	tiledb_cache_init(db_handle);
+
 	return TILEDB_OK;
 }
 
@@ -95,6 +98,23 @@ tiledb_error tiledb_close(DB_Handle *db_handle) {
 	}
 
 	return result;
+}
+
+const char *tiledb_strerror(int err) {
+	switch (err) {
+	case TILEDB_OK:
+		return "No error";
+	case TILEDB_MALLOC_FAILED:
+		return "Malloc failed";
+	case TILEDB_SMALL_BUFFER:
+		return "Internal buffer is too small (may be bug in library)";
+	case TILEDB_SYSCALL_ERROR:	/* see errno() */
+		return "Syscall failed";
+	case TILEDB_NOT_FOUND:
+		return "Not found";
+	default:
+		return "Unknown error";
+	}
 }
 
 tiledb_error tiledb_put(DB_Handle *db_handle, uint32_t x, uint32_t y, uint32_t level, unsigned char *data, size_t size)

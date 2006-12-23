@@ -15,6 +15,7 @@ srcs = Split("""tiledb_file_io.c
 		tiledb_internal.c
 		tiledb_filesystem_import.c
 		tiledb_endian.c
+		tiledb_cache.c
 		tiledb.c""")
 
 libtiledb = env.StaticLibrary('libtiledb', [srcs])
