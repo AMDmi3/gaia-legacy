@@ -19,8 +19,8 @@ parseenv.ParseConfig('curl-config --cflags --libs')
 parseenv.ParseConfig('libpng-config --cflags --libs')
 
 env.Append( LIBS = parseenv['LIBS'] )
-env.Append( CPPPATH = parseenv['LIBS'] )
-env.Append( LIBPATH = parseenv['LIBS'] )
+env.Append( CPPPATH = parseenv['CPPPATH'] )
+env.Append( LIBPATH = parseenv['LIBPATH'] )
 
 if int(env['gpsd']):
 	env.Append( LIBS = [ 'gps' ], CCFLAGS = [ '-DWITH_GPSD' ], CXXFLAGS = [ '-DWITH_GPSD' ] )
