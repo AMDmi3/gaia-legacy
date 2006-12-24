@@ -161,12 +161,19 @@ tiledb_error tiledb_exists(DB_Handle *db_handle, unsigned int x, unsigned int y,
 
 tiledb_error tiledb_enable_lazylock(DB_Handle *db_handle) {
 	db_printf("tiledb_enable_lazylock\n");
+	tiledb_error result;
+
 	//lock index page 0, put/get of other processes will block
-	acquire_index_page_lock(db_handle, 0);
+	if ((result = acquire_index_page_lock(db_handle, 0)) != TILEDB_OK) {
+		return result;
+	}
 	//other processes, could have locked other pages in the index_file
 	//acquire lock on hole file
 	size_t size = tiledb_get_file_size(db_handle->index_file);
-	acquire_file_lock(db_handle->index_file, 0, size);
+	if ((result = acquire_file_lock(db_handle->index_file, 0, size)) != TILEDB_OK) {
+		release_index_page_lock(db_handle, 0);
+		return result;
+	}
 
 	db_handle->lazy_locking = 1;
 	return TILEDB_OK;
@@ -174,14 +181,20 @@ tiledb_error tiledb_enable_lazylock(DB_Handle *db_handle) {
 
 tiledb_error tiledb_disable_lazylock(DB_Handle *db_handle) {
 	db_printf("tiledb_disable_lazylock\n");
+	tiledb_error result;
 
 	db_handle->lazy_locking = 0;
 
 	//release hole file lock
 	size_t size = tiledb_get_file_size(db_handle->index_file);
-	acquire_file_lock(db_handle->index_file, 0, size);
+	if ((result = release_file_lock(db_handle->index_file, 0, size)) != TILEDB_OK) {
+		release_index_page_lock(db_handle, 0);
+		return result;
+	}
 	//release index lock
-	release_index_page_lock(db_handle, 0);
+	if ((result = release_index_page_lock(db_handle, 0)) != TILEDB_OK) {
+		return result;
+	}
 
 	return TILEDB_OK;
 }
