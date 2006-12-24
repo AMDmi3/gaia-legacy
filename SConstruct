@@ -75,6 +75,7 @@ libwwfetch = SConscript('lib/wwfetch/SConscript', exports = ['env'])
 libtiledb = SConscript('lib/tiledb/SConscript', exports = ['env'])
 
 SConscript('programs/gaia/SConscript', exports = ['env', 'libwwfetch', 'libtiledb'])
+SConscript('programs/gaia-cache/SConscript', exports = ['env', 'libtiledb'])
 
 if env['prefix'] != ".":
 	env.Alias('install', env['prefix'])
