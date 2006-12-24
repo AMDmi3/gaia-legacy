@@ -1,0 +1,41 @@
+#!/bin/env python
+
+Import('*')
+
+#######################################
+# ENVIRONMENT
+#######################################
+env = env.Copy();
+
+env.Append(LIBS = [ 'z', 'm', 'db-4.2' ]);
+env.Append(CPPPATH = [ '../../lib/wwfetch', '../../lib/tiledb' ]);
+env.Append(LIBPATH = [ '../../lib/wwfetch', '../../lib/tiledb' ]);
+
+#######################################
+# CHECKS
+#######################################
+if not env.GetOption('clean'):
+	config = env.Configure(log_file = '/dev/null')
+	config_ok = True
+
+	if not config.CheckLib('db-4.2'):
+		print "You need to install Berkeley BD development libraries"
+		config_ok = False
+
+	if not config_ok:
+		Exit(1)
+
+	env = config.Finish()
+
+#######################################
+# TARGETS
+#######################################
+srcs = Split("""main.c
+		core.c
+		dump.c
+		import.c
+		stat.c""")
+
+env.Program('../../gaia-cache', [srcs, libtiledb])
+
+env.Install(env['prefix'] + '/bin/', ['gaia-cache']);
