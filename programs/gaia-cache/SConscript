@@ -38,4 +38,4 @@ srcs = Split("""main.c
 
 env.Program('../../gaia-cache', [srcs, libtiledb])
 
-env.Install(env['prefix'] + '/bin/', ['gaia-cache']);
+env.Install(env['prefix'] + "/" + env['bindir'], ['../../gaia-cache']);
