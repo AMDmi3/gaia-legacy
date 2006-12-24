@@ -154,7 +154,7 @@ tiledb_error tiledb_read_index_object_v0(DB_Handle *db_handle, tiledb_index_obje
 
 		tiledb_index_entry_v0 *entry;
 		if (!tiledb_get_from_cache(db_handle, page, &entry)) {
-			if ((result == tiledb_read_index_page(db_handle, page, entry)) != TILEDB_OK) {
+			if ((result = tiledb_read_index_page(db_handle, page, entry)) != TILEDB_OK) {
 				return result;
 			}
 		}
@@ -237,7 +237,7 @@ tiledb_error tiledb_get_index_object_v0(DB_Handle *db_handle, unsigned int x, un
 
 			//old_file_offset is still lock
 			if ((result = release_index_page_lock(db_handle, parent_index_page_ref)) != TILEDB_OK) {
-				return TILEDB_SYSCALL_ERROR;
+				return result;
 			}
 
 			//all index entries are unlocked
@@ -247,7 +247,7 @@ tiledb_error tiledb_get_index_object_v0(DB_Handle *db_handle, unsigned int x, un
 			//create new index entry
 			if ((result = acquire_index_lock(db_handle)) != TILEDB_OK) {
 				release_index_page_lock(db_handle, parent_index_page_ref);
-				return TILEDB_SYSCALL_ERROR;
+				return result;
 			}
 
 			index_page_ref = tiledb_get_free_index_page(db_handle);
@@ -255,17 +255,18 @@ tiledb_error tiledb_get_index_object_v0(DB_Handle *db_handle, unsigned int x, un
 			if ((result = acquire_index_page_lock(db_handle, index_page_ref)) != TILEDB_OK) {
 				release_index_lock(db_handle);
 				release_index_page_lock(db_handle, parent_index_page_ref);
-				return TILEDB_SYSCALL_ERROR;
+				return result;
 			}
 
 			//store new index entry
-			tiledb_index_entry_v0 new_index_entry;
-			tiledb_init_index_entry_v0(db_handle, &new_index_entry, parent_index_page_ref, offset);
-			if ((result = tiledb_store_index_page(db_handle, index_page_ref, &new_index_entry)) != TILEDB_OK) {
+			tiledb_index_entry_v0 *new_index_entry;
+			tiledb_get_from_cache(db_handle, index_page_ref, &new_index_entry); //page is not in cache
+			tiledb_init_index_entry_v0(db_handle, new_index_entry, parent_index_page_ref, offset);
+			if ((result = tiledb_store_index_page(db_handle, index_page_ref, new_index_entry)) != TILEDB_OK) {
 				release_index_lock(db_handle);
 				release_index_page_lock(db_handle, index_page_ref);
 				release_index_page_lock(db_handle, parent_index_page_ref);
-				return TILEDB_SYSCALL_ERROR;
+				return result;
 			}
 
 			//update parent index entry
@@ -274,17 +275,17 @@ tiledb_error tiledb_get_index_object_v0(DB_Handle *db_handle, unsigned int x, un
 				release_index_lock(db_handle);
 				release_index_page_lock(db_handle, index_page_ref);
 				release_index_page_lock(db_handle, parent_index_page_ref);
-				return TILEDB_SYSCALL_ERROR;
+				return result;
 			}
 
 			if ((result = release_index_lock(db_handle)) != TILEDB_OK) {
 				release_index_page_lock(db_handle, index_page_ref);
 				release_index_page_lock(db_handle, parent_index_page_ref);
-				return TILEDB_SYSCALL_ERROR;
+				return result;
 			}
 			if ((result = release_index_page_lock(db_handle, parent_index_page_ref)) != TILEDB_OK) {
 				release_index_page_lock(db_handle, index_page_ref);
-				return TILEDB_SYSCALL_ERROR;
+				return result;
 			}
 
 			parent_index_page_ref = index_page_ref;
@@ -293,19 +294,21 @@ tiledb_error tiledb_get_index_object_v0(DB_Handle *db_handle, unsigned int x, un
 		} else {
 			if ((result = acquire_index_page_lock(db_handle, index_page_ref)) != TILEDB_OK) {
 				release_index_page_lock(db_handle, parent_index_page_ref);
+				return result;
 			}
 			if ((result = release_index_page_lock(db_handle, parent_index_page_ref)) != TILEDB_OK) {
 				release_index_page_lock(db_handle, index_page_ref);
+				return result;
 			}
 
 			parent_index_page_ref = index_page_ref;
 			offset = tiledb_get_next_offset_v0(current_node_level, x, y, level);
 			if (current_node_level + LEVELS_PER_PYRAMID <= level) {
 				//final index entry not reached
-				if (tiledb_read_index_page_child_entry_v0(db_handle, index_page_ref, offset, &index_page_ref) != TILEDB_OK) {
+				if ((result = tiledb_read_index_page_child_entry_v0(db_handle, index_page_ref, offset, &index_page_ref)) != TILEDB_OK) {
 					release_index_page_lock(db_handle, parent_index_page_ref);
 					db_error("on reading index page");
-					return TILEDB_SYSCALL_ERROR;
+					return result;
 				}
 			}
 		}
@@ -313,10 +316,10 @@ tiledb_error tiledb_get_index_object_v0(DB_Handle *db_handle, unsigned int x, un
 	}
 
 	//load index_object
-	if (tiledb_read_index_object_v0(db_handle, index_object, parent_index_page_ref, offset) != TILEDB_OK) {
+	if ((result = tiledb_read_index_object_v0(db_handle, index_object, parent_index_page_ref, offset)) != TILEDB_OK) {
 		release_index_page_lock(db_handle, parent_index_page_ref);
 		db_error("on reading index page");
-		return TILEDB_SYSCALL_ERROR;
+		return result;
 	}
 
 	// object holds entry for x/y/level
@@ -365,12 +368,12 @@ tiledb_error tiledb_put_v0(DB_Handle *db_handle, unsigned int x, unsigned int y,
 
 	memcpy(((char *)&data_to_store)+sizeof(tiledb_data_entry_v0), data, size);
 	//store data_entry and data with same syscall
-	if (tiledb_store_data_to_file(db_handle->data_file, data_file_offset, data_to_store, sizeof(data_to_store)) != TILEDB_OK) {
+	if ((result = tiledb_store_data_to_file(db_handle->data_file, data_file_offset, data_to_store, sizeof(data_to_store))) != TILEDB_OK) {
 		release_data_lock(db_handle);
 		release_index_page_lock(db_handle, locked_page);
 
 		//new data could not be written -> db is in consistent state
-		return TILEDB_SYSCALL_ERROR;
+		return result;
 	}
 
 	//save old data, mark as invalid data after updating index
@@ -381,20 +384,20 @@ tiledb_error tiledb_put_v0(DB_Handle *db_handle, unsigned int x, unsigned int y,
 	object.offset = tiledb_switch_int(db_handle, data_file_offset);
 	object.checksum = tiledb_switch_int(db_handle, tiledb_checksum(db_handle, data, size));
 	object.size = tiledb_switch_int(db_handle, size);
-	if (tiledb_store_index_object_v0(db_handle, &object, locked_page, objects_index) != TILEDB_OK) {
+	if ((result = tiledb_store_index_object_v0(db_handle, &object, locked_page, objects_index)) != TILEDB_OK) {
 		release_data_lock(db_handle);
 		release_index_page_lock(db_handle, locked_page);
 
 		//index could not be updated, still using old data, new data is garbage
 		//garbage collection:
 		//(data_entry->index_page->objects[data_entry->index].offset != data_entry) => garbage
-		return TILEDB_SYSCALL_ERROR;
+		return result;
 	}
 
 	if (old_data_size > 0) {
 		// read meta informations of old data
 		tiledb_data_entry_v0 data_entry;
-		if (tiledb_read_data_to_buffer(db_handle->data_file, old_data_offset, &data_entry, sizeof(tiledb_data_entry_v0)) != TILEDB_OK) {
+		if ((result = tiledb_read_data_to_buffer(db_handle->data_file, old_data_offset, &data_entry, sizeof(tiledb_data_entry_v0))) != TILEDB_OK) {
 			release_data_lock(db_handle);
 			release_index_page_lock(db_handle, locked_page);
 			db_printf("read error\n");
@@ -402,14 +405,14 @@ tiledb_error tiledb_put_v0(DB_Handle *db_handle, unsigned int x, unsigned int y,
 			//old data is garbage
 			//garbage collection:
 			//(data_entry->index_page->objects[data_entry->index].offset != data_entry) => garbage
-			return TILEDB_SYSCALL_ERROR;
+			return result;
 		}
 
 		//mark old data as invalid
 		data_entry.mtime = tiledb_switch_int(db_handle, 0);
 		data_entry.index_page = tiledb_switch_int(db_handle, -1);
 		data_entry.index = tiledb_switch_int(db_handle, -1);
-		if (tiledb_store_data_to_file(db_handle->data_file, old_data_offset, &data_entry, sizeof(tiledb_data_entry_v0)) != TILEDB_OK) {
+		if ((result = tiledb_store_data_to_file(db_handle->data_file, old_data_offset, &data_entry, sizeof(tiledb_data_entry_v0))) != TILEDB_OK) {
 			release_data_lock(db_handle);
 			release_index_page_lock(db_handle, locked_page);
 			db_printf("read error\n");
@@ -417,7 +420,7 @@ tiledb_error tiledb_put_v0(DB_Handle *db_handle, unsigned int x, unsigned int y,
 			//old data is garbage
 			//garbage collection:
 			//(data_entry->index_page->objects[data_entry->index].offset != data_entry) => garbage
-			return TILEDB_SYSCALL_ERROR;
+			return result;
 		}
 	}
 	if ((result = release_data_lock(db_handle)) != TILEDB_OK) {
@@ -471,10 +474,10 @@ tiledb_error tiledb_get_v0(DB_Handle *db_handle, unsigned int x, unsigned int y,
 	//}
 
 	offset += sizeof(tiledb_data_entry_v0);
-	if (tiledb_read_data_to_buffer(db_handle->data_file, offset, db_handle->current_data, db_handle->current_size) != TILEDB_OK) {
+	if ((result = tiledb_read_data_to_buffer(db_handle->data_file, offset, db_handle->current_data, db_handle->current_size)) != TILEDB_OK) {
 		release_index_page_lock(db_handle, locked_page);
 		db_printf("read error\n");
-		return TILEDB_SYSCALL_ERROR;
+		return result;
 	}
 
 	if (tiledb_checksum(db_handle, db_handle->current_data, db_handle->current_size) != tiledb_switch_int(db_handle, object.checksum)) {
@@ -516,12 +519,12 @@ tiledb_error tiledb_remove_v0(DB_Handle *db_handle, unsigned int x, unsigned int
 	object.offset = tiledb_switch_int(db_handle, 0);
 	object.checksum = tiledb_switch_int(db_handle, 0);
 	object.size = tiledb_switch_int(db_handle, 0);
-	if (tiledb_store_index_object_v0(db_handle, &object, locked_page, objects_index) != TILEDB_OK) {
+	if ((result = tiledb_store_index_object_v0(db_handle, &object, locked_page, objects_index)) != TILEDB_OK) {
 		release_data_lock(db_handle);
 		release_index_page_lock(db_handle, locked_page);
 
 		//index could not be updated -> db is in consistent state
-		return TILEDB_SYSCALL_ERROR;
+		return result;
 	}
 
 	if ((result = acquire_data_lock(db_handle)) != TILEDB_OK) {
@@ -534,11 +537,11 @@ tiledb_error tiledb_remove_v0(DB_Handle *db_handle, unsigned int x, unsigned int
 
 	//read data meta informations
 	tiledb_data_entry_v0 data_entry;
-	if (tiledb_read_data_to_buffer(db_handle->data_file, offset, &data_entry, sizeof(tiledb_data_entry_v0)) != TILEDB_OK) {
+	if ((result = tiledb_read_data_to_buffer(db_handle->data_file, offset, &data_entry, sizeof(tiledb_data_entry_v0))) != TILEDB_OK) {
 		release_data_lock(db_handle);
 		release_index_page_lock(db_handle, locked_page);
 		db_printf("read error\n");
-		return TILEDB_SYSCALL_ERROR;
+		return result;
 	}
 
 	//update data meta informations
@@ -547,11 +550,11 @@ tiledb_error tiledb_remove_v0(DB_Handle *db_handle, unsigned int x, unsigned int
 	data_entry.index = tiledb_switch_int(db_handle, -1);
 
 	//store data meta informations
-	if (tiledb_store_data_to_file(db_handle->data_file, offset, &data_entry, sizeof(tiledb_data_entry_v0)) != TILEDB_OK) {
+	if ((result = tiledb_store_data_to_file(db_handle->data_file, offset, &data_entry, sizeof(tiledb_data_entry_v0))) != TILEDB_OK) {
 		release_data_lock(db_handle);
 		release_index_page_lock(db_handle, locked_page);
 		db_printf("write error\n");
-		return TILEDB_SYSCALL_ERROR;
+		return result;
 	}
 
 	if ((result = release_data_lock(db_handle)) != TILEDB_OK) {
@@ -579,7 +582,7 @@ tiledb_error tiledb_exists_v0(DB_Handle *db_handle, unsigned int x, unsigned int
 	}
 
 	if (object.size == tiledb_switch_int(db_handle, 0)) {
-		// data element not found or nodata is stored
+		// data element not found or no data is stored
 		release_index_page_lock(db_handle, locked_page);
 		db_printf("element not found\n");
 		return TILEDB_NOT_FOUND;
