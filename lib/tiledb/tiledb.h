@@ -1,5 +1,5 @@
-#ifndef _INDEX_STORAGE_
-#define _INDEX_STORAGE_
+#ifndef _TILEDB_
+#define _TILEDB_
 
 #include <stdio.h>
 

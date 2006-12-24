@@ -1,5 +1,5 @@
-#ifndef _INDEX_STORAGE_CONFIG_
-#define _INDEX_STORAGE_CONFIG_
+#ifndef _TILEDB_CONFIG_
+#define _TILEDB_CONFIG_
 
 #include <stdint.h>
 #include <stdio.h>

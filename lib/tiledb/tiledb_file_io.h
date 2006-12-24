@@ -1,5 +1,5 @@
-#ifndef _INDEX_STORAGE_FILE_IO_
-#define _INDEX_STORAGE_FILE_IO_
+#ifndef _TILEDB_FILE_IO_
+#define _TILEDB_FILE_IO_
 
 #include <unistd.h>
 #include "tiledb_config.h"

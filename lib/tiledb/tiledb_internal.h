@@ -1,5 +1,5 @@
-#ifndef _INDEX_STORAGE_PRIVATE_
-#define _INDEX_STORAGE_PRIVATE_
+#ifndef _TILEDB_PRIVATE_
+#define _TILEDB_PRIVATE_
 
 #include "tiledb_config.h"
 #include "tiledb.h"

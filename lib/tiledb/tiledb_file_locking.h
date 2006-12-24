@@ -1,5 +1,5 @@
-#ifndef _INDEX_STORAGE_FILE_LOCKING_
-#define _INDEX_STORAGE_FILE_LOCKING_
+#ifndef _TILEDB_FILE_LOCKING_
+#define _TILEDB_FILE_LOCKING_
 
 #include <stdlib.h>
 

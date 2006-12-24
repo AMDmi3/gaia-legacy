@@ -1,5 +1,5 @@
-#ifndef _INDEX_FILESYSTEM_IMPORT_
-#define _INDEX_FILESYSTEM_IMPORT_
+#ifndef _TILEDB_IMPORT_
+#define _TILEDB_IMPORT_
 
 #include "tiledb.h"
 
