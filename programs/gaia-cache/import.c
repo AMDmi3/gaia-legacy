@@ -118,6 +118,8 @@ int action_import() {
 
 	int successresult = 1;
 
+	//tiledb_enable_lazylock(&g_tiledb);
+
 	/* traverse dirtree */
 	while ((ftsent = fts_read(fts))) {
 		if (ftsent->fts_info == FTS_F || ftsent->fts_info == FTS_NS || ftsent->fts_info == FTS_NSOK) {
@@ -125,6 +127,8 @@ int action_import() {
 				successresult &= import_image(ftsent);
 		}
 	}
+
+	//tiledb_disable_lazylock(&g_tiledb);
 
 	/* close fts */
 	fts_close(fts);
@@ -135,6 +139,75 @@ int action_import() {
 	return successresult;
 }
 
+void rec_export(int x, int y, int level) {
+	tiledb_error result = tiledb_exists(&g_tiledb, x, y, level);
+	if (result == TILEDB_OK) {
+		if ((result = tiledb_get(&g_tiledb, x, y, level)) == TILEDB_OK) {
+			char path[1024];
+			char name[1024];
+			int i;
+			int c = 0;
+			for (i = 0; i <= level; i++) {
+				int bit = 1 << (level-i);
+
+				if (x & bit) {
+					if (y & bit)    name[i] = '2';
+					else            name[i] = '1';
+				} else {
+					if (y & bit)    name[i] = '3';
+					else            name[i] = '0';
+				}
+
+				if (i < ((level+1) & ~0x3)) {
+					if (x & bit) {
+						if (y & bit)    path[c++] = '2';
+						else            path[c++] = '1';
+					} else {
+						if (y & bit)    path[c++] = '3';
+						else            path[c++] = '0';
+					}
+
+					if (i % 4 == 3)
+						path[c++] = '/';
+				}
+			}
+			name[i] = 0;
+			path[c] = 0;
+			char file[1024];
+			snprintf((char*)&file, 1024, "%s/%s", g_filesdir, (char*)&path);
+			if (!(mkdir((char*)&file, 0777) != 0 && errno != EEXIST)) {
+				snprintf((char*)&file, 1024, "%s/%s/%s.jpg", g_filesdir, (char*)&path, (char*)&name);
+				int f;
+				if ((f = open((char*)&file, O_WRONLY | O_CREAT | O_TRUNC, 0666)) != -1) {
+					size_t size = tiledb_get_data_size(&g_tiledb);
+					if (write(f, tiledb_get_data_ptr(&g_tiledb), size) != size) {
+						printf("oops2 %d\n", errno);
+						unlink(file);	/* ensure no broken files get into cache */
+						close(f);
+					}
+					close(f);
+				} else {
+					printf("oops3 %d %d\n", f, errno);
+					//error open file
+				}
+			} else {
+				printf("oops4 %d\n", errno);
+				//error open file
+			}
+		}
+		if (level == 3) printf(".");fflush(stdout);
+	}
+
+	if ((result == TILEDB_OK || result == TILEDB_NOT_FOUND) && level < 20) {
+		rec_export((x<<1)+0, (y<<1)+0, level+1);
+		rec_export((x<<1)+1, (y<<1)+0, level+1);
+		rec_export((x<<1)+0, (y<<1)+1, level+1);
+		rec_export((x<<1)+1, (y<<1)+1, level+1);
+	}
+}
+
 int action_export() {
+	rec_export(0, 0, 0);
+	printf("\n");
 	return 1;
 }

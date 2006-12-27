@@ -42,12 +42,12 @@ int action_stat() {
 		count[i] = 0;
 	}
 
-	tiledb_enable_lazylock(&g_tiledb);
+	//tiledb_enable_lazylock(&g_tiledb);
 	rec(0, 0, 0, (int *)&count);
-	tiledb_disable_lazylock(&g_tiledb);
+	//tiledb_disable_lazylock(&g_tiledb);
 
 	for (i=0; i<20; i++) {
 		printf("%d: %d tiles found\n", i, count[i]);
 	}
-	return 0;
+	return 1;
 }
