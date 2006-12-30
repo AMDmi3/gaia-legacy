@@ -18,10 +18,14 @@
 #endif
 
 size_t tiledb_get_data_size(DB_Handle *db_handle) {
+	if (db_handle == NULL || !db_handle->initialized) return 0;
+
 	return db_handle->current_data ? db_handle->current_size : 0;
 }
 
 unsigned char *tiledb_get_data_ptr(DB_Handle *db_handle) {
+	if (db_handle == NULL || !db_handle->initialized) return NULL;
+
 	return db_handle->current_data;
 }
 
@@ -78,10 +82,16 @@ tiledb_error tiledb_open(DB_Handle *db_handle, char *filepath, int flags) {
 
 	tiledb_cache_init(db_handle);
 
+	db_handle->initialized = 1;
+
 	return TILEDB_OK;
 }
 
 tiledb_error tiledb_close(DB_Handle *db_handle) {
+	if (db_handle == NULL || !db_handle->initialized) return TILEDB_INVALID_HANDLE;
+
+	db_handle->initialized = 0;
+
 	tiledb_error result = TILEDB_OK;
 	if (close(db_handle->index_file) == -1) {
 		db_error("on close index");
@@ -112,14 +122,24 @@ const char *tiledb_strerror(int err) {
 		return "Syscall failed";
 	case TILEDB_NOT_FOUND:
 		return "Not found";
+	case TILEDB_UNSUPPORTED_ENDIANESS:
+		return "DB is not big or little endian";
+	case TILEDB_CORRUPT_DATABASE:
+		return "DB is corrupt";
+	case TILEDB_INVALID_HANDLE:
+		return "DB handle is not initialized or null pointer";
+	case TILEDB_INDEX_ENTRY_NOT_EXISTS:
+		return "Index entry not exists";
+	case TILEDB_UNSUPPORTED_DB_VERSION:
+		return "DB version is not supported";
 	default:
 		return "Unknown error";
 	}
 }
 
-tiledb_error tiledb_put(DB_Handle *db_handle, uint32_t x, uint32_t y, uint32_t level, unsigned char *data, size_t size)
-{
+tiledb_error tiledb_put(DB_Handle *db_handle, uint32_t x, uint32_t y, uint32_t level, unsigned char *data, size_t size) {
 	db_printf("tiledb_put(x=%d, y=%d, level=%d, size=%d)\n", x, y, level, size);
+	if (db_handle == NULL || !db_handle->initialized) return TILEDB_INVALID_HANDLE;
 
 	if (db_handle->version == 0) {
 		return tiledb_put_v0(db_handle, x, y, level, data, size);
@@ -128,9 +148,9 @@ tiledb_error tiledb_put(DB_Handle *db_handle, uint32_t x, uint32_t y, uint32_t l
 	}
 }
 
-tiledb_error tiledb_get(DB_Handle *db_handle, uint32_t x, uint32_t y, uint32_t level)
-{
+tiledb_error tiledb_get(DB_Handle *db_handle, uint32_t x, uint32_t y, uint32_t level) {
 	db_printf("tiledb_get(x=%d, y=%d, level=%d)\n", x, y, level);
+	if (db_handle == NULL || !db_handle->initialized) return TILEDB_INVALID_HANDLE;
 
 	if (db_handle->version == 0) {
 		return tiledb_get_v0(db_handle, x, y, level);
@@ -141,6 +161,7 @@ tiledb_error tiledb_get(DB_Handle *db_handle, uint32_t x, uint32_t y, uint32_t l
 
 tiledb_error tiledb_remove(DB_Handle *db_handle, unsigned int x, unsigned int y, unsigned int level) {
 	db_printf("tiledb_remove(x=%d, y=%d, level=%d)\n", x, y, level);
+	if (db_handle == NULL || !db_handle->initialized) return TILEDB_INVALID_HANDLE;
 
 	if (db_handle->version == 0) {
 		return tiledb_remove_v0(db_handle, x, y, level);
@@ -151,6 +172,7 @@ tiledb_error tiledb_remove(DB_Handle *db_handle, unsigned int x, unsigned int y,
 
 tiledb_error tiledb_exists(DB_Handle *db_handle, unsigned int x, unsigned int y, unsigned int level) {
 	db_printf("tiledb_exists(x=%d, y=%d, level=%d)\n", x, y, level);
+	if (db_handle == NULL || !db_handle->initialized) return TILEDB_INVALID_HANDLE;
 
 	if (db_handle->version == 0) {
 		return tiledb_exists_v0(db_handle, x, y, level);
@@ -161,6 +183,7 @@ tiledb_error tiledb_exists(DB_Handle *db_handle, unsigned int x, unsigned int y,
 
 tiledb_error tiledb_enable_lazylock(DB_Handle *db_handle) {
 	db_printf("tiledb_enable_lazylock\n");
+	if (db_handle == NULL || !db_handle->initialized) return TILEDB_INVALID_HANDLE;
 	tiledb_error result;
 
 	//lock index page 0, put/get of other processes will block
@@ -181,6 +204,7 @@ tiledb_error tiledb_enable_lazylock(DB_Handle *db_handle) {
 
 tiledb_error tiledb_disable_lazylock(DB_Handle *db_handle) {
 	db_printf("tiledb_disable_lazylock\n");
+	if (db_handle == NULL || !db_handle->initialized) return TILEDB_INVALID_HANDLE;
 	tiledb_error result;
 
 	db_handle->lazy_locking = 0;

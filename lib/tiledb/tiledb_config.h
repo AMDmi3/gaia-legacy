@@ -39,19 +39,21 @@ typedef enum {
 	/* only big/little andian archs supported */
 	TILEDB_UNSUPPORTED_ENDIANESS,
 
-	/* only big/little andian archs supported */
+	/* only big/little endian archs supported */
 	TILEDB_CORRUPT_DATABASE,
 
+	/* db handle is not initialized or null pointer */
 	TILEDB_INVALID_HANDLE,
 
+	/* index not found -> no tiles for location with givben level (or deeper) does not exists */
 	TILEDB_INDEX_ENTRY_NOT_EXISTS,
 
+	/* db version is not sopported */
 	TILEDB_UNSUPPORTED_DB_VERSION,
 } tiledb_error;
 
 typedef int tiledb_index_page_ref;
 typedef int tiledb_array_index;
-
 
 #define LEVELS_PER_PYRAMID 5
 
@@ -88,6 +90,8 @@ typedef struct tiledb_cache_object_v0 {
 } tiledb_cache_object_v0;
 
 typedef struct DB_Handle {
+	int initialized;
+
 	int index_file;
 	int data_file;
 
