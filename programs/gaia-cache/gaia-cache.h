@@ -61,6 +61,7 @@ int action_list();
 int action_remove();
 int action_import();
 int action_export();
+int action_defrag();
 int action_dump();
 int action_undump();
 int action_stat();

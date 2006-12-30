@@ -213,3 +213,10 @@ int action_export() {
 	printf("\n");
 	return 1;
 }
+
+int action_defrag() {
+	if (tiledb_defragment_data_file(&g_tiledb) == TILEDB_OK) {
+		return 1;
+	}
+	return 0;
+}

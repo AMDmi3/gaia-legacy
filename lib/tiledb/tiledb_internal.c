@@ -35,6 +35,14 @@ int tiledb_checksum(DB_Handle *db_handle, unsigned char *data, size_t size) { //
 	return checksum;
 }
 
+int tiledb_get_paged_data_size(DB_Handle *db_handle, int size) {
+	int fragment = size % db_handle->data_page_size;
+	if (fragment != 0) {
+		return size - fragment + db_handle->data_page_size;
+	}
+	return size;
+}
+
 tiledb_error tiledb_create_new_cache(char *filepath) {
 	DB_Handle handle;
 
@@ -357,7 +365,7 @@ tiledb_error tiledb_put_v0(DB_Handle *db_handle, unsigned int x, unsigned int y,
 	// store data meta informations
 	int data_to_store_size = sizeof(tiledb_data_entry_v0)+size;
 	// data is stored in pages
-	data_to_store_size = (data_to_store_size / db_handle->data_page_size + 1) * db_handle->data_page_size;
+	data_to_store_size = tiledb_get_paged_data_size(db_handle, data_to_store_size);
 
 	char data_to_store[data_to_store_size];
 	tiledb_data_entry_v0 *data_entry = (tiledb_data_entry_v0 *)&data_to_store;

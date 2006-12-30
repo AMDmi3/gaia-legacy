@@ -14,6 +14,7 @@ srcs = Split("""tiledb_file_io.c
 		tiledb_file_locking.c
 		tiledb_internal.c
 		tiledb_endian.c
+		tiledb_defrag.c
 		tiledb_cache.c
 		tiledb.c""")
 

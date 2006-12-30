@@ -42,6 +42,7 @@ static struct option longopts[] = {
 	{ "remove",	no_argument,		0,	'R' },
 	{ "import",	no_argument,		0,	'I' },
 	{ "export",	no_argument,		0,	'W' },
+	{ "defrag",	no_argument,		0,	'F' },
 	{ "dump",	no_argument,		0,	'D' },
 	{ "undump",	no_argument,		0,	'U' },
 	{ "stat",	no_argument,		0,	'S' },
@@ -68,12 +69,13 @@ int main(int argc, char **argv) {
 	int ch;
 
 	/* arguments parsing */
-	while ((ch = getopt_long(argc, argv, "LRIEDUShc:f:d:t:p:vl", longopts, NULL)) != -1)
+	while ((ch = getopt_long(argc, argv, "LRIEFDUShc:f:d:t:p:vl", longopts, NULL)) != -1)
 		switch (ch) {
 		case 'L':
 		case 'R':
 		case 'I':
 		case 'E':
+		case 'F':
 		case 'D':
 		case 'U':
 		case 'S':
@@ -190,6 +192,8 @@ int main(int argc, char **argv) {
 		return action_import();
 	} else if (action == 'E') {
 		return action_export();
+	} else if (action == 'F') {
+		return action_defrag();
 	} else if (action == 'D') {
 		return action_dump();
 	} else if (action == 'U') {
@@ -212,6 +216,7 @@ void usage() {
 	fprintf(stderr, "  -R, --remove      remove specified region data from cache\n");
 	fprintf(stderr, "  -I, --import      import cache from bunch of JPEGs (gaia 0.1.0 cache)\n");
 	fprintf(stderr, "  -E, --export      export part of cache as bunch of files\n");
+	fprintf(stderr, "  -F, --defrag      defragment data file\n");
 	fprintf(stderr, "  -D, --dump        dump cache in cross-plaform binary format\n");
 	fprintf(stderr, "  -U, --undump      suck in previously dumped cache\n");
 	fprintf(stderr, "  -S, --stat        display cache statistics\n");

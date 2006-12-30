@@ -10,6 +10,7 @@
 #include "tiledb_file_locking.h"
 #include "tiledb_internal.h"
 #include "tiledb_cache.h"
+#include "tiledb_defrag.h"
 
 #if LOG_DB
 #define db_printf(...) printf(__VA_ARGS__)
@@ -224,23 +225,22 @@ tiledb_error tiledb_disable_lazylock(DB_Handle *db_handle) {
 }
 
 tiledb_error tiledb_defragment_data_file(DB_Handle *db_handle) {
-	//TODO implement defragment
-	// 	lock_complete_database();
-	// 	data_entry = 0;
-	// 	next_data_entry = 0;
-	// 	while (next_data_entry < filesize(db_handle->data_file)) {
-	// 		if (next_data_entry->mtime == 0 || (next_data_entry->index_page->objects[next_data_entry->index].offset != next_data_entry) {
-	// 			//data_entry is garbage
-	// 			next_data_entry = search_next_non_garbage_entry_starting_with(next_data_entry);
-	// 			filecpy(data_entry, next_data_entry); //entry must not overlap
-	// 			//update index
-	// 			data_entry->index_page->objects[data_entry->index].offset = data_entry;
-	// 			store_index();
-	// 			next_data_entry += data_entry.size + padding;
-	// 		}
-	// 		data_entry += data_entry.size + padding;
-	// 	}
-	// 	delete_file_space_after(data_entry)
-	// 	unlock complete database
-	return TILEDB_OK;
+	db_printf("tiledb_defragment_data_file()\n");
+	if (db_handle == NULL || !db_handle->initialized) return TILEDB_INVALID_HANDLE;
+
+	if (db_handle->version == 0) {
+		tiledb_error result;
+		if ((result = tiledb_enable_lazylock(db_handle)) != TILEDB_OK) {
+			return result;
+		}
+		if ((result = tiledb_defragment_data_file_v0(db_handle)) != TILEDB_OK) {
+			return result;
+		}
+		if ((result = tiledb_disable_lazylock(db_handle)) != TILEDB_OK) {
+			return result;
+		}
+		return TILEDB_OK;
+	} else {
+		return TILEDB_UNSUPPORTED_DB_VERSION;
+	}
 }
