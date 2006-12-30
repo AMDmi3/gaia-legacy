@@ -32,22 +32,27 @@ void rec(int x, int y, int level, int *count) {
 		rec((x<<1)+0, (y<<1)+1, level+1, count);
 		rec((x<<1)+1, (y<<1)+1, level+1, count);
 	}
+	if (level == 3) printf(".");fflush(stdout);
 }
 
 
 int action_stat() {
-	int count[20];
+	int count[31];
 	int i;
-	for (i=0; i<20; i++) {
+	int total = 0;
+	for (i=0; i<31; i++) {
 		count[i] = 0;
 	}
 
 	if (g_lazylockingflag) tiledb_enable_lazylock(&g_tiledb);
 	rec(0, 0, 0, (int *)&count);
 	if (g_lazylockingflag) tiledb_disable_lazylock(&g_tiledb);
+	printf("\n");
 
-	for (i=0; i<20; i++) {
-		printf("%d: %d tiles found\n", i, count[i]);
+	for (i=0; i<31; i++) {
+		printf("%d: %d/%d tiles found\n", i, count[i], (1<<i)*(1<<i));
+		total += count[i];
 	}
+	printf("total: %d tiles found\n", total);
 	return 1;
 }
