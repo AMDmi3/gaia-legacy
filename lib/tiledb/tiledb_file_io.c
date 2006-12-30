@@ -29,7 +29,7 @@ tiledb_index_page_ref tiledb_get_free_index_page(DB_Handle* db_handle) {
 }
 
 tiledb_error tiledb_store_data_to_file(int file, off_t offset, void* data, size_t size) {
-	io_printf("store_data_to_file(offset=%d, size=%d)\n", (int)offset, size);
+	io_printf("store_data_to_file(file=%d, offset=%d, size=%d)\n", file, (int)offset, size);
 	if (lseek(file, offset, 0) == -1) {
 		db_error("on lseek");
 		return TILEDB_SYSCALL_ERROR;
@@ -48,7 +48,7 @@ tiledb_error tiledb_store_index_page(DB_Handle *db_handle, tiledb_index_page_ref
 
 tiledb_error tiledb_read_data_to_buffer(int file, off_t offset, void* buffer, size_t size)
 {
-	io_printf("read_data_to_buffer(offset=%d, size=%d)\n", (int)offset, size);
+	io_printf("read_data_to_buffer(file=%d, offset=%d, size=%d)\n", file, (int)offset, size);
 	if (lseek(file, offset, 0) == -1) {
 		db_error("on lseek");
 		return TILEDB_SYSCALL_ERROR;
