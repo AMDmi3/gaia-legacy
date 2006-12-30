@@ -31,6 +31,7 @@ char	*g_filesdir = 0;
 int	g_typemask = 0;
 
 int	g_verboseflag = 0;
+int	g_lazylockingflag = 0;
 
 DB_Handle	g_tiledb;
 
@@ -52,6 +53,7 @@ static struct option longopts[] = {
 	{ "type",	required_argument,	0,	't' },
 	{ "point",	required_argument,	0,	'p' },
 	{ "verbose",	no_argument,		0,	'v' },
+	{ "lazylocking",	no_argument,		0,	'l' },
 };
 
 void cleanup() {
@@ -66,7 +68,7 @@ int main(int argc, char **argv) {
 	int ch;
 
 	/* arguments parsing */
-	while ((ch = getopt_long(argc, argv, "LRIEDUShc:f:d:t:p:v", longopts, NULL)) != -1)
+	while ((ch = getopt_long(argc, argv, "LRIEDUShc:f:d:t:p:vl", longopts, NULL)) != -1)
 		switch (ch) {
 		case 'L':
 		case 'R':
@@ -102,6 +104,9 @@ int main(int argc, char **argv) {
 		case 'v':
 			g_verboseflag = 1;
 			break;
+		case 'l':
+			g_lazylockingflag = 1;
+			break;
 		case 'h':
 			usage();
 			return 0;
@@ -110,6 +115,9 @@ int main(int argc, char **argv) {
 			errx(1, "unrecognized option `%s'", argv[optind-1]);
 			return 1;
 		}
+
+	if (g_verboseflag && g_lazylockingflag)
+		fprintf(stderr, "using lazy locking\n");
 
 	/* check/fix options */
 	if (action == 0)
@@ -215,6 +223,7 @@ void usage() {
 	fprintf(stderr, "  -t, --type=TYPE         work only with specified type(s) of data (default all)\n");
 	fprintf(stderr, "  -p, --point=COORDS      specify one or more points to limit region (default whole world)\n");
 	fprintf(stderr, "  -v, --verbose           increase verbosity\n");
+	fprintf(stderr, "  -l, --lazylocking       used lazylocking, single process db access\n");
 	fprintf(stderr, "\nData types (for -t)\n");
 	fprintf(stderr, "  Only `image' is supported at the moment\n");
 	fprintf(stderr, "\nPoints format (for -p)\n");

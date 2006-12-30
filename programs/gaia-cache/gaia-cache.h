@@ -51,6 +51,7 @@ extern char	*g_filesdir;
 extern int	g_typemask;
 
 extern int	g_verboseflag;
+extern int	g_lazylockingflag;
 
 extern DB_Handle g_tiledb;
 

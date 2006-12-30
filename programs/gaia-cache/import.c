@@ -118,7 +118,7 @@ int action_import() {
 
 	int successresult = 1;
 
-	//tiledb_enable_lazylock(&g_tiledb);
+	if (g_lazylockingflag) tiledb_enable_lazylock(&g_tiledb);
 
 	/* traverse dirtree */
 	while ((ftsent = fts_read(fts))) {
@@ -128,7 +128,7 @@ int action_import() {
 		}
 	}
 
-	//tiledb_disable_lazylock(&g_tiledb);
+	if (g_lazylockingflag) tiledb_disable_lazylock(&g_tiledb);
 
 	/* close fts */
 	fts_close(fts);
@@ -207,7 +207,9 @@ void rec_export(int x, int y, int level) {
 }
 
 int action_export() {
+	if (g_lazylockingflag) tiledb_enable_lazylock(&g_tiledb);
 	rec_export(0, 0, 0);
+	if (g_lazylockingflag) tiledb_disable_lazylock(&g_tiledb);
 	printf("\n");
 	return 1;
 }
