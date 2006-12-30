@@ -6,6 +6,7 @@
 
 #define LOG_LOCKING 0
 #define LOG_IO 0
+#define LOG_DEFRAG 0
 #define LOG_DB 0
 
 #define db_error(...) printf("DB-ERROR: ");					\

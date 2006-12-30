@@ -3,8 +3,14 @@
 #include "tiledb_file_io.h"
 #include "tiledb_endian.h"
 
+#if LOG_DEFRAG
+#define defrag_printf(...) printf(__VA_ARGS__)
+#else
+#define defrag_printf(...) while(0){}
+#endif
+
 tiledb_error tiledb_move_data_v0(DB_Handle *db_handle, int from, int to, int size) {
-	printf("tiledb_move_data_v0 %d => %d (%d)\n", from, to, size);
+	defrag_printf("tiledb_move_data_v0 %d => %d (%d)\n", from, to, size);
 	//old and new location must not overlap
 	tiledb_error result;
 
