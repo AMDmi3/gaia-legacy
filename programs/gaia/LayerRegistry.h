@@ -22,15 +22,13 @@
 
 #include "Layer.h"
 
-/* layer groups; by default layers are sorted in group order */
-/* layer is opaque and covers whole world (like NASA WW) */
-#define LAYERGROUP_OPAQUE		0x00
+/* groups that specify default layer ordering */
+/* TODO: more groups (maybe will be added with new layers) */
+#define LAYERGROUP_OPAQUE		0x00000000	/* cover whole world */
+#define LAYERGROUP_PARTIALLY_OPAQUE	0x00010000	/* like aerial data for single city */
+#define LAYERGROUP_TRANSPARENT		0x00020000	/* grids, gps data */
 
-/* layer has data only for specific regions (for example, map of some city) */
-#define LAYERGROUP_PARTIALLY_OPAQUE	0x01
-
-/* layer is fully transparent (GPS, grid etc.) */
-#define LAYERGROUP_TRANSPARENT		0x02
+#define LAYERGROUP_BACKGROUND		-1
 
 /* macros to define layers */
 #define DECLARE_GAIA_LAYER(classname) \
@@ -41,35 +39,23 @@ private: \
 	static LayerMeta _meta;
 
 #define INIT_GAIA_LAYER(classname, name, group) \
-	LayerMeta classname::_meta = LayerMeta(name, classname::_spawn);
+	LayerMeta classname::_meta = LayerMeta(name, classname::_spawn, group);
 
 namespace gaia {
 
 class LayerRegistry;
 
-class LayerMeta {
+struct LayerMeta {
 public:
-	LayerMeta(char *name) {}
-	LayerMeta(Layer *(*spawn)()) {}
-	LayerMeta(char *name, Layer *(*spawn)());
-	virtual ~LayerMeta();
+	LayerMeta(char *name, Layer *(*spawn)(), int group);
 
-	LayerMeta *Next();
-	Layer*	Spawn();
+public:
+	char	*name;
+	int	group;
+	Layer	*(*spawn)();
+	LayerMeta	*next;
 
-	int Toggle(int on);
-	int IsActive();
-
-private:
-	void SetNext(LayerMeta *next);
-
-private:
-	char	*m_Name;
-	int	m_Active;
-	Layer	*(*m_SpawnFunction)();
-	LayerMeta	*m_Next;
-
-	friend class LayerRegistry;
+	static LayerMeta* first;
 };
 
 /*class LayerRegistry {
@@ -77,10 +63,10 @@ public:
 	LayerRegistry();
 	virtual ~LayerRegistry();
 
-	virtual void RegisterLayer(LayerData *data, int group);
+	virtual void RegisterLayer(LayerMeta *data, int group);
 
 private:
-	LayerData	*m_FirstLayer;
+	LayerMeta	*m_FirstMeta;
 };*/
 
 } /* namespace gaia */

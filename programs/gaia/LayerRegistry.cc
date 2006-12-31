@@ -21,37 +21,39 @@
 
 namespace gaia {
 
-LayerMeta::LayerMeta(char *name, Layer *(*spawn)()) {
-	m_Name = name;
-	m_Next = 0;
-	m_Active = 1;
-	m_SpawnFunction = spawn;
+/********************************************************************\
+ * LayerMeta                                                        *
+\********************************************************************/
+LayerMeta *LayerMeta::first = 0;
+
+LayerMeta::LayerMeta(char *nname, Layer *(*nspawn)(), int ngroup) {
+	name = nname;
+	spawn = nspawn;
+	group = ngroup;
+
+	/* insert newly registered layer right after last layer
+	 * with less group number, i.e.
+	 * for new layer with group = 1, it will be placed:
+	 * 0 0 0 [here] 1 1 1 2 2 2
+	 * 0 0 1 0 [here] 1 1
+	 * 1 1 1 0 0 0 [here]
+	 */
+	LayerMeta *current, *after = 0;
+	for (current = first; current; current = current->next)
+		if (current->group < ngroup)
+			after = current;
+
+	if (after == 0) {
+		next = first;
+		first = this;
+	} else {
+		next = after->next;
+		after->next = this;
+	}
 }
 
-LayerMeta::~LayerMeta() {
-}
-
-LayerMeta *LayerMeta::Next() {
-	return m_Next;
-}
-
-void LayerMeta::SetNext(LayerMeta *next) {
-	m_Next = next;
-}
-
-Layer *LayerMeta::Spawn() {
-	return m_SpawnFunction();
-}
-
-int LayerMeta::Toggle(int on) {
-	int current = m_Active;
-	m_Active = on;
-
-	return current;
-}
-
-int LayerMeta::IsActive() {
-	return m_Active;
-}
+/********************************************************************\
+ * LayerRegistry                                                    *
+\********************************************************************/
 
 } /* namespace gaia */

@@ -21,7 +21,7 @@
 
 namespace gaia {
 
-INIT_GAIA_LAYER(GridLayer, "Grid", LAYERGROUP_TRANSPARENT);
+INIT_GAIA_LAYER(GridLayer, "Grid", LAYERGROUP_TRANSPARENT + LAYERGROUP_BACKGROUND);
 
 GridLayer::GridLayer() {
 }
