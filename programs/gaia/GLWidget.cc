@@ -31,6 +31,7 @@ GLWidget::GLWidget(QWidget* parent, const char* name): QGLWidget(parent, name) {
 	m_MouseDownMask = 0;
 
 //	SetMouseTracking(1);
+	setFocusPolicy(QWidget::WheelFocus);
 }
 
 GLWidget::~GLWidget() {
