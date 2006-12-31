@@ -21,6 +21,8 @@
 
 namespace gaia {
 
+INIT_GAIA_LAYER(GridLayer, "Grid", LAYERGROUP_TRANSPARENT);
+
 GridLayer::GridLayer() {
 }
 

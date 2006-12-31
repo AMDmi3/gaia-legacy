@@ -24,8 +24,9 @@
 #include <string.h>
 #include <pthread.h>
 
+#include "LayerRegistry.h"
+
 #include "Timer.h"
-#include "Layer.h"
 #include "GPSSourceNMEA.h"
 #include "GPSSourceTest.h"
 #ifdef WITH_GPSD
@@ -67,6 +68,7 @@ struct GPSEntity {
  * points, leave only first and last)
  */
 class GPSLayer: public Layer {
+	DECLARE_GAIA_LAYER(GPSLayer);
 public:
 	/**
 	 * Constructor

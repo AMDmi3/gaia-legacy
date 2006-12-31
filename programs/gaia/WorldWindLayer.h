@@ -20,7 +20,8 @@
 #ifndef __GAIA__WORLDWINDLAYER_H__
 #define __GAIA__WORLDWINDLAYER_H__
 
-#include "Layer.h"
+#include "LayerRegistry.h"
+
 #include "WorldWindTileManager.h"
 #include "WorldWindFetcher.h"
 #include "FilesystemStorage.h"
@@ -29,11 +30,13 @@
 
 namespace gaia {
 
+/**
+ * NASA World Wind map layer
+ */
 class WorldWindLayer: public Layer {
+	DECLARE_GAIA_LAYER(WorldWindLayer);
 public:
-	/* XXX: layer ctor should have no parameters
-	 * think of config system instead */
-	WorldWindLayer(std::string storageroot);
+	WorldWindLayer();
 	virtual ~WorldWindLayer();
 
 	void RenderRegion(Region *rgn);

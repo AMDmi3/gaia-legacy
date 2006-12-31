@@ -17,35 +17,41 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef __GAIA__TESTLAYER_H__
-#define __GAIA__TESTLAYER_H__
-
 #include "LayerRegistry.h"
 
 namespace gaia {
 
-/**
- * Layer for rendering testing.
- *
- * Designed primarily for *EarthView classes testing, TestLayer
- * only renders regions requested as coloured triangles.
- */
-class TestLayer: public Layer {
-	DECLARE_GAIA_LAYER(TestLayer);
-public:
-	/**
-	 * Constructor
-	 */
-	TestLayer();
+LayerMeta::LayerMeta(char *name, Layer *(*spawn)()) {
+	m_Name = name;
+	m_Next = 0;
+	m_Active = 1;
+	m_SpawnFunction = spawn;
+}
 
-	/**
-	 * Destructor
-	 */
-	virtual ~TestLayer();
+LayerMeta::~LayerMeta() {
+}
 
-	void RenderRegion(Region *rgn);
-};
+LayerMeta *LayerMeta::Next() {
+	return m_Next;
+}
+
+void LayerMeta::SetNext(LayerMeta *next) {
+	m_Next = next;
+}
+
+Layer *LayerMeta::Spawn() {
+	return m_SpawnFunction();
+}
+
+int LayerMeta::Toggle(int on) {
+	int current = m_Active;
+	m_Active = on;
+
+	return current;
+}
+
+int LayerMeta::IsActive() {
+	return m_Active;
+}
 
 } /* namespace gaia */
-
-#endif

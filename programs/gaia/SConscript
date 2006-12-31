@@ -51,6 +51,7 @@ srcs = Split("""Main.cc
 		SimpleTileStorage.cc
 		GlobeEarthView.cc
 		Layer.cc
+		LayerRegistry.cc
 		TestLayer.cc
 		Texture.cc
 		TextureTile.cc

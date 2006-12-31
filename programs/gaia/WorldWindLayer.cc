@@ -21,12 +21,17 @@
 
 namespace gaia {
 
-WorldWindLayer::WorldWindLayer(std::string storageroot) {
+INIT_GAIA_LAYER(WorldWindLayer, "World Wind", LAYERGROUP_OPAQUE);
+
+WorldWindLayer::WorldWindLayer() {
 	m_DiskCache = 0;
 	m_ImageFetcher = 0;
 	m_TileManager = 0;
 
 	try {
+		/* XXX: temporary hack; config system is needed */
+		std::string storageroot = std::string(getenv("HOME")) + "/.gaia/cache";
+
 		/* create disk cache */
 		m_DiskCache = new FilesystemStorage(storageroot);
 		m_ImageFetcher = new WorldWindFetcher();

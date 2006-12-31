@@ -21,6 +21,8 @@
 
 namespace gaia {
 
+INIT_GAIA_LAYER(TestLayer, "Test", LAYERGROUP_OPAQUE);
+
 TestLayer::TestLayer() {
 }
 

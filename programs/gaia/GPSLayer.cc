@@ -21,6 +21,8 @@
 
 namespace gaia {
 
+INIT_GAIA_LAYER(GPSLayer, "GPS", LAYERGROUP_TRANSPARENT);
+
 GPSLayer::GPSLayer() {
 }
 

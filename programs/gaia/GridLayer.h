@@ -20,7 +20,7 @@
 #ifndef __GAIA__GRIDLAYER_H__
 #define __GAIA__GRIDLAYER_H__
 
-#include "Layer.h"
+#include "LayerRegistry.h"
 
 #define MIN_GRID_DISTANCE 100.0
 
@@ -34,6 +34,7 @@ namespace gaia {
  * @todo drawing angle values with text
  */
 class GridLayer: public Layer {
+	DECLARE_GAIA_LAYER(GridLayer);
 public:
 	GridLayer();
 	virtual ~GridLayer();

@@ -71,7 +71,7 @@ ControlWidget::ControlWidget(GLWidget* target, QWidget* parent, const char* name
 	new QListViewItem(listview, "Grid"); */
 
 	/* XXX: Path should not be specified like that */
-	m_LayerItems.append(new LayerListItem(listview, listview->lastItem(), "World Wind", new WorldWindLayer(std::string(getenv("HOME")) + "/.gaia/cache"), 1));
+	m_LayerItems.append(new LayerListItem(listview, listview->lastItem(), "World Wind", new WorldWindLayer(), 1));
 	m_LayerItems.append(new LayerListItem(listview, listview->lastItem(), "Test", new TestLayer(), 0));
 	m_LayerItems.append(new LayerListItem(listview, listview->lastItem(), "GPS", new GPSLayer(), 0));
 	m_LayerItems.append(new LayerListItem(listview, listview->lastItem(), "Grid", new GridLayer(), 0));
