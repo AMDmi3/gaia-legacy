@@ -25,17 +25,22 @@
 
 #include "GLWidget.h"
 
+#include "LayerRegistry.h"
+
 namespace gaia {
 
 class LayerListItem: public QCheckListItem {
 public:
-	LayerListItem(QListView *parent, QListViewItem *after, const QString &name, Layer *layer, int on) : QCheckListItem(parent, after, name, QCheckListItem::CheckBox), m_Layer(layer) { setOn(on); }
-	~LayerListItem() { delete m_Layer; }
+	LayerListItem(QListView *parent, QListViewItem *after, LayerMeta *meta) : QCheckListItem(parent, after, meta->name, QCheckListItem::CheckBox), m_Meta(meta) { setOn(meta->active); }
+	~LayerListItem() {}
 
-	Layer	*GetLayer() { return m_Layer; }
+	LayerMeta	*GetMeta() { return m_Meta; }
 
 protected:
-	Layer	*m_Layer;
+	virtual void stateChange(bool s) { m_Meta->active = state(); }
+
+protected:
+	LayerMeta	*m_Meta;
 };
 
 class ControlWidget: public QWidget {

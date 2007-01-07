@@ -35,8 +35,7 @@ public:
 
 	void SetFlatEarthView();
 	void SetGlobeEarthView();
-	void AttachLayer(Layer *layer);
-	void DetachAllLayers();
+	void UpdateLayers();
 
 protected:
 	void initializeGL();

@@ -21,7 +21,7 @@
 
 namespace gaia {
 
-INIT_GAIA_LAYER(TestLayer, "Test", LAYERGROUP_OPAQUE);
+IMPLEMENT_GAIA_LAYER(TestLayer, "Test layer", LAYERGROUP_OPAQUE, 0);
 
 TestLayer::TestLayer() {
 }

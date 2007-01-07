@@ -38,36 +38,26 @@ private: \
 	} \
 	static LayerMeta _meta;
 
-#define INIT_GAIA_LAYER(classname, name, group) \
-	LayerMeta classname::_meta = LayerMeta(name, classname::_spawn, group);
+#define IMPLEMENT_GAIA_LAYER(classname, name, group, active) \
+	LayerMeta classname::_meta = LayerMeta(name, classname::_spawn, group, active);
 
 namespace gaia {
 
 class LayerRegistry;
 
-struct LayerMeta {
+class LayerMeta {
 public:
-	LayerMeta(char *name, Layer *(*spawn)(), int group);
+	LayerMeta(char *nname, Layer *(*nspawn)(), int ngroup, int nactive);
 
 public:
 	char	*name;
 	int	group;
+	int	active;
 	Layer	*(*spawn)();
-	LayerMeta	*next;
 
+	LayerMeta	*next;
 	static LayerMeta* first;
 };
-
-/*class LayerRegistry {
-public:
-	LayerRegistry();
-	virtual ~LayerRegistry();
-
-	virtual void RegisterLayer(LayerMeta *data, int group);
-
-private:
-	LayerMeta	*m_FirstMeta;
-};*/
 
 } /* namespace gaia */
 

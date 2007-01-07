@@ -19,21 +19,29 @@
 
 #include "EarthView.h"
 
+#include "LayerRegistry.h"
+
 namespace gaia {
 
 EarthView::EarthView() {
 	m_ViewportWidth = m_ViewportHeight = 0;
+	UpdateLayers();
 }
 
 EarthView::~EarthView() {
+	for (std::vector<Layer*>::iterator i = m_Layers.begin(); i < m_Layers.end(); i++)
+		delete (*i);
 }
 
-void EarthView::AttachLayer(Layer *layer) {
-	m_Layers.push_back(layer);
-}
+void EarthView::UpdateLayers() {
+	for (std::vector<Layer*>::iterator i = m_Layers.begin(); i < m_Layers.end(); i++)
+		delete (*i);
 
-void EarthView::DetachAllLayers() {
 	m_Layers.clear();
+
+	for (LayerMeta *meta = LayerMeta::first; meta; meta = meta->next)
+		if (meta->active)
+			m_Layers.push_back(meta->spawn());
 }
 
 void EarthView::Resize(int width, int height) {

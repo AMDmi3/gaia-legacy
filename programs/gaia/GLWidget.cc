@@ -54,15 +54,6 @@ void GLWidget::resizeGL(int w, int h) {
 	glViewport(0, 0, w, h);
 }
 
-/* public methods for ControlWidget */
-void GLWidget::AttachLayer(Layer *layer) {
-	m_EarthView->AttachLayer(layer);
-}
-
-void GLWidget::DetachAllLayers() {
-	m_EarthView->DetachAllLayers();
-}
-
 /* events */
 void GLWidget::mousePressEvent(QMouseEvent *e) {
 	m_MouseDownMask |= e->button();
@@ -179,13 +170,13 @@ void GLWidget::keyReleaseEvent(QKeyEvent *e) {
 	updateGL();
 }
 
-/* slots */
 void GLWidget::SetFlatEarthView() {
 	EarthView *newearthview = new FlatEarthView();
 
 	delete m_EarthView;
 
 	m_EarthView = newearthview;
+	m_EarthView->UpdateLayers();
 }
 
 void GLWidget::SetGlobeEarthView() {
@@ -194,6 +185,11 @@ void GLWidget::SetGlobeEarthView() {
 	delete m_EarthView;
 
 	m_EarthView = newearthview;
+	m_EarthView->UpdateLayers();
+}
+
+void GLWidget::UpdateLayers() {
+	m_EarthView->UpdateLayers();
 }
 
 } /* namespace gaia */

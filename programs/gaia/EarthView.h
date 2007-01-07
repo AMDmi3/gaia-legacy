@@ -46,8 +46,7 @@ public:
 	EarthView();
 	virtual ~EarthView();
 
-	void AttachLayer(Layer *layer);
-	void DetachAllLayers();
+	void UpdateLayers();
 
 	virtual void Render() = 0;
 	virtual void Animate(double delta) = 0;

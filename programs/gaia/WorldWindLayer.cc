@@ -21,7 +21,7 @@
 
 namespace gaia {
 
-INIT_GAIA_LAYER(WorldWindLayer, "World Wind", LAYERGROUP_OPAQUE);
+IMPLEMENT_GAIA_LAYER(WorldWindLayer, "World Wind", LAYERGROUP_OPAQUE, 1);
 
 WorldWindLayer::WorldWindLayer() {
 	m_DiskCache = 0;
