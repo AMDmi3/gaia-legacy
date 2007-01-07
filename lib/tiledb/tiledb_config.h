@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <fcntl.h>
 
 #define LOG_LOCKING 0
 #define LOG_IO 0
