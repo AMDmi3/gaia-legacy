@@ -19,6 +19,8 @@
 
 #include "GlobeEarthView.h"
 
+#include "PreloadedTextureManager.h"
+
 namespace gaia {
 
 GlobeEarthView::GlobeEarthView() {

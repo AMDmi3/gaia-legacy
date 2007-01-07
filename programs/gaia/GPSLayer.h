@@ -20,21 +20,12 @@
 #ifndef __GAIA__GPSLAYER_H__
 #define __GAIA__GPSLAYER_H__
 
-#include <vector>
-#include <string.h>
-#include <pthread.h>
-
 #include "LayerRegistry.h"
 
-#include "Timer.h"
-#include "GPSSourceNMEA.h"
-#include "GPSSourceTest.h"
-#ifdef WITH_GPSD
-#	include "GPSSourceGPSD.h"
-#endif
-#include "Hud.h"
-#include "HudIcon.h"
-#include "Data.h"
+#include <vector>
+#include <pthread.h>
+
+#include "GPSSource.h"
 
 #define DATA_ROT_TIME 5000
 #define MAX_ENTITY_NAME 64

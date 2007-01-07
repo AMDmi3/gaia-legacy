@@ -20,12 +20,9 @@
 #ifndef __GAIA__GPSSOURCEGPSD_H__
 #define __GAIA__GPSSOURCEGPSD_H__
 
-#include <vector>
-#include <string.h>
-#include <fcntl.h>
-#include <gps.h>
-
 #include "GPSSource.h"
+
+#include <gps.h>
 
 namespace gaia {
 

@@ -20,13 +20,7 @@
 #ifndef __GAIA__GPSSOURCETEST_H__
 #define __GAIA__GPSSOURCETEST_H__
 
-#include <vector>
-#include <string.h>
-#include <fcntl.h>
-#include <unistd.h>
-
 #include "GPSSource.h"
-#include "Timer.h"
 
 namespace gaia {
 

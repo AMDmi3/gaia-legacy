@@ -19,6 +19,18 @@
 
 #include "GPSLayer.h"
 
+#include <string.h>
+
+#include "Timer.h"
+#include "GPSSourceNMEA.h"
+#include "GPSSourceTest.h"
+#ifdef WITH_GPSD
+#       include "GPSSourceGPSD.h"
+#endif
+#include "Hud.h"
+#include "HudIcon.h"
+#include "Data.h"
+
 namespace gaia {
 
 IMPLEMENT_GAIA_LAYER(GPSLayer, "GPS", LAYERGROUP_TRANSPARENT, 0);

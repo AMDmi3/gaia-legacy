@@ -20,13 +20,6 @@
 #ifndef __GAIA__MESSAGES_H__
 #define __GAIA__MESSAGES_H__
 
-#include "Timer.h"
-
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/time.h>
-
 namespace gaia {
 
 #ifdef DEBUG

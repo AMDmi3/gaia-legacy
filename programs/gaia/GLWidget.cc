@@ -35,6 +35,7 @@ GLWidget::GLWidget(QWidget* parent, const char* name): QGLWidget(parent, name) {
 }
 
 GLWidget::~GLWidget() {
+	delete m_EarthView;
 }
 
 void GLWidget::paintGL() {

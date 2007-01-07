@@ -22,9 +22,9 @@
 
 #include <pthread.h>
 
-#include "Timer.h"
 #include "SmartPtr.h"
 #include "RawBuffer.h"
+#include "Timer.h"
 
 namespace gaia {
 

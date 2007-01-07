@@ -19,6 +19,8 @@
 
 #include "Hud.h"
 
+#include <GL/gl.h>
+
 namespace gaia {
 
 Hud *Hud::m_Instance = 0;

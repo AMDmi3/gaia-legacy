@@ -20,9 +20,6 @@
 #ifndef __GAIA__GLOBEEARTHVIEW_H__
 #define __GAIA__GLOBEEARTHVIEW_H__
 
-#include "Viewpoint.h"
-#include "Layer.h"
-#include "PreloadedTextureManager.h"
 #include "EarthView.h"
 
 namespace gaia {

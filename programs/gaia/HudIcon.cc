@@ -19,6 +19,8 @@
 
 #include "HudIcon.h"
 
+#include "PreloadedTextureManager.h"
+
 namespace gaia {
 
 void HudIcon::Render() {

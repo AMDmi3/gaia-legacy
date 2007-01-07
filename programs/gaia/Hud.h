@@ -21,7 +21,6 @@
 #define __GAIA__HUD_H__
 
 #include <vector>
-#include <GL/gl.h>
 
 #include "HudObject.h"
 

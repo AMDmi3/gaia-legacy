@@ -20,12 +20,6 @@
 #ifndef __GAIA__RAWBUFFER_H__
 #define __GAIA__RAWBUFFER_H__
 
-#include <string.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <unistd.h>
-#include <stdio.h>
-
 #include "Exceptions.h"
 
 namespace gaia {

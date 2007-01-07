@@ -21,7 +21,6 @@
 #define __GAIA__HUDICON_H__
 
 #include "HudObject.h"
-#include "PreloadedTextureManager.h"
 
 namespace gaia {
 

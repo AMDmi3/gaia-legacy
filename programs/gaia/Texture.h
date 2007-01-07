@@ -24,10 +24,6 @@
 #include "Exceptions.h"
 
 #include <GL/gl.h>
-#include <string>
-#include <stdarg.h>
-#include <string.h>
-#include <stdio.h>
 #include <png.h>
 
 namespace gaia {

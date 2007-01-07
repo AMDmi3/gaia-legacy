@@ -19,6 +19,14 @@
 
 #include "GPSSourceNMEA.h"
 
+#include "Exceptions.h"
+
+#include <ctype.h>
+#include <stdio.h>
+#include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
+
 namespace gaia {
 
 GPSSourceNMEA::GPSSourceNMEA(char *path) {

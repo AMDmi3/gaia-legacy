@@ -19,6 +19,11 @@
 
 #include "GPSSourceGPSD.h"
 
+#include "Exceptions.h"
+
+#include <string.h>
+#include <fcntl.h>
+
 namespace gaia {
 
 GPSSourceGPSD::GPSSourceGPSD(char *server, char *port) {

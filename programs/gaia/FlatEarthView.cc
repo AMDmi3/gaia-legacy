@@ -19,6 +19,8 @@
 
 #include "FlatEarthView.h"
 
+#include "PreloadedTextureManager.h"
+
 namespace gaia {
 
 FlatEarthView::FlatEarthView() {

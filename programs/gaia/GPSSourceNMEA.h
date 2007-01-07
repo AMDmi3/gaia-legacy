@@ -20,11 +20,6 @@
 #ifndef __GAIA__GPSSOURCENMEA_H__
 #define __GAIA__GPSSOURCENMEA_H__
 
-#include <vector>
-#include <string.h>
-#include <fcntl.h>
-#include <unistd.h>
-
 #include "GPSSource.h"
 
 #define MAX_SENTENCE_LENGTH 1024

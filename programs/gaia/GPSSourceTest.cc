@@ -19,6 +19,10 @@
 
 #include "GPSSourceTest.h"
 
+#include "Timer.h"
+
+#include <unistd.h>
+
 namespace gaia {
 
 GPSSourceTest::GPSSourceTest() {

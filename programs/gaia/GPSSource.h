@@ -20,8 +20,6 @@
 #ifndef __GAIA__GPSSOURCE_H__
 #define __GAIA__GPSSOURCE_H__
 
-#include "Exceptions.h"
-
 namespace gaia {
 
 /**

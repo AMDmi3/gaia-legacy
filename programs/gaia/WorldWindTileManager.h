@@ -20,11 +20,10 @@
 #ifndef __GAIA__WORLDWINDTILEMANAGER_H__
 #define __GAIA__WORLDWINDTILEMANAGER_H__
 
-#include <map>
-
-#include "Messages.h"
 #include "TextureTile.h"
 #include "TileStorage.h"
+
+#include <map>
 
 #define DEFAULT_MAX_TEXTURES 100
 

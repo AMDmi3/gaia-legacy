@@ -19,6 +19,11 @@
 
 #include "Texture.h"
 
+#include <string>
+#include <stdarg.h>
+#include <string.h>
+#include <stdio.h>
+
 namespace gaia {
 
 Texture::Texture() {

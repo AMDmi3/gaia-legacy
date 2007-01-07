@@ -20,7 +20,6 @@
 #ifndef __GAIA__FLATEARTHVIEW_H__
 #define __GAIA__FLATEARTHVIEW_H__
 
-#include "PreloadedTextureManager.h"
 #include "EarthView.h"
 
 namespace gaia {
