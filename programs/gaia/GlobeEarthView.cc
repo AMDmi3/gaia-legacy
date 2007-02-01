@@ -39,7 +39,7 @@ void GlobeEarthView::Render() {
 	gluPerspective(m_Eye.yfov((double)m_ViewportWidth/(double)m_ViewportHeight)/M_PI*180.0, (double)m_ViewportWidth/(double)m_ViewportHeight, 0.001, 10);
 	glTranslatef(0, 0, -1.0-m_Eye.h);
 	glRotatef(-90.0 + m_Eye.y*360.0, 1, 0, 0);
-	glRotatef(-m_Eye.x*360.0, 0, 0, 1);
+	glRotatef(-m_Eye.x*360.0 + 180.0, 0, 0, 1);
 
 
 	glEnable(GL_CULL_FACE);
