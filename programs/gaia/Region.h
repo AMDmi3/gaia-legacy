@@ -28,12 +28,15 @@ namespace gaia {
 /**
  * Minimal renderable part of Earth
  *
- * Region is rectangular piece of earth surface, with sides parallel to parallels and meridians.
- * Thus, it has only world coordinates w[0] is lower left and w[1] is top right (height is likely
- * to be added as well). However, this rectangle may be rendered to screen in almost arbitary way,
- * (twisted, skewed, rotated etc.) - so virtual coordinates for each vertex are also stored.
- * Vertices are counted [0..3] beginning from bottom-left (that one that is w[0]), CCW.
- * Also projected coordinates may be used.
+ * Region is rectangular piece of earth surface, with sides parallel
+ * to parallels and meridians. Thus, it has only world coordinates
+ * w[0] is lower left and w[1] is top right (height is likely to be
+ * added as well). However, this rectangle may be rendered to screen
+ * in almost arbitary way, (twisted, skewed, rotated etc.) - so virtual
+ * coordinates for each vertex of the rectangle are also stored (those
+ * are used in OpenGL rendering). Vertices are counted [0..3], starting
+ * with bottom-left (that one thet is w[0]), CCW. Projected coordinates
+ * are stored as well. Those are useful for HUD icons, for example.
  */
 class Region {
 public:

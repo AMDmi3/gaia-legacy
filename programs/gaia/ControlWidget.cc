@@ -34,6 +34,33 @@
 
 namespace gaia {
 
+/********************************************************************\
+ * LayerListItem                                                    *
+\********************************************************************/
+LayerListItem::LayerListItem(QListView *parent, QListViewItem *after, GLWidget *glwidget, LayerMeta *meta) :
+		QCheckListItem(parent, after, meta->name, QCheckListItem::CheckBox),
+       		m_Meta(meta), m_GLWidget(glwidget) {
+	setOn(meta->initiallyactive);
+}
+
+LayerListItem::~LayerListItem() {
+}
+
+LayerMeta *LayerListItem::GetMeta() {
+	return m_Meta;
+}
+
+void LayerListItem::stateChange(bool s) {
+	printf("STATE\n");
+	if (state() == QCheckListItem::On)
+		m_GLWidget->ActivateLayer(m_Meta);
+	else if (state() == QCheckListItem::Off)
+		m_GLWidget->DeactivateLayer(m_Meta);
+}
+
+/********************************************************************\
+ * ControlWidget                                                    *
+\********************************************************************/
 ControlWidget::ControlWidget(GLWidget* target, QWidget* parent, const char* name): QWidget(parent, name) {
 	/* target GLWidget to control */
 	m_GLWidget = target;
@@ -56,7 +83,7 @@ ControlWidget::ControlWidget(GLWidget* target, QWidget* parent, const char* name
 	listview->setSorting(-1);
 
 	for (LayerMeta *meta = LayerMeta::first; meta; meta = meta->next)
-		m_LayerItems.append(new LayerListItem(listview, listview->lastItem(), meta));
+		m_LayerItems.append(new LayerListItem(listview, listview->lastItem(), m_GLWidget, meta));
 
 	QObject::connect(listview, SIGNAL(clicked(QListViewItem *)), this, SLOT(UpdateLayers()));
 
@@ -66,11 +93,13 @@ ControlWidget::ControlWidget(GLWidget* target, QWidget* parent, const char* name
 	layout->addWidget(listview);
 
 	/* init GLWidget to default state */
+	/* XXX: ?! */
 	SetFlatEarthView();
 }
 
 void ControlWidget::UpdateLayers() {
-	m_GLWidget->UpdateLayers();
+	/* XXX: ?! */
+//	m_GLWidget->UpdateLayers();
 	m_GLWidget->updateGL();
 }
 

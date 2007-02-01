@@ -25,24 +25,36 @@
 
 #include "GLWidget.h"
 
-#include "LayerRegistry.h"
+#include "Layer.h"
 
 namespace gaia {
 
+/**
+ * Single item of layer list
+ *
+ * There object of this class, derived from QCheckListItem for every
+ * Layer available, so user can toggle (and later change order of) layers
+ */
 class LayerListItem: public QCheckListItem {
 public:
-	LayerListItem(QListView *parent, QListViewItem *after, LayerMeta *meta) : QCheckListItem(parent, after, meta->name, QCheckListItem::CheckBox), m_Meta(meta) { setOn(meta->active); }
-	~LayerListItem() {}
+	LayerListItem(QListView *parent, QListViewItem *after, GLWidget *glwidget, LayerMeta *meta);
+	~LayerListItem();
 
-	LayerMeta	*GetMeta() { return m_Meta; }
-
-protected:
-	virtual void stateChange(bool s) { m_Meta->active = state(); }
+	LayerMeta	*GetMeta();
 
 protected:
-	LayerMeta	*m_Meta;
+	virtual void stateChange(bool s);
+
+protected:
+	LayerMeta	*m_Meta;	///< Layer metadata associated with this item
+	GLWidget	*m_GLWidget;	///< GLWidget to control
 };
 
+/**
+ * Widget gaia's left panel
+ *
+ * Contains layer list, view mode selector and other stuff
+ */
 class ControlWidget: public QWidget {
 	Q_OBJECT
 public:
@@ -54,8 +66,8 @@ private slots:
 	void UpdateLayers();
 
 private:
-	QPtrList<LayerListItem>	m_LayerItems;
-	GLWidget	*m_GLWidget;
+	QPtrList<LayerListItem>	m_LayerItems;	///< Items of layer list
+	GLWidget	*m_GLWidget;		///< GLWidget to control
 };
 
 } /* namespace gaia */

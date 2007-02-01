@@ -20,7 +20,7 @@
 #ifndef __GAIA__TESTLAYER_H__
 #define __GAIA__TESTLAYER_H__
 
-#include "LayerRegistry.h"
+#include "Layer.h"
 
 namespace gaia {
 

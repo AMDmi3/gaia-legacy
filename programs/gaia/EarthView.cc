@@ -19,13 +19,10 @@
 
 #include "EarthView.h"
 
-#include "LayerRegistry.h"
-
 namespace gaia {
 
 EarthView::EarthView() {
 	m_ViewportWidth = m_ViewportHeight = 0;
-	UpdateLayers();
 }
 
 EarthView::~EarthView() {
@@ -33,15 +30,50 @@ EarthView::~EarthView() {
 		delete (*i);
 }
 
-void EarthView::UpdateLayers() {
+int EarthView::ActivateLayer(LayerMeta *meta) {
+	/* turn layer on: create layer object and position
+	 * it in layer list corresponding to it's meta
+	 * position in meta list
+	 */
+	if (m_Layers.empty()) {
+		/* empty list -> just add */
+		m_Layers.push_back(meta->spawn());
+		return 1;
+	}
+
+	std::vector<Layer*>::iterator i = m_Layers.begin();
+	for (LayerMeta *curmeta = LayerMeta::first; curmeta; curmeta = curmeta->next) {
+		if ((*i)->GetMeta() == curmeta) {
+			if (curmeta == meta)
+				return 0;	/* layer is already active */
+			i++;
+			if (i == m_Layers.end() ) {
+				/* gone past last active layer -> add new layer to the end of the list*/
+				m_Layers.push_back(meta->spawn());
+				return 1;
+			}
+		} else if (curmeta == meta) {
+			/* bingo */
+			m_Layers.insert(i, meta->spawn());
+			return 1;
+		}
+	}
+
+	m_Layers.insert(m_Layers.begin(), meta->spawn());
+	return 1;
+}
+
+int EarthView::DeactivateLayer(LayerMeta *meta) {
+	/* turn layer off: find in in layer list by meta,
+	 * delete layer itself and remove pointer to it
+	 * from the list */
 	for (std::vector<Layer*>::iterator i = m_Layers.begin(); i < m_Layers.end(); i++)
-		delete (*i);
-
-	m_Layers.clear();
-
-	for (LayerMeta *meta = LayerMeta::first; meta; meta = meta->next)
-		if (meta->active)
-			m_Layers.push_back(meta->spawn());
+		if ((*i)->GetMeta() == meta) {
+			delete (*i);
+			m_Layers.erase(i);
+			return 1;
+		}
+	return 0;
 }
 
 void EarthView::Resize(int width, int height) {

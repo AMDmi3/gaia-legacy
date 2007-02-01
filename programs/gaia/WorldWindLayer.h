@@ -20,7 +20,7 @@
 #ifndef __GAIA__WORLDWINDLAYER_H__
 #define __GAIA__WORLDWINDLAYER_H__
 
-#include "LayerRegistry.h"
+#include "Layer.h"
 
 #include "WorldWindTileManager.h"
 #include "WorldWindFetcher.h"

@@ -27,20 +27,29 @@
 
 namespace gaia {
 
+/**
+ * Widget with earth view
+ */
 class GLWidget: public QGLWidget {
 	Q_OBJECT
 public:
 	GLWidget(QWidget* parent, const char* name = 0);
 	~GLWidget();
 
+public:
+	/* methods to call from ControlWidget */
 	void SetFlatEarthView();
 	void SetGlobeEarthView();
-	void UpdateLayers();
+	void ActivateLayer(LayerMeta *meta);
+	void DeactivateLayer(LayerMeta *meta);
 
 protected:
+	/* GL stuff */
 	void initializeGL();
 	void paintGL();
 	void resizeGL(int w, int h);
+
+	/* events */
 	void mousePressEvent(QMouseEvent *e);
 	void mouseReleaseEvent(QMouseEvent *e);
 	void mouseMoveEvent(QMouseEvent *e);
@@ -49,11 +58,11 @@ protected:
 	void keyReleaseEvent(QKeyEvent *e);
 
 private:
-	EarthView	*m_EarthView;
-	int		m_MouseDownMask;
-	QPoint		m_MouseLeftAnchor;
-	QPoint		m_MouseMidAnchor;
-	QPoint		m_MouseRightAnchor;
+	EarthView	*m_EarthView;		///< EarthView to render data with
+	int		m_MouseDownMask;	///< Bitmask containing info on which mouse buttons are currently down
+	QPoint		m_MouseLeftAnchor;	///< Where left mouse button was pressed
+	QPoint		m_MouseMidAnchor;	///< Where middle mouse button was pressed
+	QPoint		m_MouseRightAnchor;	///< Where right mouse button was pressed
 };
 
 } /* namespace gaia */

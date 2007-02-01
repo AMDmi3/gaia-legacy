@@ -48,6 +48,11 @@ Additional layers:
 * Layers based on WorldWind addons (warning! what license are these
   under?): http://www.dynagis.net/wwdownload/free_addons.html, patches
   for some by Andreas Grau are available)
+* There's free aerial imagery of whole Slovenia (where? license?)
+* More sources:
+  * http://www.ssec.wisc.edu/data/ (what's license for those?)
+  * http://www.fourmilab.ch/cgi-bin/Earth
+  * http://aa.usno.navy.mil/data/docs/earthview.html
 
 Other:
 * Windows port

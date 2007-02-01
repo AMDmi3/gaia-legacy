@@ -27,7 +27,14 @@
 namespace gaia {
 
 GLWidget::GLWidget(QWidget* parent, const char* name): QGLWidget(parent, name) {
+	/* create default EarthView */
 	m_EarthView = new FlatEarthView();
+
+	/* create default Layers */
+	for (LayerMeta *meta = LayerMeta::first; meta; meta = meta->next)
+		if (meta->initiallyactive)
+			m_EarthView->ActivateLayer(meta);
+
 	m_MouseDownMask = 0;
 
 //	SetMouseTracking(1);
@@ -177,7 +184,6 @@ void GLWidget::SetFlatEarthView() {
 	delete m_EarthView;
 
 	m_EarthView = newearthview;
-	m_EarthView->UpdateLayers();
 }
 
 void GLWidget::SetGlobeEarthView() {
@@ -186,11 +192,14 @@ void GLWidget::SetGlobeEarthView() {
 	delete m_EarthView;
 
 	m_EarthView = newearthview;
-	m_EarthView->UpdateLayers();
 }
 
-void GLWidget::UpdateLayers() {
-	m_EarthView->UpdateLayers();
+void GLWidget::ActivateLayer(LayerMeta *meta) {
+	m_EarthView->ActivateLayer(meta);
+}
+
+void GLWidget::DeactivateLayer(LayerMeta *meta) {
+	m_EarthView->DeactivateLayer(meta);
 }
 
 } /* namespace gaia */

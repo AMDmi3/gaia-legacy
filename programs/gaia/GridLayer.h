@@ -20,7 +20,7 @@
 #ifndef __GAIA__GRIDLAYER_H__
 #define __GAIA__GRIDLAYER_H__
 
-#include "LayerRegistry.h"
+#include "Layer.h"
 
 #define MIN_GRID_DISTANCE 100.0
 

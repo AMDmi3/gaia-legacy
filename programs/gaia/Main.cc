@@ -23,7 +23,7 @@
 
 using namespace gaia;
 
-int main( int argc, char **argv ) {
+int main(int argc, char **argv) {
 	QApplication app(argc,argv);
 
 	if (!QGLFormat::hasOpenGL()) {

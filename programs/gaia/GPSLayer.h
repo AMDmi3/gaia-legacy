@@ -20,7 +20,7 @@
 #ifndef __GAIA__GPSLAYER_H__
 #define __GAIA__GPSLAYER_H__
 
-#include "LayerRegistry.h"
+#include "Layer.h"
 
 #include <vector>
 #include <pthread.h>

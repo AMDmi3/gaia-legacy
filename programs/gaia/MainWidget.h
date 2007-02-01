@@ -25,6 +25,11 @@
 
 namespace gaia {
 
+/**
+ * Main widget for Qt application
+ *
+ * Contains ControlWidget and GLWidget with splitter
+ */
 class MainWidget: public QSplitter {
 	Q_OBJECT
 public:

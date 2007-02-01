@@ -46,7 +46,8 @@ public:
 	EarthView();
 	virtual ~EarthView();
 
-	void UpdateLayers();
+	int ActivateLayer(LayerMeta *meta);
+	int DeactivateLayer(LayerMeta *meta);
 
 	virtual void Render() = 0;
 	virtual void Animate(double delta) = 0;
