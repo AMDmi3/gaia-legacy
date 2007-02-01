@@ -107,4 +107,10 @@ int EarthView::SingleMovement(int flags) {
 	return 0;
 }
 
+/* movement methods */
+void EarthView::MoveToPosition(double x, double y) {
+	m_Eye.x = x;
+	m_Eye.y = y;
+}
+
 } /* namespace gaia */

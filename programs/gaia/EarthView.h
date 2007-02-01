@@ -62,6 +62,8 @@ public:
 	virtual int StopMovement(int flags);
 	virtual int SingleMovement(int flags);
 
+	void MoveToPosition(double x, double y);
+
 protected:
 	std::vector<Layer*>	m_Layers;	///< Layers to use
 

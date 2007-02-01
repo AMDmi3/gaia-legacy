@@ -22,6 +22,7 @@
 #include <qradiobutton.h>
 #include <qpushbutton.h>
 #include <qhbuttongroup.h>
+#include <qvbuttongroup.h>
 #include <qlayout.h>
 
 #include "ControlWidget.h"
@@ -86,9 +87,18 @@ ControlWidget::ControlWidget(GLWidget* target, QWidget* parent, const char* name
 
 	QObject::connect(listview, SIGNAL(clicked(QListViewItem *)), this, SLOT(UpdateLayers()));
 
+	/* position input */
+	QVButtonGroup *group2 = new QVButtonGroup("Goto Position", this);
+	m_XPosSpinbox = new DoubleSpinBox(-180, 180, 10000, group2);
+	m_YPosSpinbox = new DoubleSpinBox(-90, 90, 10000, group2);
+
+	QObject::connect(m_XPosSpinbox, SIGNAL(valueChanged(int)), this, SLOT(MoveToPosition()));
+	QObject::connect(m_YPosSpinbox, SIGNAL(valueChanged(int)), this, SLOT(MoveToPosition()));
+
 	/* layout */
-	QVBoxLayout *layout = new QVBoxLayout(this, 2, 2);
+	QVBoxLayout *layout = new QVBoxLayout(this, 3, 2);
 	layout->addWidget(group);
+	layout->addWidget(group2);
 	layout->addWidget(listview);
 
 	/* init GLWidget to default state */
@@ -110,6 +120,13 @@ void ControlWidget::SetFlatEarthView() {
 void ControlWidget::SetGlobeEarthView() {
 	m_GLWidget->SetGlobeEarthView();
 	m_GLWidget->updateGL();
+}
+
+void ControlWidget::MoveToPosition() {
+	double x = m_XPosSpinbox->GetValue() / 360.0;
+	double y = m_YPosSpinbox->GetValue() / 360.0;
+
+	m_GLWidget->MoveToPosition(x, y);
 }
 
 } /* namespace gaia */

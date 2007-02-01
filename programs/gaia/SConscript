@@ -35,6 +35,7 @@ srcs = Split("""Main.cc
 		MainWidget.cc
 		GLWidget.cc
 		ControlWidget.cc
+		DoubleSpinBox.cc
 		EarthView.cc
 		FilesystemStorage.cc
 		FlatEarthView.cc

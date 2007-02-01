@@ -24,6 +24,7 @@
 #include <qlistview.h>
 
 #include "GLWidget.h"
+#include "DoubleSpinBox.h"
 
 #include "Layer.h"
 
@@ -63,11 +64,15 @@ public:
 private slots:
 	void SetFlatEarthView();
 	void SetGlobeEarthView();
+	void MoveToPosition();
 	void UpdateLayers();
 
 private:
 	QPtrList<LayerListItem>	m_LayerItems;	///< Items of layer list
 	GLWidget	*m_GLWidget;		///< GLWidget to control
+
+	DoubleSpinBox	*m_XPosSpinbox;
+	DoubleSpinBox	*m_YPosSpinbox;
 };
 
 } /* namespace gaia */

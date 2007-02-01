@@ -42,6 +42,7 @@ public:
 	void SetGlobeEarthView();
 	void ActivateLayer(LayerMeta *meta);
 	void DeactivateLayer(LayerMeta *meta);
+	void MoveToPosition(double x, double y);
 
 protected:
 	/* GL stuff */

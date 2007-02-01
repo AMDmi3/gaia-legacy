@@ -196,10 +196,20 @@ void GLWidget::SetGlobeEarthView() {
 
 void GLWidget::ActivateLayer(LayerMeta *meta) {
 	m_EarthView->ActivateLayer(meta);
+
+	updateGL();
 }
 
 void GLWidget::DeactivateLayer(LayerMeta *meta) {
 	m_EarthView->DeactivateLayer(meta);
+
+	updateGL();
+}
+
+void GLWidget::MoveToPosition(double x, double y) {
+	m_EarthView->MoveToPosition(x, y);
+
+	updateGL();
 }
 
 } /* namespace gaia */
