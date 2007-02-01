@@ -51,7 +51,6 @@ LayerMeta *LayerListItem::GetMeta() {
 }
 
 void LayerListItem::stateChange(bool s) {
-	printf("STATE\n");
 	if (state() == QCheckListItem::On)
 		m_GLWidget->ActivateLayer(m_Meta);
 	else if (state() == QCheckListItem::Off)
