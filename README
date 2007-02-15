@@ -35,32 +35,26 @@ Command line arguments
 Building & Installation
 ~~~~~~~~~~~~~~~~~~~~~~~
 To build gaia, you need:
-    - SCons (http://www.scons.org)
-    - cURL library (http://curl.haxx.se)
-    - SDL library (http://www.libsdl.org)
-    - jpeg library (http://www.ijg.org)
-    - png library (http://libpng.sourceforge.net)
+    - cmake (http://www.cmake.org)
+    - Qt3 (http://www.trolltech.com)
+    - libcurl (http://curl.haxx.se/libcurl)
+    - libjpeg (http://www.ijg.org)
+    - libpng (http://libpng.sourceforge.net)
     - libgps (http://gpsd.berlios.de) - optional
 
 Once you obtain all of these, just run in this directory:
 
-% scons
+% cmake .
+or, if you want libgps support,
+% cmake -DWITH_GPSD=1 .
 
-This will build gaia and produce binar(y/ies) runnable from current
-directory.
+Then just run
 
-If you want systemwide installation of gaia, you should explicitly
-provide prefix and specify install target:
+% make
 
-% scons prefix=/usr/local install
+After the build process is complete, run gaia with
 
-This will build gaia and install binaries into /usr/local/bin/ and
-data files into /usr/local/share/gaia/. You can change path suffixes:
-
-% scons prefix=/usr/local bindir=bin/gaia datadir=data/gaia install
-
-Now, binaries will be installed into /usr/local/bin/gaia/ and data
-files into /usr/local/data/gaia/
+% programs/gaia/gaia
 
 Keyboard controls
 ~~~~~~~~~~~~~~~~~
