@@ -17,6 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#ifdef WITH_GPSD
+
 #include "GPSSourceGPSD.h"
 
 #include "Exceptions.h"
@@ -60,3 +62,5 @@ int GPSSourceGPSD::Poll(GPSData *target) {
 }
 
 } /* namespace gaia */
+
+#endif
