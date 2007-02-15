@@ -6,7 +6,7 @@ project(gaia)
 
 # defs
 set(GAIA_VERSION "0.1.3")
-add_definitions(-Wall -g)
+add_definitions(-Wall -g -DGAIA_VERSION="\\"${GAIA_VERSION}\\"")
 
 # subdirs (everything is in subdirs)
 subdirs(lib/wwfetch)
