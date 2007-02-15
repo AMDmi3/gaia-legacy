@@ -2,8 +2,7 @@
 project(gaia)
 
 # cmake setup
-set(CMAKE_VERBOSE_MAKEFILE ON)		# for myself, while learning cmake
-#set(CMAKE_USE_RELATIVE_PATH ON)	# how to make ../../lib/wwfetch remain relative?
+#set(CMAKE_VERBOSE_MAKEFILE ON)		# for myself, while learning cmake
 
 # defs
 set(GAIA_VERSION "0.1.3")
