@@ -46,3 +46,5 @@ qt_wrap_cpp(gaia gaia_MOC_SRCS ${gaia_MOC_HDRS})
 add_executable(gaia ${gaia_SRCS} ${gaia_MOC_SRCS})
 
 target_link_libraries(gaia wwfetch ${QT_LIBRARIES} ${PNG_LIBRARIES} ${JPEG_LIBRARIES} ${CURL_LIBRARIES} ${OPENGL_LIBRARIES} ${GPS_LIBRARY})
+
+install(PROGRAMS gaia DESTINATION bin)
