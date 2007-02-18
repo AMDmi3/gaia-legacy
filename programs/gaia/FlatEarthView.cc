@@ -23,7 +23,7 @@
 
 namespace gaia {
 
-FlatEarthView::FlatEarthView() {
+FlatEarthView::FlatEarthView(EarthView *ancestor): EarthView(ancestor) {
 	m_CurrentMovementFlags = 0;
 }
 

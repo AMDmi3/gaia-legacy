@@ -35,7 +35,7 @@ public:
 	/**
 	 * Constructor.
 	 */
-	GlobeEarthView();
+	GlobeEarthView(EarthView *ancestor = 0);
 
 	/**
 	 * Destructor.

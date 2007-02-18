@@ -28,11 +28,6 @@
 #include "ControlWidget.h"
 #include "GLWidget.h"
 
-#include "WorldWindLayer.h"
-#include "GridLayer.h"
-#include "GPSLayer.h"
-#include "TestLayer.h"
-
 namespace gaia {
 
 /********************************************************************\

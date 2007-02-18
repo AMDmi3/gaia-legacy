@@ -22,8 +22,6 @@
 #include "FlatEarthView.h"
 #include "GlobeEarthView.h"
 
-#include "TestLayer.h"
-
 namespace gaia {
 
 GLWidget::GLWidget(QWidget* parent, const char* name): QGLWidget(parent, name) {
@@ -179,7 +177,7 @@ void GLWidget::keyReleaseEvent(QKeyEvent *e) {
 }
 
 void GLWidget::SetFlatEarthView() {
-	EarthView *newearthview = new FlatEarthView();
+	EarthView *newearthview = new FlatEarthView(m_EarthView);
 
 	delete m_EarthView;
 
@@ -187,7 +185,7 @@ void GLWidget::SetFlatEarthView() {
 }
 
 void GLWidget::SetGlobeEarthView() {
-	EarthView *newearthview = new GlobeEarthView();
+	EarthView *newearthview = new GlobeEarthView(m_EarthView);
 
 	delete m_EarthView;
 

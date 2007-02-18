@@ -21,8 +21,16 @@
 
 namespace gaia {
 
-EarthView::EarthView() {
+EarthView::EarthView(EarthView *ancestor) {
 	m_ViewportWidth = m_ViewportHeight = 0;
+
+	/* new class inherits all valuable data stored in ancestor
+	 * (layers, coords), which is stripped of everything */
+	/* XXX: do we need protected interface for this ? */
+	if (ancestor) {
+		m_Layers = ancestor->m_Layers;
+		ancestor->m_Layers.clear();
+	}
 }
 
 EarthView::~EarthView() {

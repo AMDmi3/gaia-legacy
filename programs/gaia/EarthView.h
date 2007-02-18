@@ -43,7 +43,7 @@ namespace gaia {
  */
 class EarthView {
 public:
-	EarthView();
+	EarthView(EarthView *ancestor = 0);
 	virtual ~EarthView();
 
 	int ActivateLayer(LayerMeta *meta);

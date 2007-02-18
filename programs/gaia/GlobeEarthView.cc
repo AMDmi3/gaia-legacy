@@ -23,7 +23,7 @@
 
 namespace gaia {
 
-GlobeEarthView::GlobeEarthView() {
+GlobeEarthView::GlobeEarthView(EarthView *ancestor): EarthView(ancestor) {
 }
 
 GlobeEarthView::~GlobeEarthView() {

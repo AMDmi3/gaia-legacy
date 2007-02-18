@@ -35,7 +35,7 @@ public:
 	/**
 	 * Constructor.
 	 */
-	FlatEarthView();
+	FlatEarthView(EarthView *ancestor = 0);
 
 	/**
 	 * Destructor.
