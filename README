@@ -1,37 +1,6 @@
            gaia - opensource 3D interface to the planet
           ==============================================
 
-Command line arguments
-~~~~~~~~~~~~~~~~~~~~~~
--w, --world=MODEL
-    Select world model. Default model is `flat', which gives you
-    simple flat world view, similar to plain paper map. No rotation
-    or tilt, but this model is fastest. Another model currently
-    available is `3d', which will show you earth as a globe with
-    extended navigation functions. It's currently not finished, so
-    not much of use.
-
--t, --test
-    Add test layer. Used for rendering testing.
-
--g, --grid
-    Add grid layer. Shows dynamic geographical grid (not fully
-    functional currently).
-
--p, --gps=SOURCE
-    Add GPS layer. Shows location of GPS device and it's route.
-    Available sources are:
-
-    gpsd://host[:port] - Connect to gpsd running on specified host
-    and port. Port is optional and defaults to 2947. Gpsd supports
-    many GPS devices and may be run locally or remotely. For details,
-    see http://gpsd.berlios.de/
-
-    nmea://path - Path to device (socket/fifo also works) that outputs
-    NMEA information from GPS device.
-
-    test:// - Provides fake coordinates for layer testing.
-
 Building & Installation
 ~~~~~~~~~~~~~~~~~~~~~~~
 To build gaia, you need:
@@ -42,19 +11,31 @@ To build gaia, you need:
     - libpng (http://libpng.sourceforge.net)
     - libgps (http://gpsd.berlios.de) - optional
 
-Once you obtain all of these, just run in this directory:
+* If you just want to try gaia without installing it systemwide, just run:
 
 % cmake .
-or, if you want libgps support,
-% cmake -DWITH_GPSD=1 .
-
-Then just run
-
 % make
 
-After the build process is complete, run gaia with
+You can also add -DWITH_GPSD=1 to compile in gpsd support via libgps.
 
-% programs/gaia/gaia
+* If you want to install gaia systemwide, run:
+
+% cmake -DWITH_INSTALL=1
+% make
+% make install
+
+Install prefix is /usr/local by default, and may be changed like that:
+
+% cmake -DCMAKE_INSTALL_PREFIX=/usr
+
+* Notes:
+
+Those values (CMAKE_INSTALL_PREFIX, WITH_INSTALL, WITH_GPSD) are cached,
+so if you have once built source tree for installation and want to rebuild
+it again for local use, you'll have to specify -DWITH_INSTALL=0
+To see actual values for all variables affecting build, run
+
+% cmake -LH
 
 Keyboard controls
 ~~~~~~~~~~~~~~~~~

@@ -1,8 +1,3 @@
-project(gaia)
-
-# checks
-cmake_minimum_required(VERSION 2.4.0)
-
 # depends
 find_package(Qt3 REQUIRED)
 find_package(JPEG REQUIRED)
@@ -23,11 +18,12 @@ if(WITH_GPSD)
 	message(STATUS "Found GPS: ${GPS_LIBRARY}")
 	add_definitions(-DWITH_GPSD)
 else(WITH_GPSD)
-	MESSAGE(STATUS "GPSD support not requested")
+	message(STATUS "GPSD support not requested")
 endif(WITH_GPSD)
 
 # defs
 add_definitions(${QT_DEFINITIONS})
+add_definitions(-DDATADIR="\\"${CMAKE_INSTALL_PREFIX}/${DATADIR}\\"")
 include_directories(${QT_INCLUDE_DIR} ${PNG_INCLUDE_DIR} ${JPEG_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR} ${GPS_INCLUDE_DIR} ../../lib/wwfetch)
 
 # sources
@@ -47,4 +43,6 @@ add_executable(gaia ${gaia_SRCS} ${gaia_MOC_SRCS})
 
 target_link_libraries(gaia wwfetch ${QT_LIBRARIES} ${PNG_LIBRARIES} ${JPEG_LIBRARIES} ${CURL_LIBRARIES} ${OPENGL_LIBRARIES} ${GPS_LIBRARY})
 
-install(PROGRAMS gaia DESTINATION bin)
+if(WITH_INSTALL)
+	install(PROGRAMS gaia DESTINATION ${BINDIR})
+endif(WITH_INSTALL)
