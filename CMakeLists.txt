@@ -12,7 +12,7 @@ set(DATADIR	"share/${PROJECT_NAME}"	CACHE STRING "Where to install data files un
 # dirs
 if(WITH_INSTALL)
 	message(STATUS "Binaries will be installed into ${CMAKE_INSTALL_PREFIX}/${BINDIR}/ (-DBINDIR=${BINDIR})")
-	message(STATUS "Data will be installed into ${CMAKE_INSTALL_PREFIX}/${DATADIR}/ (-DDATADIR=${DATADIR})")
+	message(STATUS "Data files will be installed into ${CMAKE_INSTALL_PREFIX}/${DATADIR}/ (-DDATADIR=${DATADIR})")
 else(WITH_INSTALL)
 	set(CMAKE_INSTALL_PREFIX ${PROJECT_BINARY_DIR})
 	set(DATADIR "data")

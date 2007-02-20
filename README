@@ -20,13 +20,11 @@ You can also add -DWITH_GPSD=1 to compile in gpsd support via libgps.
 
 * If you want to install gaia systemwide, run:
 
-% cmake -DWITH_INSTALL=1
+% cmake -DWITH_INSTALL=1 -DCMAKE_INSTALL_PREFIX=/usr/local
 % make
 % make install
 
-Install prefix is /usr/local by default, and may be changed like that:
-
-% cmake -DCMAKE_INSTALL_PREFIX=/usr
+You may omit -DCMAKE_INSTALL_PREFIX, which is /usr/local by default
 
 * Notes:
 
@@ -37,11 +35,13 @@ To see actual values for all variables affecting build, run
 
 % cmake -LH
 
+
 Keyboard controls
 ~~~~~~~~~~~~~~~~~
 Arrow keys    Pan view
 =/-           Zoom in/out
 Q, Esc        Quit
+
 
 Mouse controls
 ~~~~~~~~~~~~~~
