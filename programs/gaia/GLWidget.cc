@@ -45,6 +45,7 @@ GLWidget::GLWidget(QWidget* parent): QGLWidget(parent) {
 
 	m_MouseDownMask = 0;
 
+//	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 //	SetMouseTracking(1);
 	setFocusPolicy(Qt::WheelFocus);
 }

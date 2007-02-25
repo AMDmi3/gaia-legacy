@@ -58,9 +58,8 @@ void LayerListItem::stateChange(bool s) {
 /********************************************************************\
  * ControlWidget                                                    *
 \********************************************************************/
-ControlWidget::ControlWidget(QWidget* parent, GLWidget* target): QWidget(parent) {
-	/* target GLWidget to control */
-	m_GLWidget = target;
+ControlWidget::ControlWidget(GLWidget* target, QWidget* parent): QWidget(parent), m_GLWidget(target) {
+	setupUi(this);
 
 	/* view model selector */
 //	Q3HButtonGroup *group = new Q3HButtonGroup("View model", this);

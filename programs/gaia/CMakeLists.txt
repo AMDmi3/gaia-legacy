@@ -35,14 +35,17 @@ file(GLOB gaia_SRCS *.cc)
 set(gaia_MOC_HDRS
 	ControlWidget.h
 	GLWidget.h
-	MainWidget.h
-#	DoubleSpinBox.h
+)
+
+set(gaia_UIS
+	ControlWidget.ui
 )
 
 # targets
+qt4_wrap_ui(gaia_UIC_HDRS ${gaia_UIS})
 qt4_wrap_cpp(gaia_MOC_SRCS ${gaia_MOC_HDRS})
 
-add_executable(gaia ${gaia_SRCS} ${gaia_MOC_SRCS})
+add_executable(gaia ${gaia_SRCS} ${gaia_MOC_SRCS} ${gaia_UIC_HDRS})
 
 target_link_libraries(gaia wwfetch ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTOPENGL_LIBRARY} ${PNG_LIBRARIES} ${JPEG_LIBRARIES} ${CURL_LIBRARIES} ${OPENGL_LIBRARIES} ${GPS_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
 

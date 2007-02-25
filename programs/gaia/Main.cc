@@ -17,9 +17,12 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "MainWidget.h"
-#include <qapplication.h>
-#include <qgl.h>
+#include "GLWidget.h"
+#include "ControlWidget.h"
+
+#include <QApplication>
+#include <QGLFormat>
+#include <QSplitter>
 
 using namespace gaia;
 
@@ -31,10 +34,13 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 
-	MainWidget mainWidget;
+	QSplitter splitter;
 
-	mainWidget.resize(800, 600);
-	mainWidget.show();
+	GLWidget *gl = new GLWidget(&splitter);
+	splitter.insertWidget(0, new ControlWidget(gl, &splitter));
+	splitter.setStretchFactor(1, 1);
+	splitter.resize(800, 600);
+	splitter.show();
 
 	return app.exec();
 }

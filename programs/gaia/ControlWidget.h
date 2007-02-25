@@ -26,7 +26,7 @@
 //#include <QPtrList>
 
 #include "GLWidget.h"
-//#include "DoubleSpinBox.h"
+#include "ui_ControlWidget.h"
 
 #include "Layer.h"
 
@@ -58,10 +58,10 @@ protected:
  *
  * Contains layer list, view mode selector and other stuff
  */
-class ControlWidget: public QWidget {
+class ControlWidget: public QWidget, Ui::ControlWidget {
 	Q_OBJECT
 public:
-	ControlWidget(QWidget* parent, GLWidget* target);
+	ControlWidget(GLWidget* target, QWidget* parent = 0);
 
 private slots:
 	void SetFlatEarthView();
