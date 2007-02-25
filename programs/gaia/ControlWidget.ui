@@ -1,26 +1,18 @@
 <ui version="4.0" >
  <class>ControlWidget</class>
  <widget class="QWidget" name="ControlWidget" >
-  <property name="geometry" >
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>163</width>
-    <height>594</height>
-   </rect>
-  </property>
   <property name="windowTitle" >
    <string>Control Widget</string>
   </property>
   <layout class="QVBoxLayout" >
    <property name="margin" >
-    <number>9</number>
+    <number>6</number>
    </property>
    <property name="spacing" >
     <number>6</number>
    </property>
    <item>
-    <widget class="QGroupBox" name="groupBox" >
+    <widget class="QGroupBox" name="m_ViewModelGroup" >
      <property name="title" >
       <string>View Model</string>
      </property>
@@ -35,6 +27,9 @@
        <widget class="QRadioButton" name="m_FlatWorldRadio" >
         <property name="text" >
          <string>Flat</string>
+        </property>
+        <property name="checked" >
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -64,16 +59,42 @@
        <number>6</number>
       </property>
       <item>
-       <widget class="QDoubleSpinBox" name="m_XPosSpinbox" />
+       <widget class="QDoubleSpinBox" name="m_XPosSpinbox" >
+        <property name="decimals" >
+         <number>5</number>
+        </property>
+        <property name="maximum" >
+         <double>180.000000000000000</double>
+        </property>
+        <property name="minimum" >
+         <double>-180.000000000000000</double>
+        </property>
+        <property name="singleStep" >
+         <double>0.010000000000000</double>
+        </property>
+       </widget>
       </item>
       <item>
-       <widget class="QDoubleSpinBox" name="m_YPosSpinbox" />
+       <widget class="QDoubleSpinBox" name="m_YPosSpinbox" >
+        <property name="decimals" >
+         <number>5</number>
+        </property>
+        <property name="maximum" >
+         <double>90.000000000000000</double>
+        </property>
+        <property name="minimum" >
+         <double>-90.000000000000000</double>
+        </property>
+        <property name="singleStep" >
+         <double>0.010000000000000</double>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
    </item>
    <item>
-    <widget class="QTreeWidget" name="m_LayerList" >
+    <widget class="QTreeWidget" name="m_LayerTree" >
      <property name="sizePolicy" >
       <sizepolicy>
        <hsizetype>7</hsizetype>

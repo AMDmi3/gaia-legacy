@@ -72,9 +72,6 @@ private slots:
 private:
 //	QPtrList<LayerListItem>	m_LayerItems;	///< Items of layer list
 	GLWidget	*m_GLWidget;		///< GLWidget to control
-
-//	DoubleSpinBox	*m_XPosSpinbox;
-//	DoubleSpinBox	*m_YPosSpinbox;
 };
 
 } /* namespace gaia */

@@ -62,21 +62,16 @@ ControlWidget::ControlWidget(GLWidget* target, QWidget* parent): QWidget(parent)
 	setupUi(this);
 
 	/* view model selector */
-//	Q3HButtonGroup *group = new Q3HButtonGroup("View model", this);
-
-//	QRadioButton *rflat = new QRadioButton("Flat", group);
-//	QRadioButton *rglobe = new QRadioButton("Globe", group);
-
-//	group->setButton(0);
-
-//	QObject::connect(rflat, SIGNAL(clicked()), this, SLOT(SetFlatEarthView()));
-//	QObject::connect(rglobe, SIGNAL(clicked()), this, SLOT(SetGlobeEarthView()));
+	QObject::connect(m_FlatWorldRadio, SIGNAL(clicked()), this, SLOT(SetFlatEarthView()));
+	QObject::connect(m_GlobeWorldRadio, SIGNAL(clicked()), this, SLOT(SetGlobeEarthView()));
 
 	/* layer list */
 //	Q3ListView* listview = new Q3ListView(this);
 //	listview->header()->setClickEnabled(0);
 //	listview->addColumn("Layer");
 //	listview->setSorting(-1);
+
+	//m_LayerTree.append
 
 //	for (LayerMeta *meta = LayerMeta::first; meta; meta = meta->next)
 //		m_LayerItems.append(new LayerListItem(listview, listview->lastItem(), m_GLWidget, meta));
@@ -119,10 +114,8 @@ void ControlWidget::SetGlobeEarthView() {
 }
 
 void ControlWidget::MoveToPosition() {
-//	double x = m_XPosSpinbox->GetValue() / 360.0;
-//	double y = m_YPosSpinbox->GetValue() / 360.0;
-	double x = 0;
-	double y = 0;
+	double x = m_XPosSpinbox->value() / 360.0;
+	double y = m_YPosSpinbox->value() / 360.0;
 
 	m_GLWidget->MoveToPosition(x, y);
 }

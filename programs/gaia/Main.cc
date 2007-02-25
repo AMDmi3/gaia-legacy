@@ -34,13 +34,17 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 
-	QSplitter splitter;
+	QSplitter *splitter = new QSplitter;
+	GLWidget *glWidget = new GLWidget;
+	ControlWidget *ctlWidget = new ControlWidget(glWidget);
 
-	GLWidget *gl = new GLWidget(&splitter);
-	splitter.insertWidget(0, new ControlWidget(gl, &splitter));
-	splitter.setStretchFactor(1, 1);
-	splitter.resize(800, 600);
-	splitter.show();
+	splitter->addWidget(ctlWidget);
+	splitter->addWidget(glWidget);
+	splitter->setStretchFactor(0, 0);
+	splitter->setStretchFactor(1, 1);
+	splitter->resize(800, 600);
+	splitter->setWindowTitle("Gaia " GAIA_VERSION);
+	splitter->show();
 
 	return app.exec();
 }
