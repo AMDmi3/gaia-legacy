@@ -33,7 +33,7 @@ namespace gaia {
 class MainWidget: public QSplitter {
 	Q_OBJECT
 public:
-	MainWidget(QWidget* parent = 0, const char* name = 0);
+	MainWidget(QWidget* parent = 0);
 };
 
 } /* namespace gaia */

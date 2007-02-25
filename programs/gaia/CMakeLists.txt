@@ -1,9 +1,12 @@
 # depends
-find_package(Qt3 REQUIRED)
+find_package(Qt4 REQUIRED)
 find_package(JPEG REQUIRED)
 find_package(PNG REQUIRED)
-find_package(OpenGL REQUIRED)
 find_package(CURL REQUIRED)
+find_package(Threads REQUIRED)
+
+set(QT_USE_QTOPENGL)
+find_package(OpenGL REQUIRED)
 
 # options
 option(WITH_GPSD	"Enable GPSD support"	OFF)
@@ -24,7 +27,7 @@ endif(WITH_GPSD)
 # defs
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DDATADIR="\\"${CMAKE_INSTALL_PREFIX}/${DATADIR}\\"")
-include_directories(${QT_INCLUDE_DIR} ${PNG_INCLUDE_DIR} ${JPEG_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR} ${GPS_INCLUDE_DIR} ../../lib/wwfetch)
+include_directories(${QT_INCLUDE_DIR} ${QT_QTGUI_INCLUDE_DIR} ${QT_QTOPENGL_INCLUDE_DIR} ${PNG_INCLUDE_DIR} ${JPEG_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR} ${GPS_INCLUDE_DIR} ../../lib/wwfetch)
 
 # sources
 file(GLOB gaia_SRCS *.cc)
@@ -33,15 +36,15 @@ set(gaia_MOC_HDRS
 	ControlWidget.h
 	GLWidget.h
 	MainWidget.h
-	DoubleSpinBox.h
+#	DoubleSpinBox.h
 )
 
 # targets
-qt_wrap_cpp(gaia gaia_MOC_SRCS ${gaia_MOC_HDRS})
+qt4_wrap_cpp(gaia_MOC_SRCS ${gaia_MOC_HDRS})
 
 add_executable(gaia ${gaia_SRCS} ${gaia_MOC_SRCS})
 
-target_link_libraries(gaia wwfetch ${QT_LIBRARIES} ${PNG_LIBRARIES} ${JPEG_LIBRARIES} ${CURL_LIBRARIES} ${OPENGL_LIBRARIES} ${GPS_LIBRARY})
+target_link_libraries(gaia wwfetch ${QT_QTCORE_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTOPENGL_LIBRARY} ${PNG_LIBRARIES} ${JPEG_LIBRARIES} ${CURL_LIBRARIES} ${OPENGL_LIBRARIES} ${GPS_LIBRARY} ${CMAKE_THREAD_LIBS_INIT})
 
 if(WITH_INSTALL)
 	install(PROGRAMS gaia DESTINATION ${BINDIR})

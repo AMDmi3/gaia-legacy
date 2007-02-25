@@ -34,7 +34,6 @@ int main(int argc, char **argv) {
 	MainWidget mainWidget;
 
 	mainWidget.resize(800, 600);
-	app.setMainWidget(&mainWidget);
 	mainWidget.show();
 
 	return app.exec();

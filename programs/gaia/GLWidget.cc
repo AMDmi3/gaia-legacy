@@ -24,10 +24,14 @@
 
 #include "PreloadedTextureManager.h"
 #include "Data.h"
+//Added by qt3to4:
+#include <QWheelEvent>
+#include <QMouseEvent>
+#include <QKeyEvent>
 
 namespace gaia {
 
-GLWidget::GLWidget(QWidget* parent, const char* name): QGLWidget(parent, name) {
+GLWidget::GLWidget(QWidget* parent): QGLWidget(parent) {
 	/* init preloaded texture manager */
 	PreloadedTextureManager::Instance()->LoadPNG(TEXTURE_FONT, DATADIR "/font.png");
 
@@ -42,7 +46,7 @@ GLWidget::GLWidget(QWidget* parent, const char* name): QGLWidget(parent, name) {
 	m_MouseDownMask = 0;
 
 //	SetMouseTracking(1);
-	setFocusPolicy(QWidget::WheelFocus);
+	setFocusPolicy(Qt::WheelFocus);
 }
 
 GLWidget::~GLWidget() {
@@ -59,7 +63,7 @@ void GLWidget::paintGL() {
 }
 
 void GLWidget::initializeGL() {
-	qglClearColor(black);
+	qglClearColor(Qt::black);
 }
 
 void GLWidget::resizeGL(int w, int h) {
@@ -71,14 +75,14 @@ void GLWidget::mousePressEvent(QMouseEvent *e) {
 	m_MouseDownMask |= e->button();
 
 	switch(e->button()) {
-	case LeftButton:
+	case Qt::LeftButton:
 		m_MouseLeftAnchor = e->pos();
 		m_EarthView->StartDrag(e->x(), e->y(), NAV_DRAG_PAN);
 		break;
-	case MidButton:
+	case Qt::MidButton:
 		m_MouseMidAnchor = e->pos();
 		break;
-	case RightButton:
+	case Qt::RightButton:
 		m_MouseRightAnchor = e->pos();
 		m_EarthView->StartDrag(e->x(), e->y(), NAV_DRAG_ZOOM);
 		break;
@@ -93,11 +97,11 @@ void GLWidget::mouseReleaseEvent(QMouseEvent *e) {
 	m_MouseDownMask &= ~e->button();
 
 	switch(e->button()) {
-	case LeftButton:
+	case Qt::LeftButton:
 		break;
-	case MidButton:
+	case Qt::MidButton:
 		break;
-	case RightButton:
+	case Qt::RightButton:
 		break;
 	default:
 		break;
@@ -107,9 +111,9 @@ void GLWidget::mouseReleaseEvent(QMouseEvent *e) {
 }
 
 void GLWidget::mouseMoveEvent(QMouseEvent *e) {
-	if (m_MouseDownMask & LeftButton)
+	if (m_MouseDownMask & Qt::LeftButton)
 		m_EarthView->Drag(m_MouseLeftAnchor.x(), m_MouseLeftAnchor.y(), e->x(), e->y(), NAV_DRAG_PAN);
-	if (m_MouseDownMask & RightButton)
+	if (m_MouseDownMask & Qt::RightButton)
 		m_EarthView->Drag(m_MouseRightAnchor.x(), m_MouseRightAnchor.y(), e->x(), e->y(), NAV_DRAG_ZOOM);
 
 	updateGL();
@@ -126,24 +130,24 @@ void GLWidget::wheelEvent(QWheelEvent *e) {
 
 void GLWidget::keyPressEvent(QKeyEvent *e) {
 	switch(e->key()) {
-		case Key_Left:
+		case Qt::Key_Left:
 			m_EarthView->StartMovement(NAV_PAN_LEFT);
 			break;
-		case Key_Right:
+		case Qt::Key_Right:
 			m_EarthView->StartMovement(NAV_PAN_RIGHT);
 			break;
-		case Key_Down:
+		case Qt::Key_Down:
 			m_EarthView->StartMovement(NAV_PAN_DOWN);
 			break;
-		case Key_Up:
+		case Qt::Key_Up:
 			m_EarthView->StartMovement(NAV_PAN_UP);
 			break;
-		case Key_PageUp:
-		case Key_Equal:
+		case Qt::Key_PageUp:
+		case Qt::Key_Equal:
 			m_EarthView->StartMovement(NAV_ZOOM_IN);
 			break;
-		case Key_PageDown:
-		case Key_Minus:
+		case Qt::Key_PageDown:
+		case Qt::Key_Minus:
 			m_EarthView->StartMovement(NAV_ZOOM_OUT);
 			break;
 		default:
@@ -155,24 +159,24 @@ void GLWidget::keyPressEvent(QKeyEvent *e) {
 
 void GLWidget::keyReleaseEvent(QKeyEvent *e) {
 	switch(e->key()) {
-		case Key_Left:
+		case Qt::Key_Left:
 			m_EarthView->StartMovement(NAV_PAN_LEFT);
 			break;
-		case Key_Right:
+		case Qt::Key_Right:
 			m_EarthView->StartMovement(NAV_PAN_RIGHT);
 			break;
-		case Key_Down:
+		case Qt::Key_Down:
 			m_EarthView->StartMovement(NAV_PAN_DOWN);
 			break;
-		case Key_Up:
+		case Qt::Key_Up:
 			m_EarthView->StartMovement(NAV_PAN_UP);
 			break;
-		case Key_PageUp:
-		case Key_Equal:
+		case Qt::Key_PageUp:
+		case Qt::Key_Equal:
 			m_EarthView->StartMovement(NAV_ZOOM_IN);
 			break;
-		case Key_PageDown:
-		case Key_Minus:
+		case Qt::Key_PageDown:
+		case Qt::Key_Minus:
 			m_EarthView->StartMovement(NAV_ZOOM_OUT);
 			break;
 		default:

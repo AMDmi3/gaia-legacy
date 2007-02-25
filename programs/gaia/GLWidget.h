@@ -21,6 +21,10 @@
 #define __GAIA__GLWIDGET_H__
 
 #include <qgl.h>
+//Added by qt3to4:
+#include <QMouseEvent>
+#include <QKeyEvent>
+#include <QWheelEvent>
 
 #include "EarthView.h"
 #include "Layer.h"
@@ -33,7 +37,7 @@ namespace gaia {
 class GLWidget: public QGLWidget {
 	Q_OBJECT
 public:
-	GLWidget(QWidget* parent, const char* name = 0);
+	GLWidget(QWidget* parent);
 	~GLWidget();
 
 public:

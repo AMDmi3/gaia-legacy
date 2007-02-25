@@ -20,11 +20,13 @@
 #ifndef __GAIA__CONTROLWIDGET_H__
 #define __GAIA__CONTROLWIDGET_H__
 
-#include <qwidget.h>
-#include <qlistview.h>
+//#include <qwidget.h>
+//#include <q3listview.h>
+//Added by qt3to4:
+//#include <QPtrList>
 
 #include "GLWidget.h"
-#include "DoubleSpinBox.h"
+//#include "DoubleSpinBox.h"
 
 #include "Layer.h"
 
@@ -36,9 +38,9 @@ namespace gaia {
  * There object of this class, derived from QCheckListItem for every
  * Layer available, so user can toggle (and later change order of) layers
  */
-class LayerListItem: public QCheckListItem {
+/*class LayerListItem: public Q3CheckListItem {
 public:
-	LayerListItem(QListView *parent, QListViewItem *after, GLWidget *glwidget, LayerMeta *meta);
+	LayerListItem(Q3ListView *parent, Q3ListViewItem *after, GLWidget *glwidget, LayerMeta *meta);
 	~LayerListItem();
 
 	LayerMeta	*GetMeta();
@@ -49,7 +51,7 @@ protected:
 protected:
 	LayerMeta	*m_Meta;	///< Layer metadata associated with this item
 	GLWidget	*m_GLWidget;	///< GLWidget to control
-};
+};*/
 
 /**
  * Widget gaia's left panel
@@ -59,7 +61,7 @@ protected:
 class ControlWidget: public QWidget {
 	Q_OBJECT
 public:
-	ControlWidget(GLWidget* target, QWidget* parent = 0, const char* name = 0);
+	ControlWidget(QWidget* parent, GLWidget* target);
 
 private slots:
 	void SetFlatEarthView();
@@ -68,11 +70,11 @@ private slots:
 	void UpdateLayers();
 
 private:
-	QPtrList<LayerListItem>	m_LayerItems;	///< Items of layer list
+//	QPtrList<LayerListItem>	m_LayerItems;	///< Items of layer list
 	GLWidget	*m_GLWidget;		///< GLWidget to control
 
-	DoubleSpinBox	*m_XPosSpinbox;
-	DoubleSpinBox	*m_YPosSpinbox;
+//	DoubleSpinBox	*m_XPosSpinbox;
+//	DoubleSpinBox	*m_YPosSpinbox;
 };
 
 } /* namespace gaia */
