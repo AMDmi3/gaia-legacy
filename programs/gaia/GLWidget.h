@@ -24,6 +24,7 @@
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QWheelEvent>
+#include <QTime>
 
 #include "EarthView.h"
 #include "Layer.h"
@@ -67,6 +68,8 @@ private:
 	QPoint		m_MouseLeftAnchor;	///< Where left mouse button was pressed
 	QPoint		m_MouseMidAnchor;	///< Where middle mouse button was pressed
 	QPoint		m_MouseRightAnchor;	///< Where right mouse button was pressed
+
+	QTime		m_LastRender;
 };
 
 } /* namespace gaia */

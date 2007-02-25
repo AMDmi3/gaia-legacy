@@ -44,6 +44,9 @@ int main(int argc, char **argv) {
 	splitter->setStretchFactor(1, 1);
 	splitter->resize(800, 600);
 	splitter->setWindowTitle("Gaia " GAIA_VERSION);
+
+	glWidget->setFocus(Qt::OtherFocusReason);
+
 	splitter->show();
 
 	return app.exec();

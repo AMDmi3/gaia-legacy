@@ -17,6 +17,8 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#include <QTimer>
+
 #include "GLWidget.h"
 
 #include "FlatEarthView.h"
@@ -43,6 +45,12 @@ GLWidget::GLWidget(QWidget* parent): QGLWidget(parent) {
 
 //	SetMouseTracking(1);
 	setFocusPolicy(Qt::WheelFocus);
+
+	m_LastRender.start();
+
+	QTimer *timer = new QTimer(this);
+	connect(timer, SIGNAL(timeout()), this, SLOT(updateGL()));
+	timer->start(30);
 }
 
 GLWidget::~GLWidget() {
@@ -53,8 +61,11 @@ void GLWidget::paintGL() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	if (m_EarthView) {
+		m_EarthView->Animate((double)m_LastRender.elapsed()/1000.0);
 		m_EarthView->Resize(width(), height());
 		m_EarthView->Render();
+
+		m_LastRender.start();
 	}
 }
 
@@ -125,6 +136,11 @@ void GLWidget::wheelEvent(QWheelEvent *e) {
 }
 
 void GLWidget::keyPressEvent(QKeyEvent *e) {
+	if (e->isAutoRepeat()) {
+		e->ignore();
+		return;
+	}
+
 	switch(e->key()) {
 		case Qt::Key_Left:
 			m_EarthView->StartMovement(NAV_PAN_LEFT);
@@ -147,38 +163,47 @@ void GLWidget::keyPressEvent(QKeyEvent *e) {
 			m_EarthView->StartMovement(NAV_ZOOM_OUT);
 			break;
 		default:
-			break;
+			e->ignore();
+			return;
 	}
 
+	e->accept();
 	updateGL();
 }
 
 void GLWidget::keyReleaseEvent(QKeyEvent *e) {
+	if (e->isAutoRepeat()) {
+		e->ignore();
+		return;
+	}
+
 	switch(e->key()) {
 		case Qt::Key_Left:
-			m_EarthView->StartMovement(NAV_PAN_LEFT);
+			m_EarthView->StopMovement(NAV_PAN_LEFT);
 			break;
 		case Qt::Key_Right:
-			m_EarthView->StartMovement(NAV_PAN_RIGHT);
+			m_EarthView->StopMovement(NAV_PAN_RIGHT);
 			break;
 		case Qt::Key_Down:
-			m_EarthView->StartMovement(NAV_PAN_DOWN);
+			m_EarthView->StopMovement(NAV_PAN_DOWN);
 			break;
 		case Qt::Key_Up:
-			m_EarthView->StartMovement(NAV_PAN_UP);
+			m_EarthView->StopMovement(NAV_PAN_UP);
 			break;
 		case Qt::Key_PageUp:
 		case Qt::Key_Equal:
-			m_EarthView->StartMovement(NAV_ZOOM_IN);
+			m_EarthView->StopMovement(NAV_ZOOM_IN);
 			break;
 		case Qt::Key_PageDown:
 		case Qt::Key_Minus:
-			m_EarthView->StartMovement(NAV_ZOOM_OUT);
+			m_EarthView->StopMovement(NAV_ZOOM_OUT);
 			break;
 		default:
-			break;
+			e->ignore();
+			return;
 	}
 
+	e->accept();
 	updateGL();
 }
 

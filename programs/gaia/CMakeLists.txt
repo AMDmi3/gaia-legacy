@@ -27,7 +27,7 @@ endif(WITH_GPSD)
 # defs
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DDATADIR="\\"${CMAKE_INSTALL_PREFIX}/${DATADIR}\\"")
-include_directories(${QT_INCLUDE_DIR} ${QT_QTGUI_INCLUDE_DIR} ${QT_QTOPENGL_INCLUDE_DIR} ${PNG_INCLUDE_DIR} ${JPEG_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR} ${GPS_INCLUDE_DIR} ../../lib/wwfetch)
+include_directories(${QT_QTCORE_INCLUDE_DIR} ${QT_QTGUI_INCLUDE_DIR} ${QT_QTOPENGL_INCLUDE_DIR} ${PNG_INCLUDE_DIR} ${JPEG_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR} ${GPS_INCLUDE_DIR} ../../lib/wwfetch)
 
 # sources
 file(GLOB gaia_SRCS *.cc)
