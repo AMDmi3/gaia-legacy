@@ -1,8 +1,16 @@
 <ui version="4.0" >
  <class>ControlWidget</class>
  <widget class="QWidget" name="ControlWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>157</width>
+    <height>762</height>
+   </rect>
+  </property>
   <property name="windowTitle" >
-   <string>Control Widget</string>
+   <string>Gaia Controls</string>
   </property>
   <layout class="QVBoxLayout" >
    <property name="margin" >
@@ -59,36 +67,10 @@
        <number>6</number>
       </property>
       <item>
-       <widget class="QDoubleSpinBox" name="m_XPosSpinbox" >
-        <property name="decimals" >
-         <number>5</number>
-        </property>
-        <property name="maximum" >
-         <double>180.000000000000000</double>
-        </property>
-        <property name="minimum" >
-         <double>-180.000000000000000</double>
-        </property>
-        <property name="singleStep" >
-         <double>0.010000000000000</double>
-        </property>
-       </widget>
+       <widget class="gaia::LongitudeSpinbox" name="m_XPosSpinbox" />
       </item>
       <item>
-       <widget class="QDoubleSpinBox" name="m_YPosSpinbox" >
-        <property name="decimals" >
-         <number>5</number>
-        </property>
-        <property name="maximum" >
-         <double>90.000000000000000</double>
-        </property>
-        <property name="minimum" >
-         <double>-90.000000000000000</double>
-        </property>
-        <property name="singleStep" >
-         <double>0.010000000000000</double>
-        </property>
-       </widget>
+       <widget class="gaia::LatitudeSpinbox" name="m_YPosSpinbox" />
       </item>
      </layout>
     </widget>
@@ -118,6 +100,20 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>gaia::LatitudeSpinbox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>GeoCoordSpinbox.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>gaia::LongitudeSpinbox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>GeoCoordSpinbox.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

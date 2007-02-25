@@ -35,6 +35,7 @@ file(GLOB gaia_SRCS *.cc)
 set(gaia_MOC_HDRS
 	ControlWidget.h
 	GLWidget.h
+	GeoCoordSpinbox.h
 )
 
 set(gaia_UIS
