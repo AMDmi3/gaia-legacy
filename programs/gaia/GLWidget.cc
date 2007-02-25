@@ -24,10 +24,6 @@
 
 #include "PreloadedTextureManager.h"
 #include "Data.h"
-//Added by qt3to4:
-#include <QWheelEvent>
-#include <QMouseEvent>
-#include <QKeyEvent>
 
 namespace gaia {
 
@@ -45,7 +41,6 @@ GLWidget::GLWidget(QWidget* parent): QGLWidget(parent) {
 
 	m_MouseDownMask = 0;
 
-//	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 //	SetMouseTracking(1);
 	setFocusPolicy(Qt::WheelFocus);
 }

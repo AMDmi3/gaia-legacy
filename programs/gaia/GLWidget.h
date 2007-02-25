@@ -20,8 +20,7 @@
 #ifndef __GAIA__GLWIDGET_H__
 #define __GAIA__GLWIDGET_H__
 
-#include <qgl.h>
-//Added by qt3to4:
+#include <QGLWidget>
 #include <QMouseEvent>
 #include <QKeyEvent>
 #include <QWheelEvent>

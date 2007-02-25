@@ -17,43 +17,26 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-//#include <q3header.h>
-//#include <q3listview.h>
-//#include <qradiobutton.h>
-//#include <qpushbutton.h>
-//#include <qhbuttongroup.h>
-//#include <qvbuttongroup.h>
-//#include <qlayout.h>
-//Added by qt3to4:
-//#include <Q3VBoxLayout>
-
 #include "ControlWidget.h"
 #include "GLWidget.h"
 
 namespace gaia {
 
 /********************************************************************\
- * LayerListItem                                                    *
+ * LayerTreeItem                                                    *
 \********************************************************************/
-/*LayerListItem::LayerListItem(Q3ListView *parent, Q3ListViewItem *after, GLWidget *glwidget, LayerMeta *meta) :
-		Q3CheckListItem(parent, after, meta->name, Q3CheckListItem::CheckBox),
-       		m_Meta(meta), m_GLWidget(glwidget) {
-	setOn(meta->initiallyactive);
+LayerTreeItem::LayerTreeItem(QTreeWidget *parent, QTreeWidgetItem *preceding, LayerMeta *meta) :
+		QTreeWidgetItem(parent, preceding, LayerTreeItemType), m_Meta(meta) {
+	setCheckState(0, meta->initiallyactive ? Qt::Checked : Qt::Unchecked);
+	setText(0, meta->name);
 }
 
-LayerListItem::~LayerListItem() {
+LayerTreeItem::~LayerTreeItem() {
 }
 
-LayerMeta *LayerListItem::GetMeta() {
+LayerMeta *LayerTreeItem::GetMeta() {
 	return m_Meta;
 }
-
-void LayerListItem::stateChange(bool s) {
-	if (state() == Q3CheckListItem::On)
-		m_GLWidget->ActivateLayer(m_Meta);
-	else if (state() == Q3CheckListItem::Off)
-		m_GLWidget->DeactivateLayer(m_Meta);
-}*/
 
 /********************************************************************\
  * ControlWidget                                                    *
@@ -66,35 +49,32 @@ ControlWidget::ControlWidget(GLWidget* target, QWidget* parent): QWidget(parent)
 	QObject::connect(m_GlobeWorldRadio, SIGNAL(clicked()), this, SLOT(SetGlobeEarthView()));
 
 	/* layer list */
-//	Q3ListView* listview = new Q3ListView(this);
-//	listview->header()->setClickEnabled(0);
-//	listview->addColumn("Layer");
-//	listview->setSorting(-1);
+	LayerTreeItem *prev = 0;
+	for (LayerMeta *meta = LayerMeta::first; meta; meta = meta->next)
+		prev = new LayerTreeItem(m_LayerTree, prev, meta);
 
-	//m_LayerTree.append
-
-//	for (LayerMeta *meta = LayerMeta::first; meta; meta = meta->next)
-//		m_LayerItems.append(new LayerListItem(listview, listview->lastItem(), m_GLWidget, meta));
-
-//	QObject::connect(listview, SIGNAL(clicked(Q3ListViewItem *)), this, SLOT(UpdateLayers()));
+	QObject::connect(m_LayerTree, SIGNAL(itemChanged(QTreeWidgetItem *, int)), this, SLOT(ToggleLayerTreeItem(QTreeWidgetItem *)));
 
 	/* position input */
-//	Q3VButtonGroup *group2 = new Q3VButtonGroup("Goto Position", this);
-//	m_XPosSpinbox = new DoubleSpinBox(-180, 180, 10000, group2);
-//	m_YPosSpinbox = new DoubleSpinBox(-90, 90, 10000, group2);
-
-//	QObject::connect(m_XPosSpinbox, SIGNAL(valueChanged(int)), this, SLOT(MoveToPosition()));
-//	QObject::connect(m_YPosSpinbox, SIGNAL(valueChanged(int)), this, SLOT(MoveToPosition()));
-
-	/* layout */
-//	Q3VBoxLayout *layout = new Q3VBoxLayout(this, 3, 2);
-//	layout->addWidget(group);
-//	layout->addWidget(group2);
-//	layout->addWidget(listview);
+	QObject::connect(m_XPosSpinbox, SIGNAL(valueChanged(double)), this, SLOT(MoveToPosition()));
+	QObject::connect(m_YPosSpinbox, SIGNAL(valueChanged(double)), this, SLOT(MoveToPosition()));
 
 	/* init GLWidget to default state */
 	/* XXX: ?! */
 	SetFlatEarthView();
+}
+
+void ControlWidget::ToggleLayerTreeItem(QTreeWidgetItem *item) {
+	if (item->type() != LayerTreeItemType)
+		return;
+
+	/* XXX: do we need dynamic_cast/reinterpret_cast here instead?
+	 * I'm not good in those :/ */
+	LayerTreeItem *litem = (LayerTreeItem*)item;
+	if (litem->checkState(0) == Qt::Checked)
+		m_GLWidget->ActivateLayer(litem->GetMeta());
+	if (litem->checkState(0) == Qt::Unchecked)
+		m_GLWidget->DeactivateLayer(litem->GetMeta());
 }
 
 void ControlWidget::UpdateLayers() {

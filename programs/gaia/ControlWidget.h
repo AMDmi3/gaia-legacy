@@ -20,15 +20,16 @@
 #ifndef __GAIA__CONTROLWIDGET_H__
 #define __GAIA__CONTROLWIDGET_H__
 
-//#include <qwidget.h>
-//#include <q3listview.h>
-//Added by qt3to4:
-//#include <QPtrList>
+#include <QTreeWidgetItem>
 
-#include "GLWidget.h"
 #include "ui_ControlWidget.h"
 
+#include "GLWidget.h"
+
 #include "Layer.h"
+
+/* type to distinguish LayerTreeItem's from other QTreeWidgetItem's */
+#define LayerTreeItemType	QTreeWidgetItem::UserType+1
 
 namespace gaia {
 
@@ -38,20 +39,16 @@ namespace gaia {
  * There object of this class, derived from QCheckListItem for every
  * Layer available, so user can toggle (and later change order of) layers
  */
-/*class LayerListItem: public Q3CheckListItem {
+class LayerTreeItem: public QTreeWidgetItem {
 public:
-	LayerListItem(Q3ListView *parent, Q3ListViewItem *after, GLWidget *glwidget, LayerMeta *meta);
-	~LayerListItem();
+	LayerTreeItem(QTreeWidget *parent, QTreeWidgetItem *preceding, LayerMeta *meta);
+	~LayerTreeItem();
 
 	LayerMeta	*GetMeta();
 
 protected:
-	virtual void stateChange(bool s);
-
-protected:
 	LayerMeta	*m_Meta;	///< Layer metadata associated with this item
-	GLWidget	*m_GLWidget;	///< GLWidget to control
-};*/
+};
 
 /**
  * Widget gaia's left panel
@@ -64,13 +61,13 @@ public:
 	ControlWidget(GLWidget* target, QWidget* parent = 0);
 
 private slots:
+	void ToggleLayerTreeItem(QTreeWidgetItem *item);
 	void SetFlatEarthView();
 	void SetGlobeEarthView();
 	void MoveToPosition();
 	void UpdateLayers();
 
 private:
-//	QPtrList<LayerListItem>	m_LayerItems;	///< Items of layer list
 	GLWidget	*m_GLWidget;		///< GLWidget to control
 };
 
