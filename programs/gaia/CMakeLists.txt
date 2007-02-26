@@ -1,11 +1,10 @@
 # depends
+set(QT_USE_QTOPENGL)
 find_package(Qt4 REQUIRED)
 find_package(JPEG REQUIRED)
 find_package(PNG REQUIRED)
 find_package(CURL REQUIRED)
 find_package(Threads REQUIRED)
-
-set(QT_USE_QTOPENGL)
 find_package(OpenGL REQUIRED)
 
 # options
