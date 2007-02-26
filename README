@@ -16,6 +16,8 @@ To build gaia, you need:
 % cmake .
 % make
 
+You'll probably need to set correct QMAKESPEC environment variable.
+
 You can also add -DWITH_GPSD=1 to compile in gpsd support via libgps.
 
 * If you want to install gaia systemwide, run:
