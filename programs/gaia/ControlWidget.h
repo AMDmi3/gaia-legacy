@@ -60,6 +60,8 @@ class ControlWidget: public QWidget, Ui::ControlWidget {
 public:
 	ControlWidget(GLWidget* target, QWidget* parent = 0);
 
+	virtual QSize sizeHint() const;
+
 private slots:
 	void ToggleLayerTreeItem(QTreeWidgetItem *item);
 	void SetFlatEarthView();

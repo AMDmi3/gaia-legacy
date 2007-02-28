@@ -64,6 +64,10 @@ ControlWidget::ControlWidget(GLWidget* target, QWidget* parent): QWidget(parent)
 	SetFlatEarthView();
 }
 
+QSize ControlWidget::sizeHint() const {
+	return QSize(minimumSize().width() ? minimumSize().width() : minimumSizeHint().width(), QWidget::sizeHint().height());
+}
+
 void ControlWidget::ToggleLayerTreeItem(QTreeWidgetItem *item) {
 	if (item->type() != LayerTreeItemType)
 		return;
