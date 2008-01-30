@@ -50,3 +50,11 @@ Mouse controls
 Drag with left button    Pan view
 Drag with right button   Zoom in/out
 Wheel                    Zoom in/out
+
+Authors
+~~~~~~~
+Gaia author:
+Dmitry Marakasov <amdmi3@amdmi3.ru>
+
+Contributors (in chronological order):
+Andreas Grau     <neo237 at users.sourceforge.net>
