@@ -1,5 +1,120 @@
-TODO
-~~~~
+TODO for gaia-ng
+~~~~~~~~~~~~~~~~
+Gaia, second try:
+  Now after some time passed and many things happened, I still have
+  some ideas regarding gaia. As it's not that useful with (relatively)
+  low quality NASA maps, project goal should be to become portable
+  multi-purpose mapping tool. That is, as many map formats as possible,
+  with extended GPS and related things support. For now, focus should
+  be changed from user-visible changes and new features to changing gaia
+  architecture for easiest extension.
+
+  Those are not strictly TODO items, but just random ideas that should
+  give you an idea of new gaia:
+
+Layers will be core of gaia-ng and represent all it's functionality.
+
+Each layer sources resides in it's own directory, and compiles to
+separate .so library. Thus, layers are pluggable. Yes, 3rd-party
+layers are possible. Yes, closed-source too.
+
+There should be libgaia which provide layers interface they may use.
+That is:
+* OpenGL (layer's main task is to render tiles)
+* Config
+
+Layer stores all persistent settings in config file. Sysctl-like
+structure is sufficent, but xml should also be considered. The main
+problem here is possibly great amount of value types we'll need to
+support. In addition to standart string/value/bool/float we'll
+probably need: lan/lon in many formats, colors (more?). Need to
+check out existing configuration libs.
+
+layers.0.type = grid
+layers.0.name = Grid
+layers.0.enabled = 1
+layers.0.latitude.step = 30
+layers.0.latitude.showdegrees = 1
+layers.0.longitude.step = 30
+layers.0.longitude.showdegrees = 0
+layers.1.type = gps
+layers.1.name = GPS #1
+layers.1.enabled = 1
+layers.1.sources.0.name = My car
+layers.1.sources.0.type = gpsd
+layers.1.sources.0.host = mygps.somewhere.com
+layers.1.sources.0.color = #FF0000
+layers.1.sources.0.update = 100
+...
+
+
+* Gaia uses Qt, but I still want to make it optional, as
+  * I've promised it
+  * It'll be interesting
+  * It'll possibly make gaia more portable. Not sure, but are there
+    mobile platforms for which there's no Qt/Qt is too large, but with
+    software OpenGL available?
+
+Yes, making Qt dialogs optional in layers will be quite hard - seems
+like some heavy macro magic will be required to make layer sources
+optionally use Qt.  Still I think it can be done gracefully.
+
+Finally, layers will need interface to draw icons/text/hud.
+
+And I want to change tile renderer so it's not limited with
+axis-oriented rectangles (I have a little idea how to do this
+transparently). Actually, this is needed to special EarthView
+mode I want to implement very much.
+
+Some layers will only be allowed once (worldwind layer), but others
+will be allowed multiple times (gps layer) for user convenience.
+
+
+Well, that's it for now. Ultimate TODO list will look like this:
+* Reimplement layer architecture
+  * Restructure directory tree (programs/gaia -> src/,
+    programs/others -> util/, gaia layers -> layers/)
+  * Create simple libgaia which provides layer interface
+  * Create test layer working with libgaia, disable all other
+    layers for now
+  * Add config class with configfile reading/writing and easy
+    access to tree-like structure. Implement basic types handling
+    (int/string/bool)
+    * Should gracefully process structure changes (automatically
+      add newly added keys to config)
+    * Should leave comments
+    * Should strip default values from config (or comment them out)
+    * Should be able to modify config from commandline to some extent
+      (but I guess such changes should not be saved). I.e.
+      gaia --enable-layer=GPS --gps-enable-all-sources
+  * Review/refactor some support structures
+    * Threadsafe log with mutexes
+    * Timer
+  * Reimplement tile rendering routine to allow non-rectangular
+    tiles
+  * Create ExampleLayer. This will server as both example/template
+    for new layer creators and as unittest for all layer interfaces.
+  * Implement Qt dialogs in ExampleLayer
+    * Implement sidebar dialog
+    * Implement standalone dialog
+    * Make all those interact with config class
+    * Make all this Qt-related stuff conditionally compiled
+  * Implement services for icon/text/hud drawing
+    * As far as I remember icon stuff is already present to some
+      extent
+    * Add text handling. Freetype? Xft? sdl_ttf?
+* Next, adapt existing layers to new order 
+  * WorldWind
+  * Grid
+* Next, see old TODO below
+  * Possibly it'll be good to release something at this moment, or
+    should other features be added before?
+
+Random stuff:
+* Use forward declarations for faster compilation
+
+Old TODO
+~~~~~~~~
 Graphics/user interface:
 * Full 3D earth renderer (partially done)
 * HUD to display text labels and icons (partially done)
