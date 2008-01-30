@@ -41,8 +41,8 @@ LayerMeta::LayerMeta(char *nname, Layer *(*nspawn)(), int ngroup, int ninitially
 	 */
 	LayerMeta *current, *after = 0;
 	for (current = first; current; current = current->next)
-	if (current->group < ngroup)
-		after = current;
+		if (current->group < ngroup)
+			after = current;
 
 	if (after == 0) {
 		next = first;
