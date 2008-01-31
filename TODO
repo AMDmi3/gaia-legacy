@@ -141,6 +141,7 @@ Caching:
   separate files, delete areas etc.) (Andreas Grau is working on it)
 
 Additional layers:
+* http://openaerialmap.org - that should be useful
 * GPS: Render path in lines, instead of HUD dots
 * GPS: Path optimizer (convert strait line of points to 2 points)
 * GPS: Interface to add muliple GPS entities from command line
