@@ -17,20 +17,17 @@
  * along with Gaia.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __LIBGAIA__VIEWPOINT_H__
-#define __LIBGAIA__VIEWPOINT_H__
+#ifndef __LIBGAIA__EYE_H__
+#define __LIBGAIA__EYE_H__
 
-#include <math.h>
-
-#define DEFAULT_TRANSLATION_TIME	1.0
+#include <cmath>
 
 namespace gaia {
 
 /**
  * Coordinates of virtual `eye'.
  */
-class Eye {
-public:
+struct Eye {
 	/**
 	 * Default constructor.
 	 * Eye is located in 0 long, 0 lat, fov is 90 degrees
@@ -110,43 +107,12 @@ public:
 		return atan2(yspan(aspect) / 2.0, h) * 2.0;
 	};
 
-public:
 	double x;	///< longitude [-0.5..0.5]
 	double y;	///< latitude [-0.25..0.25]
 	double h;	///< height above the surface - in same units as x and y
 	double orient;	///< orientation [0..2*PI] where 0 is north
 	double pitch;	///< pitch [0..PI/2] where 0 is for straight top-down view
 	double fov;	///< field-of-view angle
-};
-
-/**
- * View point representation.
- * Class representing observer - contains current position and animation
- * parameters
- *
- * @deprecated no longer used anywhere - EarthView's fully control `eye' movements on their own
- */
-class Viewpoint {
-public:
-	Viewpoint();
-	Viewpoint(Eye &eye);
-	virtual ~Viewpoint();
-
-	void SetCurrentCoordinates(Eye &eye);
-	void SetTargetCoordinates(Eye &eye);
-	void Animate(double delta);
-
-	Eye GetEye();
-
-protected:
-	double TranslationFunction(double percent);
-
-protected:
-	Eye m_CurrentEye;
-	Eye m_SourceEye;
-	Eye m_TargetEye;
-	double m_Translation;
-	double m_TranslationTime;
 };
 
 } /* namespace gaia */

@@ -22,7 +22,7 @@
 
 #include <vector>
 
-#include "Viewpoint.h"
+#include "Eye.h"
 
 #define NAV_DRAG_PAN	0x01
 #define NAV_DRAG_ZOOM	0x02
@@ -44,8 +44,8 @@ class LayerMeta;
  * Abstract class for earth view.
  */
 class EarthView {
-public:
-	EarthView(EarthView *ancestor = 0);
+ public:
+  EarthView(EarthView *ancestor = 0);
 	virtual ~EarthView();
 
 	int ActivateLayer(LayerMeta *meta);
