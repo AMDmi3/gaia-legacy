@@ -24,14 +24,11 @@
 #include "FlatEarthView.h"
 #include "GlobeEarthView.h"
 
-#include "PreloadedTextureManager.h"
-#include "Data.h"
-
 namespace gaia {
 
 GLWidget::GLWidget(QWidget* parent): QGLWidget(parent) {
 	/* init preloaded texture manager */
-	PreloadedTextureManager::Instance()->LoadPNG(TEXTURE_FONT, DATADIR "/font.png");
+	//PreloadedTextureManager::Instance()->LoadPNG(TEXTURE_FONT, DATADIR "/font.png");
 
 	/* create default EarthView */
 	m_EarthView = new FlatEarthView();

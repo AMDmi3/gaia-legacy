@@ -14,5 +14,6 @@ FIND_PACKAGE(OpenGL REQUIRED)
 INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
 
 # subdirs (everything is in subdirs)
-#SUBDIRS(frontends)
+SUBDIRS(frontends)
+SUBDIRS(layers)
 SUBDIRS(libgaia)
