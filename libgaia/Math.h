@@ -20,8 +20,8 @@
 #ifndef __GAIA__MATH_H__
 #define __GAIA__MATH_H__
 
-#include <math.h>
-#include "Exceptions.h"
+#include <cmath>
+#include <stdexcept>
 
 namespace gaia {
 
@@ -226,12 +226,12 @@ public:
 	}
 	inline void normalize() {
 		T l = length();
-		if (l == 0.0) throw Exception("Attempt to normalize zero length vector");
+		if (l == 0.0) throw std::runtime_error("Attempt to normalize zero length vector");
 		x/=l; y/=l; z/=l;
 	}
 	inline Vector3<T> normalized() const {
 		T l = length();
-		if (l == 0.0) throw Exception("Attempt to normalize zero length vector");
+		if (l == 0.0) throw std::runtime_error("Attempt to normalize zero length vector");
 		return Vector3<T>(x/l, y/l, z/l);
 	}
 
