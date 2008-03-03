@@ -1,2 +1,2 @@
-SUBDIRS(gaia-qt)
-SUBDIRS(gaia-sdl)
+SUBDIRS(qgaia)
+SUBDIRS(sdlgaia)
