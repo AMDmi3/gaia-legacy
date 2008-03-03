@@ -17,8 +17,8 @@
  * along with Gaia.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GAIA__FLATEARTHVIEW_H__
-#define __GAIA__FLATEARTHVIEW_H__
+#ifndef __LIBGAIA__FLATEARTHVIEW_H__
+#define __LIBGAIA__FLATEARTHVIEW_H__
 
 #include "EarthView.h"
 

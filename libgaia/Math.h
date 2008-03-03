@@ -17,8 +17,8 @@
  * along with Gaia.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GAIA__MATH_H__
-#define __GAIA__MATH_H__
+#ifndef __LIBGAIA__MATH_H__
+#define __LIBGAIA__MATH_H__
 
 #include <cmath>
 #include <stdexcept>

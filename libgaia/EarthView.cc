@@ -19,6 +19,8 @@
 
 #include "EarthView.h"
 
+#include "Layer.h"
+
 namespace gaia {
 
 EarthView::EarthView(EarthView *ancestor) {

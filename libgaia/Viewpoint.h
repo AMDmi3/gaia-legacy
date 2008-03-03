@@ -17,8 +17,8 @@
  * along with Gaia.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GAIA__VIEWPOINT_H__
-#define __GAIA__VIEWPOINT_H__
+#ifndef __LIBGAIA__VIEWPOINT_H__
+#define __LIBGAIA__VIEWPOINT_H__
 
 #include <math.h>
 

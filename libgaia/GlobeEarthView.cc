@@ -19,7 +19,12 @@
 
 #include "GlobeEarthView.h"
 
-#include "PreloadedTextureManager.h"
+#include "Region.h"
+#include "Math.h"
+#include "Layer.h"
+
+#include <GL/gl.h>
+#include <GL/glu.h>
 
 namespace gaia {
 

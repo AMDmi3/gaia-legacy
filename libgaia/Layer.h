@@ -17,10 +17,8 @@
  * along with Gaia.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GAIA__LAYER_H__
-#define __GAIA__LAYER_H__
-
-#include "Region.h"
+#ifndef __LIBGAIA__LAYER_H__
+#define __LIBGAIA__LAYER_H__
 
 /* groups that specify default layer ordering */
 /* TODO: more groups (maybe will be added with new layers) */
@@ -46,6 +44,8 @@ public: \
 	LayerMeta classname::_meta = LayerMeta(name, classname::_spawn, group, initiallyactive);
 
 namespace gaia {
+
+class Region;
 
 class Layer;
 

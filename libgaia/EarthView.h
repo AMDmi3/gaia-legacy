@@ -17,13 +17,12 @@
  * along with Gaia.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GAIA__EARTHVIEW_H__
-#define __GAIA__EARTHVIEW_H__
+#ifndef __LIBGAIA__EARTHVIEW_H__
+#define __LIBGAIA__EARTHVIEW_H__
 
 #include <vector>
 
 #include "Viewpoint.h"
-#include "Layer.h"
 
 #define NAV_DRAG_PAN	0x01
 #define NAV_DRAG_ZOOM	0x02
@@ -37,6 +36,9 @@
 #define NAV_ZOOM_OUT	0x20
 
 namespace gaia {
+
+class Layer;
+class LayerMeta;
 
 /**
  * Abstract class for earth view.
