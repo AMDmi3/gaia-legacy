@@ -17,27 +17,24 @@
  * along with Gaia.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GAIA__CONTROLWIDGET_H__
-#define __GAIA__CONTROLWIDGET_H__
+#ifndef __GAIA__SIDEBARWIDGET_H__
+#define __GAIA__SIDEBARWIDGET_H__
 
 #include <QTreeWidgetItem>
 
-#include "ui_ControlWidget.h"
+#include "ui_SidebarWidget.h"
 
 #include "GLWidget.h"
 
 #include "Layer.h"
 
-// type to distinguish LayerTreeItem's from other QTreeWidgetItem's
-#define LayerTreeItemType	QTreeWidgetItem::UserType+1
-
 namespace gaia {
 
-/// Gaia sidebar 
-class ControlWidget: public QWidget, Ui::ControlWidget {
+/// Sidebar widget
+class SidebarWidget: public QWidget, Ui::SidebarWidget {
 	Q_OBJECT
 public:
-	ControlWidget(GLWidget* glwidget, QWidget* parent = 0);
+	SidebarWidget(GLWidget* glwidget, QWidget* parent = 0);
 
 	virtual QSize sizeHint() const;
 
@@ -52,6 +49,6 @@ private:
 	GLWidget *gl_widget_;
 };
 
-} /* namespace gaia */
+} // namespace gaia
 
 #endif

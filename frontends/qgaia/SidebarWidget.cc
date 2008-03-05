@@ -17,28 +17,28 @@
  * along with Gaia.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ControlWidget.h"
+#include "SidebarWidget.h"
 #include "GLWidget.h"
 
 namespace gaia {
 
-ControlWidget::ControlWidget(GLWidget* glwidget, QWidget* parent): QWidget(parent), gl_widget_(glwidget) {
+SidebarWidget::SidebarWidget(GLWidget* glwidget, QWidget* parent): QWidget(parent), gl_widget_(glwidget) {
 	setupUi(this);
 
 	// view model selector
 	//QObject::connect(m_FlatWorldRadio, SIGNAL(clicked()), this, SLOT(SetFlatEarthView()));
 	//QObject::connect(m_GlobeWorldRadio, SIGNAL(clicked()), this, SLOT(SetGlobeEarthView()));
 
-	/* init GLWidget to default state */
-	/* XXX: ?! */
+	// init GLWidget to default state
+	// TODO(amdmi3): ?!
 	SetFlatEarthView();
 }
 
-QSize ControlWidget::sizeHint() const {
+QSize SidebarWidget::sizeHint() const {
 	return QSize(minimumSize().width() ? minimumSize().width() : minimumSizeHint().width(), QWidget::sizeHint().height());
 }
 
-/*void ControlWidget::ToggleLayerTreeItem(QTreeWidgetItem *item) {
+/*void SidebarWidget::ToggleLayerTreeItem(QTreeWidgetItem *item) {
 	if (item->type() != LayerTreeItemType)
 		return;
 
@@ -51,20 +51,20 @@ QSize ControlWidget::sizeHint() const {
 		m_GLWidget->DeactivateLayer(litem->GetMeta());
 }
 
-void ControlWidget::UpdateLayers() {
+void SidebarWidget::UpdateLayers() {
 	// TODO(amdmi3): ?!
 //	m_GLWidget->UpdateLayers();
 	m_GLWidget->updateGL();
 }*/
 
-void ControlWidget::SetFlatEarthView() {
+void SidebarWidget::SetFlatEarthView() {
 	gl_widget_->SetFlatEarthView();
 	gl_widget_->updateGL();
 }
 
-void ControlWidget::SetGlobeEarthView() {
+void SidebarWidget::SetGlobeEarthView() {
 	gl_widget_->SetGlobeEarthView();
 	gl_widget_->updateGL();
 }
 
-} /* namespace gaia */
+} // namespace gaia

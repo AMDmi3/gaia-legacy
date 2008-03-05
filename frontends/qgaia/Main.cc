@@ -18,7 +18,7 @@
  */
 
 #include "GLWidget.h"
-#include "ControlWidget.h"
+#include "SidebarWidget.h"
 
 #include <QApplication>
 #include <QGLFormat>
@@ -36,17 +36,17 @@ int main(int argc, char **argv) {
 	}
 
 	QSplitter *splitter = new QSplitter;
-	GLWidget *glWidget = new GLWidget;
-	ControlWidget *ctlWidget = new ControlWidget(glWidget);
+	GLWidget *glwidget = new GLWidget;
+	SidebarWidget *sidebarwidget = new SidebarWidget(glwidget);
 
-	splitter->addWidget(ctlWidget);
-	splitter->addWidget(glWidget);
+	splitter->addWidget(sidebarwidget);
+	splitter->addWidget(glwidget);
 	splitter->setStretchFactor(0, 0);
 	splitter->setStretchFactor(1, 1);
 	splitter->resize(800, 600);
 	splitter->setWindowTitle("Gaia " GAIA_VERSION);
 
-	glWidget->setFocus(Qt::OtherFocusReason);
+	glwidget->setFocus(Qt::OtherFocusReason);
 
 	splitter->show();
 

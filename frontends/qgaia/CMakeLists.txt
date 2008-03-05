@@ -8,14 +8,9 @@ INCLUDE_DIRECTORIES(${QT_QTCORE_INCLUDE_DIR} ${QT_QTGUI_INCLUDE_DIR} ${QT_QTOPEN
 # sources
 FILE(GLOB qgaia_SRCS *.cc)
 
-SET(qgaia_MOC_HDRS
-	ControlWidget.h
-	GLWidget.h
-)
+FILE(GLOB qgaia_MOC_HDRS [A-Z]*.h)
 
-SET(qgaia_UIS
-	ControlWidget.ui
-)
+FILE(GLOB qgaia_UIS *.ui)
 
 # targets
 QT4_WRAP_UI(qgaia_UIC_HDRS ${qgaia_UIS})
