@@ -27,9 +27,6 @@
 namespace gaia {
 
 GLWidget::GLWidget(QWidget* parent): QGLWidget(parent) {
-	// init preloaded texture manager
-	//PreloadedTextureManager::Instance()->LoadPNG(TEXTURE_FONT, DATADIR "/font.png");
-
 	// create default EarthView
 	earth_view_ = new FlatEarthView();
 
@@ -41,7 +38,7 @@ GLWidget::GLWidget(QWidget* parent): QGLWidget(parent) {
 	mouse_down_mask_ = 0;
 
 //	SetMouseTracking(1);
-	/*setFocusPolicy(Qt::WheelFocus);*/
+	setFocusPolicy(Qt::WheelFocus);
 
 	last_render_.start();
 

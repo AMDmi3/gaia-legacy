@@ -95,6 +95,22 @@ void FlatEarthView::Render() {
 		rgn.w[1].y = 0.25;
 	}
 
+	// TODO(amdmi3): remove this; for testing only
+	glColor3f(1.0, 0.0, 0.0);
+	glBegin(GL_LINE_LOOP);
+	glVertex3f(rgn.v[0].x, rgn.v[0].y, rgn.v[0].z);
+	glVertex3f(rgn.v[1].x, rgn.v[1].y, rgn.v[1].z);
+	glVertex3f(rgn.v[2].x, rgn.v[2].y, rgn.v[2].z);
+	glVertex3f(rgn.v[3].x, rgn.v[3].y, rgn.v[3].z);
+	glEnd();
+
+	glBegin(GL_LINES);
+	glVertex3f(rgn.v[0].x, rgn.v[0].y, rgn.v[0].z);
+	glVertex3f(rgn.v[2].x, rgn.v[2].y, rgn.v[2].z);
+	glVertex3f(rgn.v[1].x, rgn.v[1].y, rgn.v[1].z);
+	glVertex3f(rgn.v[3].x, rgn.v[3].y, rgn.v[3].z);
+	glEnd();
+
 	// call layers rendering routines
 	for (std::vector<Layer*>::iterator i = layers_.begin(); i < layers_.end(); i++)
 		(*i)->RenderRegion(&rgn);

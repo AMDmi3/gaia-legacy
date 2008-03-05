@@ -40,7 +40,7 @@ EarthView::~EarthView() {
 		delete (*i);
 }
 
-int EarthView::ActivateLayer(LayerMeta *meta) {
+/*int EarthView::ActivateLayer(LayerMeta *meta) {
 	// turn layer on: create layer object and position
 	// it in layer list corresponding to it's meta
 	// position in meta list
@@ -83,7 +83,7 @@ int EarthView::DeactivateLayer(LayerMeta *meta) {
 			return 1;
 		}
 	return 0;
-}
+}*/
 
 void EarthView::Resize(int width, int height) {
 	viewport_width_ = width;
