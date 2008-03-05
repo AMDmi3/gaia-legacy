@@ -1,0 +1,78 @@
+Old TODO
+~~~~~~~~
+Old doesn't mean abandoned, I'll return to it after gaia is refactored
+enough.
+
+Graphics/user interface:
+* Full 3D earth renderer (partially done)
+* HUD to display text labels and icons (partially done)
+  * Text label support
+    * Bar with current geographical coordinates and statistics
+    * Freetype font renderer (will also allow internationalization
+      of HUD)
+* Ability to set initial viewer's coordinates, possibly with location
+  catalogue (patch by Andreas Grau available)
+* gaia-mkmap utility; tell it corner coordinates, dimensions, dpi, and
+  it'll make you map in single JPEG, ready for printing or whatever.
+  (should be also available from gaia itself). XXX: wtf is geotiffs?
+* Implement non-realtime OpenGL rendering. Thus, even software
+  emulation will be usable. You navigate with only hollow grid
+  visible, then you stop navigating and the view is rendered in 3D.
+  Anyone can tell me, is software OpenGL available in Windows Mobile
+  devices?
+* Re-implement Qt'less client
+
+Caching:
+* Implement tile cache. It'll be compatible with NASA layer, but
+  generally multi-purpose (Andreas Grau is working on it)
+* Add utility to control it (read and write dumps, read and write
+  separate files, delete areas etc.) (Andreas Grau is working on it)
+
+Additional layers:
+* http://openaerialmap.org - that should be useful
+* GPS: Render path in lines, instead of HUD dots
+* GPS: Path optimizer (convert strait line of points to 2 points)
+* GPS: Interface to add muliple GPS entities from command line
+* GPS: Auto reconnect to gpsd if connection is lost
+* GPS: Direction indicator for easy finding marker that's not in view
+  currently.
+* GPS: Ability to follow GPS marker
+* Grid: correct grid rendering
+  * Render degrees for grid lines (via HUD)
+* Anyone with any good layer ideas? Mail me (working layers are most
+  welcome, of course:)
+  * My ideas so far: SunlightLayer, TimezoneLayer,
+    SatelliteCoverageLayer
+* Layer to place and display any number of custom image files on
+  the map. Will add support for these:
+  http://www.archive.org/details/maps_usgs
+  Most probably, that'll be available only ofter GUI is done, it's
+  to clumsy to control from command line.
+* Country borders (patch avilable)
+* Layers based on WorldWind addons (warning! what license are these
+  under?): http://www.dynagis.net/wwdownload/free_addons.html, patches
+  for some by Andreas Grau are available)
+* There's free aerial imagery of whole Slovenia (where? license?)
+* More sources:
+  * http://www.ssec.wisc.edu/data/ (what's license for those?)
+  * http://www.fourmilab.ch/cgi-bin/Earth
+  * http://aa.usno.navy.mil/data/docs/earthview.html
+
+Other:
+* Windows port
+
+Random ideas and suggestions (for far future):
+* GIS support (grass.itc.it, qgis.org), export geotiffs (what's that?)
+* www.ecogeographica.com support (didn't looked there yet)
+* Add list of contributors
+
+Known bugs:
+* Tile may be loaded twice (layer refactoring)
+* Tiles are sometimes stuck unloaded (layer refactoring)
+* Timer is not threadsafe
+* On MacOSX, when exiting, stucks on pthread_join in
+  SimpleTileStorage::~SimpleTileStorage (I suppose it will stuck on
+  any pthread_join, as thread handling is the same everywhere in gaia).
+* NMEA doesn't work with USB devices on Linux (putc to a clist with no
+  reserved cblocks). Also need to setup tty before work (like line
+  speed etc.)
