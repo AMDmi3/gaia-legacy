@@ -21,14 +21,14 @@
 
 #include "GLWidget.h"
 
-#include "FlatEarthView.h"
-#include "GlobeEarthView.h"
+#include "FlatEarthRenderer.h"
+#include "GlobeEarthRenderer.h"
 
 namespace gaia {
 
 GLWidget::GLWidget(QWidget* parent): QGLWidget(parent) {
-	// create default EarthView
-	earth_view_ = new FlatEarthView();
+	// create default EarthRenderer
+	earth_view_ = new FlatEarthRenderer();
 
 	// create default Layers
 	/*for (LayerMeta *meta = LayerMeta::first; meta; meta = meta->next)
@@ -201,16 +201,16 @@ void GLWidget::keyReleaseEvent(QKeyEvent *e) {
 	updateGL();
 }
 
-void GLWidget::SetFlatEarthView() {
-	EarthView *newearthview = new FlatEarthView(earth_view_);
+void GLWidget::SetFlatEarthRenderer() {
+	EarthRenderer *newearthview = new FlatEarthRenderer(earth_view_);
 
 	delete earth_view_;
 
 	earth_view_ = newearthview;
 }
 
-void GLWidget::SetGlobeEarthView() {
-	EarthView *newearthview = new GlobeEarthView(earth_view_);
+void GLWidget::SetGlobeEarthRenderer() {
+	EarthRenderer *newearthview = new GlobeEarthRenderer(earth_view_);
 
 	delete earth_view_;
 

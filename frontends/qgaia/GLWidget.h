@@ -26,7 +26,7 @@
 #include <QWheelEvent>
 #include <QTime>
 
-#include "EarthView.h"
+#include "EarthRenderer.h"
 #include "Layer.h"
 
 namespace gaia {
@@ -40,8 +40,8 @@ public:
 
 public:
 	// methods to call from ControlWidget
-	void SetFlatEarthView();
-	void SetGlobeEarthView();
+	void SetFlatEarthRenderer();
+	void SetGlobeEarthRenderer();
 //	void ActivateLayer(LayerMeta *meta);
 //	void DeactivateLayer(LayerMeta *meta);
 //	void MoveToPosition(double x, double y);
@@ -60,8 +60,8 @@ private:
 	void keyPressEvent(QKeyEvent *e);
 	void keyReleaseEvent(QKeyEvent *e);
 
-	/// EarthView to render data with
-	EarthView	*earth_view_;
+	/// EarthRenderer to render data with
+	EarthRenderer	*earth_view_;
 
 	/// Bitmask containing info on which mouse buttons are currently down
 	int		mouse_down_mask_;

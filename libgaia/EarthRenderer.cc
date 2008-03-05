@@ -17,13 +17,13 @@
  * along with Gaia.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "EarthView.h"
+#include "EarthRenderer.h"
 
 #include "Layer.h"
 
 namespace gaia {
 
-EarthView::EarthView(EarthView *ancestor) {
+EarthRenderer::EarthRenderer(EarthRenderer *ancestor) {
 	viewport_width_ = viewport_height_ = 0;
 
 	// new class inherits all valuable data stored in ancestor
@@ -35,12 +35,12 @@ EarthView::EarthView(EarthView *ancestor) {
 	}
 }
 
-EarthView::~EarthView() {
+EarthRenderer::~EarthRenderer() {
 	for (std::vector<Layer*>::iterator i = layers_.begin(); i < layers_.end(); i++)
 		delete (*i);
 }
 
-/*int EarthView::ActivateLayer(LayerMeta *meta) {
+/*int EarthRenderer::ActivateLayer(LayerMeta *meta) {
 	// turn layer on: create layer object and position
 	// it in layer list corresponding to it's meta
 	// position in meta list
@@ -72,7 +72,7 @@ EarthView::~EarthView() {
 	return 1;
 }
 
-int EarthView::DeactivateLayer(LayerMeta *meta) {
+int EarthRenderer::DeactivateLayer(LayerMeta *meta) {
 	// turn layer off: find in in layer list by meta,
 	// delete layer itself and remove pointer to it
 	// from the list
@@ -85,39 +85,39 @@ int EarthView::DeactivateLayer(LayerMeta *meta) {
 	return 0;
 }*/
 
-void EarthView::Resize(int width, int height) {
+void EarthRenderer::Resize(int width, int height) {
 	viewport_width_ = width;
 	viewport_height_ = height;
 }
 
 // mouse movements
-int EarthView::StartDrag(int x, int y, int flags) {
+int EarthRenderer::StartDrag(int x, int y, int flags) {
 	return 0;
 }
 
-int EarthView::Drag(int fromx, int fromy, int x, int y, int flags) {
+int EarthRenderer::Drag(int fromx, int fromy, int x, int y, int flags) {
 	return 0;
 }
 
-int EarthView::Click(int x, int y, int flags) {
+int EarthRenderer::Click(int x, int y, int flags) {
 	return 0;
 }
 
 // keyboard movements
-int EarthView::StartMovement(int flags) {
+int EarthRenderer::StartMovement(int flags) {
 	return 0;
 }
 
-int EarthView::StopMovement(int flags) {
+int EarthRenderer::StopMovement(int flags) {
 	return 0;
 }
 
-int EarthView::SingleMovement(int flags) {
+int EarthRenderer::SingleMovement(int flags) {
 	return 0;
 }
 
 // movement methods
-void EarthView::MoveToPosition(double x, double y) {
+void EarthRenderer::MoveToPosition(double x, double y) {
 	eye_.x = x;
 	eye_.y = y;
 }

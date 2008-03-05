@@ -41,8 +41,8 @@ public:
 private slots:
 /*	void ToggleLayerTreeItem(QTreeWidgetItem *item);
 	void UpdateLayers();*/
-	void SetFlatEarthView();
-	void SetGlobeEarthView();
+	void SetFlatEarthRenderer();
+	void SetGlobeEarthRenderer();
 
 private:
 	/// Controlled GLWidget

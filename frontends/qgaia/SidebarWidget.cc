@@ -26,12 +26,12 @@ SidebarWidget::SidebarWidget(GLWidget* glwidget, QWidget* parent): QWidget(paren
 	setupUi(this);
 
 	// view model selector
-	//QObject::connect(m_FlatWorldRadio, SIGNAL(clicked()), this, SLOT(SetFlatEarthView()));
-	//QObject::connect(m_GlobeWorldRadio, SIGNAL(clicked()), this, SLOT(SetGlobeEarthView()));
+	//QObject::connect(m_FlatWorldRadio, SIGNAL(clicked()), this, SLOT(SetFlatEarthRenderer()));
+	//QObject::connect(m_GlobeWorldRadio, SIGNAL(clicked()), this, SLOT(SetGlobeEarthRenderer()));
 
 	// init GLWidget to default state
 	// TODO(amdmi3): ?!
-	SetFlatEarthView();
+	SetFlatEarthRenderer();
 }
 
 QSize SidebarWidget::sizeHint() const {
@@ -57,13 +57,13 @@ void SidebarWidget::UpdateLayers() {
 	m_GLWidget->updateGL();
 }*/
 
-void SidebarWidget::SetFlatEarthView() {
-	gl_widget_->SetFlatEarthView();
+void SidebarWidget::SetFlatEarthRenderer() {
+	gl_widget_->SetFlatEarthRenderer();
 	gl_widget_->updateGL();
 }
 
-void SidebarWidget::SetGlobeEarthView() {
-	gl_widget_->SetGlobeEarthView();
+void SidebarWidget::SetGlobeEarthRenderer() {
+	gl_widget_->SetGlobeEarthRenderer();
 	gl_widget_->updateGL();
 }
 

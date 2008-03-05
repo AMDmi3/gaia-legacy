@@ -20,7 +20,7 @@
 #ifndef __LIBGAIA__FLATEARTHVIEW_H__
 #define __LIBGAIA__FLATEARTHVIEW_H__
 
-#include "EarthView.h"
+#include "EarthRenderer.h"
 
 namespace gaia {
 
@@ -28,13 +28,13 @@ namespace gaia {
 ///
 /// Simplest possible earth representation. Orthogonal projection, pitch
 /// cannot be changed and north is always 'up'.
-class FlatEarthView: public EarthView {
+class FlatEarthRenderer: public EarthRenderer {
 public:
 	/// Constructor.
-	FlatEarthView(EarthView *ancestor = 0);
+	FlatEarthRenderer(EarthRenderer *ancestor = 0);
 
 	/// Destructor.
-	virtual ~FlatEarthView();
+	virtual ~FlatEarthRenderer();
 
 	/// Render one frame.
 	void Render();

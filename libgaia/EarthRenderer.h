@@ -43,10 +43,10 @@ class LayerMeta;
 ///
 /// Abstract class for earth view.
 ///
-class EarthView {
+class EarthRenderer {
 public:
-	EarthView(EarthView *ancestor = 0);
-	virtual ~EarthView();
+	EarthRenderer(EarthRenderer *ancestor = 0);
+	virtual ~EarthRenderer();
 
 //	int ActivateLayer(LayerMeta *meta);
 //	int DeactivateLayer(LayerMeta *meta);

@@ -17,7 +17,7 @@
  * along with Gaia.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "GlobeEarthView.h"
+#include "GlobeEarthRenderer.h"
 
 #include "Region.h"
 #include "Math.h"
@@ -28,16 +28,16 @@
 
 namespace gaia {
 
-GlobeEarthView::GlobeEarthView(EarthView *ancestor): EarthView(ancestor) {
+GlobeEarthRenderer::GlobeEarthRenderer(EarthRenderer *ancestor): EarthRenderer(ancestor) {
 }
 
-GlobeEarthView::~GlobeEarthView() {
+GlobeEarthRenderer::~GlobeEarthRenderer() {
 }
 
 #define XSTEP 15
 #define YSTEP 15
 
-void GlobeEarthView::Render() {
+void GlobeEarthRenderer::Render() {
 	// setup projection
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -93,7 +93,7 @@ void GlobeEarthView::Render() {
 	}
 }
 
-void GlobeEarthView::Animate(double delta) {
+void GlobeEarthRenderer::Animate(double delta) {
 	if (current_movement_flags_ & NAV_ZOOM_IN)
 		eye_.h *= delta < 1.0 ? 1.0 - delta : 0.1;
 	if (current_movement_flags_ & NAV_ZOOM_OUT)
@@ -112,17 +112,17 @@ void GlobeEarthView::Animate(double delta) {
 }
 
 // keyboard navigation
-int GlobeEarthView::StartMovement(int flags) {
+int GlobeEarthRenderer::StartMovement(int flags) {
 	current_movement_flags_ |= flags;
 	return 1;
 }
 
-int GlobeEarthView::StopMovement(int flags) {
+int GlobeEarthRenderer::StopMovement(int flags) {
 	current_movement_flags_ &= ~flags;
 	return 1;
 }
 
-int GlobeEarthView::SingleMovement(int flags) {
+int GlobeEarthRenderer::SingleMovement(int flags) {
 	if (flags & NAV_ZOOM_IN)
 		eye_.h /= 1.3;
 
@@ -135,7 +135,7 @@ int GlobeEarthView::SingleMovement(int flags) {
 }
 
 // private sphere-specific functions
-void GlobeEarthView::NormalizeEye() {
+void GlobeEarthRenderer::NormalizeEye() {
 	for (; eye_.x < -0.5; eye_.x += 1.0);
 	for (; eye_.x > 0.5; eye_.x -= 1.0);
 

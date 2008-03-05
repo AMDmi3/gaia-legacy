@@ -17,7 +17,7 @@
  * along with Gaia.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "FlatEarthView.h"
+#include "FlatEarthRenderer.h"
 
 #include "Region.h"
 #include "Layer.h"
@@ -27,14 +27,14 @@
 
 namespace gaia {
 
-FlatEarthView::FlatEarthView(EarthView *ancestor): EarthView(ancestor) {
+FlatEarthRenderer::FlatEarthRenderer(EarthRenderer *ancestor): EarthRenderer(ancestor) {
 	current_movement_flags_ = 0;
 }
 
-FlatEarthView::~FlatEarthView() {
+FlatEarthRenderer::~FlatEarthRenderer() {
 }
 
-void FlatEarthView::Render() {
+void FlatEarthRenderer::Render() {
 	// x and y span of viewable size in global coords
 	double yspan = eye_.yspan((double)viewport_width_/(double)viewport_height_);
 	double xspan = eye_.xspan((double)viewport_width_/(double)viewport_height_);
@@ -116,7 +116,7 @@ void FlatEarthView::Render() {
 		(*i)->RenderRegion(&rgn);
 }
 
-void FlatEarthView::Animate(double delta) {
+void FlatEarthRenderer::Animate(double delta) {
 	if (current_movement_flags_ & NAV_ZOOM_IN)
 		eye_.h *= delta < 1.0 ? 1.0 - delta : 0.1;
 	if (current_movement_flags_ & NAV_ZOOM_OUT)
@@ -134,7 +134,7 @@ void FlatEarthView::Animate(double delta) {
 }
 
 // mouse navigation
-int FlatEarthView::StartDrag(int x, int y, int flags) {
+int FlatEarthRenderer::StartDrag(int x, int y, int flags) {
 	if (flags & NAV_DRAG_PAN)
 		saved_pan_eye_ = eye_;
 	if (flags & NAV_DRAG_ZOOM)
@@ -143,7 +143,7 @@ int FlatEarthView::StartDrag(int x, int y, int flags) {
 	return 1;
 }
 
-int FlatEarthView::Drag(int fromx, int fromy, int x, int y, int flags) {
+int FlatEarthRenderer::Drag(int fromx, int fromy, int x, int y, int flags) {
 	double yspan = eye_.yspan((double)viewport_width_/(double)viewport_height_);
 	double xspan = eye_.xspan((double)viewport_width_/(double)viewport_height_) * AspectCorrection();;
 
@@ -162,17 +162,17 @@ int FlatEarthView::Drag(int fromx, int fromy, int x, int y, int flags) {
 }
 
 // keyboard navigation
-int FlatEarthView::StartMovement(int flags) {
+int FlatEarthRenderer::StartMovement(int flags) {
 	current_movement_flags_ |= flags;
 	return 1;
 }
 
-int FlatEarthView::StopMovement(int flags) {
+int FlatEarthRenderer::StopMovement(int flags) {
 	current_movement_flags_ &= ~flags;
 	return 1;
 }
 
-int FlatEarthView::SingleMovement(int flags) {
+int FlatEarthRenderer::SingleMovement(int flags) {
 	if (flags & NAV_ZOOM_IN)
 		eye_.h /= 1.3;
 	if (flags & NAV_ZOOM_OUT)
@@ -183,7 +183,7 @@ int FlatEarthView::SingleMovement(int flags) {
 }
 
 // private flat-specific functions
-void FlatEarthView::NormalizeEye() {
+void FlatEarthRenderer::NormalizeEye() {
 	if (eye_.x < -0.5)	eye_.x = -0.5;
 	if (eye_.x > 0.5)	eye_.x = 0.5;
 
@@ -196,7 +196,7 @@ void FlatEarthView::NormalizeEye() {
 	if (eye_.h > MAX_HEIGHT)	eye_.h = MAX_HEIGHT;
 }
 
-double FlatEarthView::AspectCorrection() {
+double FlatEarthRenderer::AspectCorrection() {
 	double yspan = eye_.yspan((double)viewport_width_/(double)viewport_height_);
 
 	// we need this for flat view model, because the closer we are to poles,
@@ -213,7 +213,7 @@ double FlatEarthView::AspectCorrection() {
 	return k;
 }
 
-double FlatEarthView::AspectCorrection(double y) {
+double FlatEarthRenderer::AspectCorrection(double y) {
 	double yspan = eye_.yspan((double)viewport_width_/(double)viewport_height_);
 
 	double k = 1.0;
