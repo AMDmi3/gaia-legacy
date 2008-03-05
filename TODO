@@ -1,43 +1,78 @@
 TODO
 ~~~~
 * Reimplement layer architecture
-  * Restructure directory tree (programs/gaia -> src/,
-    programs/others -> util/, gaia layers -> layers/)
-  * Create simple libgaia which provides layer interface
-  * Create test layer working with libgaia, disable all other
-    layers for now
-  * Add config class with configfile reading/writing and easy
-    access to tree-like structure. Implement basic types handling
-    (int/string/bool)
-    * Should gracefully process structure changes (automatically
-      add newly added keys to config)
-    * Should leave comments
-    * Should strip default values from config (or comment them out)
-    * Should be able to modify config from commandline to some extent
-      (but I guess such changes should not be saved). I.e.
-      gaia --enable-layer=GPS --gps-enable-all-sources
-  * Review/refactor some support structures
-    * Threadsafe log with mutexes
-    * Timer
-  * Reimplement tile rendering routine to allow non-rectangular
-    tiles
-  * Create ExampleLayer. This will server as both example/template
-    for new layer creators and as unittest for all layer interfaces.
-  * Implement Qt dialogs in ExampleLayer
-    * Implement sidebar dialog
-    * Implement standalone dialog
-    * Make all those interact with config class
-    * Make all this Qt-related stuff conditionally compiled
-  * Implement services for icon/text/hud drawing
-    * As far as I remember icon stuff is already present to some
-      extent
-    * Add text handling. Freetype? Xft? sdl_ttf?
-* Next, adapt existing layers to new order 
-  * WorldWind
+  * Add 
+
+* Add config class with configfile reading/writing and easy
+  access to tree-like structure. Implement basic types handling
+  (int/string/bool)
+  * Should gracefully process structure changes (automatically
+    add newly added keys to config)
+  * Should leave comments
+  * Should strip default values from config (or comment them out)
+  * Should be able to modify config from commandline to some extent
+    (but I guess such changes should not be saved). I.e.
+    gaia --enable-layer=GPS --gps-enable-all-sources
+* Rewrite Region class
+  * Should not allow copy (DISALLOW_EVIL_CONSTRUCTORS?)
+  * First of all, create stable interface providing all values
+    required for now (2 geo, 4 virtual, 4 projected coords) to
+    layers
+  * Add (lazy) projected coordinates calculation
+  * Add shift methods to reuse some of existing vertices (for
+    adjacent regions)
+* Review/refactor some layer-consumed entities
+  * Threadsafe logger (are C++ streams threadsafe?) and exception
+    classes. Thing over again while reimplementing layers. Errors
+    should be reported (via messageboxes/statusbar/log), but should
+    not bug user (don't want messagebox for each tile we weren't able
+    to download)
+  * Reimplement HUD (sprite/text rendering stuff)
+    * Add icon manager
+    * Add font manager (ASCII only for now, later think of TTF text
+      renderer)
+  * Implement Texture/Tile managers as libgaia classes
+* Update Qt GUI
+  * Level 1: should just update view at fixed framerate (use Qt timers
+    with fixed value and consider frame rendering time)
+  * Level 2: idle when nothing changes, but fixed framerate if the view
+    is updated. Should poll both EarthRenderer and Layers for changes.
+  * Level 3: special moed for software ogl (render earth in wireframe
+    while moving, then render textured view piece by piece. We'll need
+    to distinguish between screen from EarthRenderer and Layers, cause
+    if first case we should clear screen and render it from scratch, but
+    in second we may leave what's already rendered intact, but take another
+    rendering pass to overdraw outdated pieces
+    * Possibly this should be done as abstracition placed between
+      SDL/GLWidget and EarthRenderer
+* Reimplement SDL gui
+  * Not hard, since main.cc from early gaia may be used without many
+    modifications
+  * Will ensure Qt is really optional
+* Create ExampleLayer. This will serve as both example and template
+  for new layer creators and as unittest for all layer interfaces.
+* Implement Qt in Layers
+  * Sidebar widget
+  * Options dialog
+  * Make all those interact with config class
+  * Make all this Qt-related stuff conditionally compiled
+* Adapt existing layers to new order 
   * Grid
+    * Needs dynamic density with transparence
+    * That'll look cool :)
+  * GPS
+    * Depends on HUD
+  * WorldWind
+    * RawBuffer, and tilestorage stuff is badly broken afair, so
+      workaround bugs for now, and rewrite proper resource managers
+      if future versions
 * Next, see TODO.OLD
   * Possibly it'll be good to release something at this moment, or
     should other features be added before?
+* Implement coordinate deltas for layers (so one can adjust, for instance,
+   map and GPS layers if one of those is offset by 10 meters)
 
 Random stuff:
 * Use forward declarations for faster compilation
+* Rename EarthView -> EarthRenderer
+* Fix/add doxygen comments
