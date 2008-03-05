@@ -24,34 +24,24 @@
 
 namespace gaia {
 
-/**
- * Flat representation of Earth.
- *
- * Simplest possible earth representation. Orthogonal projection, pitch
- * cannot be changed and north is always 'up'.
- */
+/// Flat earth renderer.
+///
+/// Simplest possible earth representation. Orthogonal projection, pitch
+/// cannot be changed and north is always 'up'.
 class FlatEarthView: public EarthView {
 public:
-	/**
-	 * Constructor.
-	 */
+	/// Constructor.
 	FlatEarthView(EarthView *ancestor = 0);
 
-	/**
-	 * Destructor.
-	 */
+	/// Destructor.
 	virtual ~FlatEarthView();
 
-	/**
-	 * Render one frame.
-	 */
+	/// Render one frame.
 	void Render();
 
-	/**
-	 * Animate view.
-	 * 
-	 * @param delta time since last frame
-	 */
+	/// Animate view.
+	///
+	/// @param delta time since last frame
 	void Animate(double delta);
 
 	int StartDrag(int x, int y, int flags);
@@ -62,27 +52,21 @@ public:
 	int SingleMovement(int flags);
 
 private:
-	/**
-	 * Fix eye coordinates after movements
-	 */
+	/// Fix eye coordinates after movements
 	void NormalizeEye();
 
-	/**
-	 * Calculate aspect ratio correction value
-	 */
+	/// Calculate aspect ratio correction value
 	double AspectCorrection();
 
-	/**
-	 * Calculate aspect ratio correction value for given latitude
-	 */
+	/// Calculate aspect ratio correction value for given latitude
 	double AspectCorrection(double y);
 
 protected:
-	int		m_CurrentMovementFlags;
-	Eye		m_SavedZoomEye;
-	Eye		m_SavedPanEye;
+	int		current_movement_flags_;
+	Eye		saved_zoom_eye_;
+	Eye		saved_pan_eye_;
 };
 
-} /* namespace gaia */
+} // namespace gaia
 
 #endif

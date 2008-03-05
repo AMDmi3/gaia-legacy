@@ -25,18 +25,16 @@
 
 namespace gaia {
 
-/**
- * Simple 2d vector class
- */
+/// Simple 2d vector class
 template <typename T>
 class Vector2 {
 public:
-	/* ctors */
+	// ctors
 	Vector2<T>() { x = y = 0; }
 	Vector2<T>(T ix, T iy) : x(ix), y(iy) {}
 	Vector2<T>(const Vector2<T> &i) : x(i.x), y(i.y) {}
 
-	/* math operators */
+	// math operators
 	inline Vector2<T> operator + (const Vector2<T> &v) const {
 		return Vector2<T>(x+v.x, y+v.y);
 	}
@@ -107,7 +105,7 @@ public:
 		return false;
 	}
 
-	/* comparison */
+	// comparison
 	inline bool operator < (const Vector2<T> &v) const {
 		if (x < v.x && y < v.y) return true;
 		return false;
@@ -125,31 +123,29 @@ public:
 		return false;
 	}
 
-	/* methods */
+	// methods
 	inline T length() const {
 		return sqrt(x*x + y*y);
 	}
 
 public:
-	/* data */
+	// data
 	T	x, y;
 };
 
 typedef Vector2<double> Vector2d;
 typedef Vector2<int> Vector2i;
 
-/**
- * Simple 3d vector class
- */
+/// Simple 3d vector class
 template <typename T>
 class Vector3 {
 public:
-	/* ctors */
+	// ctors
 	Vector3<T>() { x = y = z = 0; }
 	Vector3<T>(T ix, T iy, T iz) : x(ix), y(iy), z(iz) {}
 	Vector3<T>(const Vector3<T> &i) : x(i.x), y(i.y), z(i.z) {}
 
-	/* math operators */
+	// math operators
 	inline Vector3<T> operator + (const Vector3<T> &v) const {
 		return Vector3<T>(x+v.x, y+v.y, z+v.z);
 	}
@@ -220,7 +216,7 @@ public:
 		return false;
 	}
 
-	/* methods */
+	// methods
 	inline T length() const {
 		return sqrt(x*x + y*y + z*z);
 	}
@@ -236,15 +232,15 @@ public:
 	}
 
 public:
-	/* data */
+	// data
 	T	x, y, z;
 };
 
 typedef Vector3<double> Vector3d;
 
-/*
- * min/max template functions for 2 and 3 arguments
- */
+//
+// min/max template functions for 2 and 3 arguments
+//
 template <typename T>
 inline T min4(T a, T b, T c, T d) {
 	if (a <= b && a <= c && a <= d)	return a;
@@ -287,9 +283,9 @@ inline T max2(T a, T b) {
 	return b;
 }
 
-/*
- * clamp
- */
+//
+// clamp
+//
 template <typename T>
 inline T clamp01(T a) {
 	if (a < 0.0) return 0.0;
@@ -297,9 +293,9 @@ inline T clamp01(T a) {
 	return a;
 }
 
-/*
- * Vector ops
- */
+//
+// Vector ops
+//
 template <typename T>
 inline int intersect_line_x(Vector3<T> &point1, Vector3<T> &point2, T &x, T *target) {
 	if (point1.x == point2.x)
@@ -328,6 +324,6 @@ inline int intersect_line_y(Vector3<T> &point1, Vector3<T> &point2, T &y, T *tar
 	return 1;
 }
 
-} /* namespace gaia */
+} // namespace gaia
 
 #endif

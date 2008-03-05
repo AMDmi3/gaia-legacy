@@ -38,13 +38,13 @@ GlobeEarthView::~GlobeEarthView() {
 #define YSTEP 15
 
 void GlobeEarthView::Render() {
-	/* setup projection */
+	// setup projection
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(m_Eye.yfov((double)m_ViewportWidth/(double)m_ViewportHeight)/M_PI*180.0, (double)m_ViewportWidth/(double)m_ViewportHeight, 0.001, 10);
-	glTranslatef(0, 0, -1.0-m_Eye.h);
-	glRotatef(-90.0 + m_Eye.y*360.0, 1, 0, 0);
-	glRotatef(-m_Eye.x*360.0 + 180.0, 0, 0, 1);
+	gluPerspective(eye_.yfov((double)viewport_width_/(double)viewport_height_)/M_PI*180.0, (double)viewport_width_/(double)viewport_height_, 0.001, 10);
+	glTranslatef(0, 0, -1.0-eye_.h);
+	glRotatef(-90.0 + eye_.y*360.0, 1, 0, 0);
+	glRotatef(-eye_.x*360.0 + 180.0, 0, 0, 1);
 
 
 	glEnable(GL_CULL_FACE);
@@ -86,67 +86,67 @@ void GlobeEarthView::Render() {
 			rgn.calc_proj(model, proj, view);
 			rgn.reset_proj_z();
 
-			/* call layers rendering routines */
-			for (std::vector<Layer*>::iterator i = m_Layers.begin(); i < m_Layers.end(); i++)
+			// call layers rendering routines
+			for (std::vector<Layer*>::iterator i = layers_.begin(); i < layers_.end(); i++)
 				(*i)->RenderRegion(&rgn);
 		}
 	}
 }
 
 void GlobeEarthView::Animate(double delta) {
-	if (m_CurrentMovementFlags & NAV_ZOOM_IN)
-		m_Eye.h *= delta < 1.0 ? 1.0 - delta : 0.1;
-	if (m_CurrentMovementFlags & NAV_ZOOM_OUT)
-		m_Eye.h *= 1.0 + delta;
+	if (current_movement_flags_ & NAV_ZOOM_IN)
+		eye_.h *= delta < 1.0 ? 1.0 - delta : 0.1;
+	if (current_movement_flags_ & NAV_ZOOM_OUT)
+		eye_.h *= 1.0 + delta;
 
-	if (m_CurrentMovementFlags & NAV_PAN_UP)
-		m_Eye.y += m_Eye.h * delta * 0.3;
-	if (m_CurrentMovementFlags & NAV_PAN_DOWN)
-		m_Eye.y -= m_Eye.h * delta * 0.3;
-	if (m_CurrentMovementFlags & NAV_PAN_LEFT)
-		m_Eye.x -= m_Eye.h * delta * 0.3;
-	if (m_CurrentMovementFlags & NAV_PAN_RIGHT)
-		m_Eye.x += m_Eye.h * delta * 0.3;
+	if (current_movement_flags_ & NAV_PAN_UP)
+		eye_.y += eye_.h * delta * 0.3;
+	if (current_movement_flags_ & NAV_PAN_DOWN)
+		eye_.y -= eye_.h * delta * 0.3;
+	if (current_movement_flags_ & NAV_PAN_LEFT)
+		eye_.x -= eye_.h * delta * 0.3;
+	if (current_movement_flags_ & NAV_PAN_RIGHT)
+		eye_.x += eye_.h * delta * 0.3;
 
 	NormalizeEye();
 }
 
-/* keyboard navigation */
+// keyboard navigation
 int GlobeEarthView::StartMovement(int flags) {
-	m_CurrentMovementFlags |= flags;
+	current_movement_flags_ |= flags;
 	return 1;
 }
 
 int GlobeEarthView::StopMovement(int flags) {
-	m_CurrentMovementFlags &= ~flags;
+	current_movement_flags_ &= ~flags;
 	return 1;
 }
 
 int GlobeEarthView::SingleMovement(int flags) {
 	if (flags & NAV_ZOOM_IN)
-		m_Eye.h /= 1.3;
+		eye_.h /= 1.3;
 
 	if (flags & NAV_ZOOM_OUT)
-		m_Eye.h *= 1.3;
+		eye_.h *= 1.3;
 
 	NormalizeEye();
 
 	return 1;
 }
 
-/* private sphere-specific functions */
+// private sphere-specific functions
 void GlobeEarthView::NormalizeEye() {
-	for (; m_Eye.x < -0.5; m_Eye.x += 1.0);
-	for (; m_Eye.x > 0.5; m_Eye.x -= 1.0);
+	for (; eye_.x < -0.5; eye_.x += 1.0);
+	for (; eye_.x > 0.5; eye_.x -= 1.0);
 
-	if (m_Eye.y < -0.25)	m_Eye.y = -0.25;
-	if (m_Eye.y > 0.25)	m_Eye.y = 0.25;
+	if (eye_.y < -0.25)	eye_.y = -0.25;
+	if (eye_.y > 0.25)	eye_.y = 0.25;
 
-	/* temporary strict limits */
+	// temporary strict limits
 #define MIN_HEIGHT 0.5
 #define MAX_HEIGHT 2.0
-	if (m_Eye.h < MIN_HEIGHT)	m_Eye.h = MIN_HEIGHT;
-	if (m_Eye.h > MAX_HEIGHT)	m_Eye.h = MAX_HEIGHT;
+	if (eye_.h < MIN_HEIGHT)	eye_.h = MIN_HEIGHT;
+	if (eye_.h > MAX_HEIGHT)	eye_.h = MAX_HEIGHT;
 }
 
-} /* namespace gaia */
+} // namespace gaia

@@ -54,4 +54,4 @@ double Region::proj_length(int i, int j) {
 	return sqrt( (p[i].x - p[j].x) * (p[i].x - p[j].x) + (p[i].y - p[j].y) * (p[i].y - p[j].y) );
 }
 
-} /* namespace gaia */
+} // namespace gaia

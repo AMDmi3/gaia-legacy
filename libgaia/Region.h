@@ -26,57 +26,49 @@
 
 namespace gaia {
 
-/**
- * Minimal renderable part of Earth
- *
- * Region is rectangular piece of earth surface, with sides parallel
- * to parallels and meridians. Thus, it has only world coordinates
- * w[0] is lower left and w[1] is top right (height is likely to be
- * added as well). However, this rectangle may be rendered to screen
- * in almost arbitary way, (twisted, skewed, rotated etc.) - so virtual
- * coordinates for each vertex of the rectangle are also stored (those
- * are used in OpenGL rendering). Vertices are counted [0..3], starting
- * with bottom-left (that one thet is w[0]), CCW. Projected coordinates
- * are stored as well. Those are useful for HUD icons, for example.
- */
+/// Minimal renderable part of Earth
+///
+/// Region is rectangular piece of earth surface, with sides parallel
+/// to parallels and meridians. Thus, it has only world coordinates
+/// w[0] is lower left and w[1] is top right (height is likely to be
+/// added as well). However, this rectangle may be rendered to screen
+/// in almost arbitary way, (twisted, skewed, rotated etc.) - so virtual
+/// coordinates for each vertex of the rectangle are also stored (those
+/// are used in OpenGL rendering). Vertices are counted [0..3], starting
+/// with bottom-left (that one thet is w[0]), CCW. Projected coordinates
+/// are stored as well. Those are useful for HUD icons, for example.
 class Region {
 public:
-	/**
-	 * Constructor
-	 */
+	/// Constructor
 	Region();
 
-	/**
-	 * Constructor with all put projected coords given
-	 */
+	/// Constructor with all put projected coords given
 	Region(Vector3d v0, Vector3d v1, Vector3d v2, Vector3d v3, Vector2d w0, Vector2d w1);
 
-	/**
-	 * Constructor with all coordinates given
-	 */
+	/// Constructor with all coordinates given
 	Region(Vector3d v0, Vector3d v1, Vector3d v2, Vector3d v3, Vector2d w0, Vector2d w1, Vector3d p0, Vector3d p1, Vector3d p2, Vector3d p3);
 
-	/**
-	 * Calculate projected coordinates
-	 */
+	/// Calculate projected coordinates
 	void calc_proj(const GLdouble *model, const GLdouble *proj, const GLint *view);
 
-	/**
-	 * Reset Z-values of projected coords
-	 */
+	/// Reset Z-values of projected coords
 	void reset_proj_z();
 
-	/**
-	 * Length of edge (i,j)
-	 */
+	/// Length of edge (i,j)
 	double proj_length(int i, int j);
 
 public:
-	Vector3d v[4];	///< Virtual coordinates (used in rendering)
-	Vector2d w[2];	///< World coordinates (corners of parallel/meridian - oriented rectangle)
-	Vector3d p[4];	///< Virtual coordinates after projection to screen (in pixels)
+	/// Virtual coordinates (used in rendering)
+	Vector3d v[4];
+
+	/// World coordinates (corners of parallel/meridian - oriented rectangle)
+	Vector2d w[2];
+
+	/// Virtual coordinates after projection to screen (in pixels)
+	Vector3d p[4];
+
 };
 
-} /* namespace gaia */
+} // namespace gaia
 
 #endif

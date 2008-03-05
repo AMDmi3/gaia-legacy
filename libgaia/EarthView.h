@@ -40,12 +40,12 @@ namespace gaia {
 class Layer;
 class LayerMeta;
 
-/**
- * Abstract class for earth view.
- */
+///
+/// Abstract class for earth view.
+///
 class EarthView {
- public:
-  EarthView(EarthView *ancestor = 0);
+public:
+	EarthView(EarthView *ancestor = 0);
 	virtual ~EarthView();
 
 	int ActivateLayer(LayerMeta *meta);
@@ -67,14 +67,19 @@ class EarthView {
 	void MoveToPosition(double x, double y);
 
 protected:
-	std::vector<Layer*>	m_Layers;	///< Layers to use
+	/// Layers to use
+	std::vector<Layer*> layers_;
 
-	Eye		m_Eye;			///< Current viewer's position
+	/// Current viewer's position
+	Eye eye_;
 
-	int		m_ViewportWidth;	///< Viewport width in pixels
-	int		m_ViewportHeight;	///< Viewport height in pixels
+	/// Viewport width in pixels
+	int viewport_width_;
+
+	/// Viewport height in pixels
+	int viewport_height_;
 };
 
-} /* namespace gaia */
+} // namespace gaia
 
 #endif

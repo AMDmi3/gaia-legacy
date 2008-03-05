@@ -28,56 +28,56 @@
 namespace gaia {
 
 FlatEarthView::FlatEarthView(EarthView *ancestor): EarthView(ancestor) {
-	m_CurrentMovementFlags = 0;
+	current_movement_flags_ = 0;
 }
 
 FlatEarthView::~FlatEarthView() {
 }
 
 void FlatEarthView::Render() {
-	/* x and y span of viewable size in global coords */
-	double yspan = m_Eye.yspan((double)m_ViewportWidth/(double)m_ViewportHeight);
-	double xspan = m_Eye.xspan((double)m_ViewportWidth/(double)m_ViewportHeight);
+	// x and y span of viewable size in global coords
+	double yspan = eye_.yspan((double)viewport_width_/(double)viewport_height_);
+	double xspan = eye_.xspan((double)viewport_width_/(double)viewport_height_);
 
 	xspan *= AspectCorrection();
 
-	/* setup projection */
+	// setup projection
 	glMatrixMode(GL_PROJECTION);
 	double m[16] = {
-		2.0/m_ViewportWidth,	0,			0,	0,
-		0,			2.0/m_ViewportHeight,	0,	0,
+		2.0/viewport_width_,	0,			0,	0,
+		0,			2.0/viewport_height_,	0,	0,
 		0,			0,			1.0,	0,
 		-1.0,			-1.0,			0,	1.0,
 	};
 	glLoadMatrixd(m);
 
-	/* calculate virtual coordinates for sides of world rectangle */
-	double world_left_virtual = ((-0.5 - m_Eye.x) * (double)m_ViewportWidth/xspan) + double(m_ViewportWidth)/2.0;
-	double world_right_virtual = ((0.5 - m_Eye.x) * (double)m_ViewportWidth/xspan) + double(m_ViewportWidth)/2.0;
-	double world_top_virtual = ((0.25 - m_Eye.y) * (double)m_ViewportHeight/yspan) + double(m_ViewportHeight)/2.0;
-	double world_bottom_virtual = ((-0.25 - m_Eye.y) * (double)m_ViewportHeight/yspan) + double(m_ViewportHeight)/2.0;
+	// calculate virtual coordinates for sides of world rectangle
+	double world_left_virtual = ((-0.5 - eye_.x) * (double)viewport_width_/xspan) + double(viewport_width_)/2.0;
+	double world_right_virtual = ((0.5 - eye_.x) * (double)viewport_width_/xspan) + double(viewport_width_)/2.0;
+	double world_top_virtual = ((0.25 - eye_.y) * (double)viewport_height_/yspan) + double(viewport_height_)/2.0;
+	double world_bottom_virtual = ((-0.25 - eye_.y) * (double)viewport_height_/yspan) + double(viewport_height_)/2.0;
 
 	Region rgn(Vector3d(0, 0, 0),
-		Vector3d((double)m_ViewportWidth, 0, 0),
-		Vector3d((double)m_ViewportWidth, (double)m_ViewportHeight, 0),
-		Vector3d(0, (double)m_ViewportHeight, 0),
+		Vector3d((double)viewport_width_, 0, 0),
+		Vector3d((double)viewport_width_, (double)viewport_height_, 0),
+		Vector3d(0, (double)viewport_height_, 0),
 
-		Vector2d(m_Eye.x - xspan/2.0, m_Eye.y - yspan/2.0),
-		Vector2d(m_Eye.x + xspan/2.0, m_Eye.y + yspan/2.0),
+		Vector2d(eye_.x - xspan/2.0, eye_.y - yspan/2.0),
+		Vector2d(eye_.x + xspan/2.0, eye_.y + yspan/2.0),
 
 		Vector3d(0, 0, 0),
-		Vector3d((double)m_ViewportWidth, 0, 0),
-		Vector3d((double)m_ViewportWidth, (double)m_ViewportHeight, 0),
-		Vector3d(0, (double)m_ViewportHeight, 0));
+		Vector3d((double)viewport_width_, 0, 0),
+		Vector3d((double)viewport_width_, (double)viewport_height_, 0),
+		Vector3d(0, (double)viewport_height_, 0));
 
-	/* tune coords for the cases where earth bounds appear on screen */
+	// tune coords for the cases where earth bounds appear on screen
 	if (world_left_virtual > 0.0) {
 		rgn.v[0].x = rgn.v[3].x = world_left_virtual;
 		rgn.p[0].x = rgn.p[3].x = world_left_virtual;
 		rgn.w[0].x = -0.5;
 	}
 
-	if (world_right_virtual < (double)m_ViewportWidth) {
+	if (world_right_virtual < (double)viewport_width_) {
 		rgn.v[1].x = rgn.v[2].x = world_right_virtual;
 		rgn.p[1].x = rgn.p[2].x = world_right_virtual;
 		rgn.w[1].x = 0.5;
@@ -89,108 +89,108 @@ void FlatEarthView::Render() {
 		rgn.w[0].y = -0.25;
 	}
 
-	if (world_top_virtual < (double)m_ViewportHeight) {
+	if (world_top_virtual < (double)viewport_height_) {
 		rgn.v[2].y = rgn.v[3].y = world_top_virtual;
 		rgn.p[2].y = rgn.p[3].y = world_top_virtual;
 		rgn.w[1].y = 0.25;
 	}
 
-	/* call layers rendering routines */
-	for (std::vector<Layer*>::iterator i = m_Layers.begin(); i < m_Layers.end(); i++)
+	// call layers rendering routines
+	for (std::vector<Layer*>::iterator i = layers_.begin(); i < layers_.end(); i++)
 		(*i)->RenderRegion(&rgn);
 }
 
 void FlatEarthView::Animate(double delta) {
-	if (m_CurrentMovementFlags & NAV_ZOOM_IN)
-		m_Eye.h *= delta < 1.0 ? 1.0 - delta : 0.1;
-	if (m_CurrentMovementFlags & NAV_ZOOM_OUT)
-		m_Eye.h *= 1.0 + delta;
-	if (m_CurrentMovementFlags & NAV_PAN_UP)
-		m_Eye.y += m_Eye.h * delta * 0.7;
-	if (m_CurrentMovementFlags & NAV_PAN_DOWN)
-		m_Eye.y -= m_Eye.h * delta * 0.7;
-	if (m_CurrentMovementFlags & NAV_PAN_LEFT)
-		m_Eye.x -= m_Eye.h * delta * 0.7 * AspectCorrection();
-	if (m_CurrentMovementFlags & NAV_PAN_RIGHT)
-		m_Eye.x += m_Eye.h * delta * 0.7 * AspectCorrection();
+	if (current_movement_flags_ & NAV_ZOOM_IN)
+		eye_.h *= delta < 1.0 ? 1.0 - delta : 0.1;
+	if (current_movement_flags_ & NAV_ZOOM_OUT)
+		eye_.h *= 1.0 + delta;
+	if (current_movement_flags_ & NAV_PAN_UP)
+		eye_.y += eye_.h * delta * 0.7;
+	if (current_movement_flags_ & NAV_PAN_DOWN)
+		eye_.y -= eye_.h * delta * 0.7;
+	if (current_movement_flags_ & NAV_PAN_LEFT)
+		eye_.x -= eye_.h * delta * 0.7 * AspectCorrection();
+	if (current_movement_flags_ & NAV_PAN_RIGHT)
+		eye_.x += eye_.h * delta * 0.7 * AspectCorrection();
 
 	NormalizeEye();
 }
 
-/* mouse navigation */
+// mouse navigation
 int FlatEarthView::StartDrag(int x, int y, int flags) {
 	if (flags & NAV_DRAG_PAN)
-		m_SavedPanEye = m_Eye;
+		saved_pan_eye_ = eye_;
 	if (flags & NAV_DRAG_ZOOM)
-		m_SavedZoomEye = m_Eye;
+		saved_zoom_eye_ = eye_;
 
 	return 1;
 }
 
 int FlatEarthView::Drag(int fromx, int fromy, int x, int y, int flags) {
-	double yspan = m_Eye.yspan((double)m_ViewportWidth/(double)m_ViewportHeight);
-	double xspan = m_Eye.xspan((double)m_ViewportWidth/(double)m_ViewportHeight) * AspectCorrection();;
+	double yspan = eye_.yspan((double)viewport_width_/(double)viewport_height_);
+	double xspan = eye_.xspan((double)viewport_width_/(double)viewport_height_) * AspectCorrection();;
 
 	if (flags & NAV_DRAG_PAN) {
-		m_Eye.y = m_SavedPanEye.y + double(y - fromy)/double(m_ViewportHeight)*yspan;
-		m_Eye.x = m_SavedPanEye.x - double(x - fromx)/double(m_ViewportWidth)*xspan;	/* not exactly correct, but usable */
+		eye_.y = saved_pan_eye_.y + double(y - fromy)/double(viewport_height_)*yspan;
+		eye_.x = saved_pan_eye_.x - double(x - fromx)/double(viewport_width_)*xspan;	// not exactly correct, but usable
 	}
 	if (flags & NAV_DRAG_ZOOM) {
 		if (y - fromy < 0)
-			m_Eye.h = m_SavedZoomEye.h * (1.0 + double(y - fromy)/double(m_ViewportHeight));
+			eye_.h = saved_zoom_eye_.h * (1.0 + double(y - fromy)/double(viewport_height_));
 		else 
-			m_Eye.h = m_SavedZoomEye.h / (1.0 - double(y - fromy)/double(m_ViewportHeight));
+			eye_.h = saved_zoom_eye_.h / (1.0 - double(y - fromy)/double(viewport_height_));
 	}
 
 	return 1;
 }
 
-/* keyboard navigation */
+// keyboard navigation
 int FlatEarthView::StartMovement(int flags) {
-	m_CurrentMovementFlags |= flags;
+	current_movement_flags_ |= flags;
 	return 1;
 }
 
 int FlatEarthView::StopMovement(int flags) {
-	m_CurrentMovementFlags &= ~flags;
+	current_movement_flags_ &= ~flags;
 	return 1;
 }
 
 int FlatEarthView::SingleMovement(int flags) {
 	if (flags & NAV_ZOOM_IN)
-		m_Eye.h /= 1.3;
+		eye_.h /= 1.3;
 	if (flags & NAV_ZOOM_OUT)
-		m_Eye.h *= 1.3;
+		eye_.h *= 1.3;
 	NormalizeEye();
 
 	return 1;
 }
 
-/* private flat-specific functions */
+// private flat-specific functions
 void FlatEarthView::NormalizeEye() {
-	if (m_Eye.x < -0.5)	m_Eye.x = -0.5;
-	if (m_Eye.x > 0.5)	m_Eye.x = 0.5;
+	if (eye_.x < -0.5)	eye_.x = -0.5;
+	if (eye_.x > 0.5)	eye_.x = 0.5;
 
-	if (m_Eye.y < -0.25)	m_Eye.y = -0.25;
-	if (m_Eye.y > 0.25)	m_Eye.y = 0.25;
+	if (eye_.y < -0.25)	eye_.y = -0.25;
+	if (eye_.y > 0.25)	eye_.y = 0.25;
 
 #define MIN_HEIGHT 10.0/40000000.0
 #define MAX_HEIGHT 1.0
-	if (m_Eye.h < MIN_HEIGHT)	m_Eye.h = MIN_HEIGHT;
-	if (m_Eye.h > MAX_HEIGHT)	m_Eye.h = MAX_HEIGHT;
+	if (eye_.h < MIN_HEIGHT)	eye_.h = MIN_HEIGHT;
+	if (eye_.h > MAX_HEIGHT)	eye_.h = MAX_HEIGHT;
 }
 
 double FlatEarthView::AspectCorrection() {
-	double yspan = m_Eye.yspan((double)m_ViewportWidth/(double)m_ViewportHeight);
+	double yspan = eye_.yspan((double)viewport_width_/(double)viewport_height_);
 
-	/* we need this for flat view model, because the closer we are to poles,
-	 * the more stretched (in longitude axis) earth surface will be. The stretch
-	 * is proportional to cos(abs(latitude)), so we'll correct it, but no more
-	 * that 6x. This will give us undeformed surface for latitudes [-80..80],
-	 * which should be enough */
+	// we need this for flat view model, because the closer we are to poles,
+	// the more stretched (in longitude axis) earth surface will be. The stretch
+	// is proportional to cos(abs(latitude)), so we'll correct it, but no more
+	// that 6x. This will give us undeformed surface for latitudes [-80..80],
+	// which should be enough
 	double k = 1.0;
-	if (m_Eye.y - yspan/2.0 >= 0.0)	k = 1.0/cos((m_Eye.y - yspan/2.0)*2.0*M_PI);
-	if (m_Eye.y + yspan/2.0 <= 0.0)	k = 1.0/cos((-m_Eye.y - yspan/2.0)*2.0*M_PI);
+	if (eye_.y - yspan/2.0 >= 0.0)	k = 1.0/cos((eye_.y - yspan/2.0)*2.0*M_PI);
+	if (eye_.y + yspan/2.0 <= 0.0)	k = 1.0/cos((-eye_.y - yspan/2.0)*2.0*M_PI);
 	if (k > 6.0)	k = 6.0;
 	if (k < 1.0)	k = 1.0;
 
@@ -198,7 +198,7 @@ double FlatEarthView::AspectCorrection() {
 }
 
 double FlatEarthView::AspectCorrection(double y) {
-	double yspan = m_Eye.yspan((double)m_ViewportWidth/(double)m_ViewportHeight);
+	double yspan = eye_.yspan((double)viewport_width_/(double)viewport_height_);
 
 	double k = 1.0;
 	if (y - yspan/2.0 >= 0.0)	k = 1.0/cos((y - yspan/2.0)*2.0*M_PI);
@@ -209,4 +209,4 @@ double FlatEarthView::AspectCorrection(double y) {
 	return k;
 }
 
-} /* namespace gaia */
+} // namespace gaia

@@ -24,14 +24,12 @@
 
 namespace gaia {
 
-/**
- * Coordinates of virtual `eye'.
- */
+///
+/// Geographical position of an oberver
+///
 struct Eye {
-	/**
-	 * Default constructor.
-	 * Eye is located in 0 long, 0 lat, fov is 90 degrees
-	 */
+	/// Default constructor.
+	/// Eye is placed in 0 long, 0 lat, fov is 90 degrees
 	Eye() {
 		x=	0.0;
 		y=	0.0;
@@ -41,9 +39,7 @@ struct Eye {
 		fov=	M_PI_2;
 	};
 
-	/**
-	 * Constructor with given FOV.
-	 */
+	/// Constructor with given FOV.
 	Eye(double nh, double nfov) {
 		x=	0.0;
 		y=	0.0;
@@ -53,9 +49,7 @@ struct Eye {
 		fov=	nfov;
 	};
 
-	/**
-	 * Constructor with all coordinates given.
-	 */
+	/// Constructor with all coordinates given.
 	Eye(double nx, double ny, double nh, double norient, double npitch, double nfov) {
 		x = nx;
 		y = ny;
@@ -65,32 +59,24 @@ struct Eye {
 		fov = nfov;
 	};
 
-	/**
-	 * Addition operator.
-	 * There's no sense in adding two eyes, but this method is used in interpolation.
-	 */
+	/// Addition operator.
+	/// There's no sense in adding two eyes, but this method is used in interpolation.
 	inline Eye operator + (const Eye &e) const {
 		return Eye(x+e.x, y+e.y, h+e.h, orient+e.orient, pitch+e.pitch, fov+e.fov);
 	};
 
-	/**
-	 * Multiplication by number operator.
-	 * There's no sense in multiplying eye on a number, but this is used in interpolation.
-	 */
+	/// Multiplication by number operator.
+	/// There's no sense in multiplying eye on a number, but this is used in interpolation.
 	inline Eye operator * (const double k) const {
 		return Eye(x*k, y*k, h*k, orient*k, pitch*k, fov*k);
 	};
 
-	/**
-	 * Calculates span of earth surface viewed (x axis).
-	 */
+	/// Calculates span of earth surface viewed (x axis).
 	double xspan(double aspect) {
 		return aspect * 2.0 * tan(fov/2.0) * h / sqrt(1.0 + aspect * aspect);
 	};
 
-	/**
-	 * Calculates span of earth surface viewed (y axis).
-	 */
+	/// Calculates span of earth surface viewed (y axis).
 	double yspan(double aspect) {
 		return 2.0 * tan(fov/2.0) * h / sqrt(1.0 + aspect * aspect);
 	};
@@ -107,14 +93,25 @@ struct Eye {
 		return atan2(yspan(aspect) / 2.0, h) * 2.0;
 	};
 
-	double x;	///< longitude [-0.5..0.5]
-	double y;	///< latitude [-0.25..0.25]
-	double h;	///< height above the surface - in same units as x and y
-	double orient;	///< orientation [0..2*PI] where 0 is north
-	double pitch;	///< pitch [0..PI/2] where 0 is for straight top-down view
-	double fov;	///< field-of-view angle
+	/// longitude [-0.5..0.5]
+	double x;
+
+	/// latitude [-0.25..0.25]
+	double y;
+
+	/// height above the surface - in same units as x and y
+	double h;
+
+	/// orientation [0..2*PI] where 0 is north
+	double orient;
+
+	/// pitch [0..PI/2] where 0 is for straight top-down view
+	double pitch;
+
+	/// field-of-view angle
+	double fov;
 };
 
-} /* namespace gaia */
+} // namespace gaia
 
 #endif

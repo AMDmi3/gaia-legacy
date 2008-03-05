@@ -24,74 +24,73 @@
 namespace gaia {
 
 EarthView::EarthView(EarthView *ancestor) {
-	m_ViewportWidth = m_ViewportHeight = 0;
+	viewport_width_ = viewport_height_ = 0;
 
-	/* new class inherits all valuable data stored in ancestor
-	 * (layers, coords), which is stripped of everything */
-	/* XXX: do we need protected interface for this ? */
+	// new class inherits all valuable data stored in ancestor
+	// (layers, coords), which is stripped of everything */
+	// TODO(amdmi3): do we need protected interface for this ?
 	if (ancestor) {
-		m_Layers = ancestor->m_Layers;
-		ancestor->m_Layers.clear();
+		layers_ = ancestor->layers_;
+		ancestor->layers_.clear();
 	}
 }
 
 EarthView::~EarthView() {
-	for (std::vector<Layer*>::iterator i = m_Layers.begin(); i < m_Layers.end(); i++)
+	for (std::vector<Layer*>::iterator i = layers_.begin(); i < layers_.end(); i++)
 		delete (*i);
 }
 
 int EarthView::ActivateLayer(LayerMeta *meta) {
-	/* turn layer on: create layer object and position
-	 * it in layer list corresponding to it's meta
-	 * position in meta list
-	 */
-	if (m_Layers.empty()) {
-		/* empty list -> just add */
-		m_Layers.push_back(meta->spawn());
+	// turn layer on: create layer object and position
+	// it in layer list corresponding to it's meta
+	// position in meta list
+	if (layers_.empty()) {
+		// empty list -> just add
+		layers_.push_back(meta->spawn());
 		return 1;
 	}
 
-	std::vector<Layer*>::iterator i = m_Layers.begin();
+	std::vector<Layer*>::iterator i = layers_.begin();
 	for (LayerMeta *curmeta = LayerMeta::first; curmeta; curmeta = curmeta->next) {
 		if ((*i)->GetMeta() == curmeta) {
 			if (curmeta == meta)
-				return 0;	/* layer is already active */
+				return 0;	// layer is already active
 			i++;
-			if (i == m_Layers.end() ) {
-				/* gone past last active layer -> add new layer to the end of the list*/
-				m_Layers.push_back(meta->spawn());
+			if (i == layers_.end() ) {
+				// gone past last active layer -> add new layer to the end of the list
+				layers_.push_back(meta->spawn());
 				return 1;
 			}
 		} else if (curmeta == meta) {
-			/* bingo */
-			m_Layers.insert(i, meta->spawn());
+			// bingo
+			layers_.insert(i, meta->spawn());
 			return 1;
 		}
 	}
 
-	m_Layers.insert(m_Layers.begin(), meta->spawn());
+	layers_.insert(layers_.begin(), meta->spawn());
 	return 1;
 }
 
 int EarthView::DeactivateLayer(LayerMeta *meta) {
-	/* turn layer off: find in in layer list by meta,
-	 * delete layer itself and remove pointer to it
-	 * from the list */
-	for (std::vector<Layer*>::iterator i = m_Layers.begin(); i < m_Layers.end(); i++)
+	// turn layer off: find in in layer list by meta,
+	// delete layer itself and remove pointer to it
+	// from the list
+	for (std::vector<Layer*>::iterator i = layers_.begin(); i < layers_.end(); i++)
 		if ((*i)->GetMeta() == meta) {
 			delete (*i);
-			m_Layers.erase(i);
+			layers_.erase(i);
 			return 1;
 		}
 	return 0;
 }
 
 void EarthView::Resize(int width, int height) {
-	m_ViewportWidth = width;
-	m_ViewportHeight = height;
+	viewport_width_ = width;
+	viewport_height_ = height;
 }
 
-/* mouse movements */
+// mouse movements
 int EarthView::StartDrag(int x, int y, int flags) {
 	return 0;
 }
@@ -104,7 +103,7 @@ int EarthView::Click(int x, int y, int flags) {
 	return 0;
 }
 
-/* keyboard movements */
+// keyboard movements
 int EarthView::StartMovement(int flags) {
 	return 0;
 }
@@ -117,10 +116,10 @@ int EarthView::SingleMovement(int flags) {
 	return 0;
 }
 
-/* movement methods */
+// movement methods
 void EarthView::MoveToPosition(double x, double y) {
-	m_Eye.x = x;
-	m_Eye.y = y;
+	eye_.x = x;
+	eye_.y = y;
 }
 
-} /* namespace gaia */
+} // namespace gaia

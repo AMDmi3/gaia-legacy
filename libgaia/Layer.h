@@ -20,15 +20,15 @@
 #ifndef __LIBGAIA__LAYER_H__
 #define __LIBGAIA__LAYER_H__
 
-/* groups that specify default layer ordering */
-/* TODO: more groups (maybe will be added with new layers) */
-#define LAYERGROUP_OPAQUE		0x00000000	/* cover whole world */
-#define LAYERGROUP_PARTIALLY_OPAQUE	0x00010000	/* like aerial data for single city */
-#define LAYERGROUP_TRANSPARENT		0x00020000	/* grids, gps data */
+// groups that specify default layer ordering
+// TODO: more groups (maybe will be added with new layers)
+#define LAYERGROUP_OPAQUE		0x00000000	// cover whole world
+#define LAYERGROUP_PARTIALLY_OPAQUE	0x00010000	// like aerial data for single city
+#define LAYERGROUP_TRANSPARENT		0x00020000	// grids, gps data
 
 #define LAYERGROUP_BACKGROUND		-1
 
-/* macros to define layers */
+// macros to define layers
 #define DECLARE_GAIA_LAYER(classname) \
 private: \
 	static Layer* _spawn() { \
@@ -49,66 +49,66 @@ class Region;
 
 class Layer;
 
-/**
- * Layer metadata
- *
- * For each layer class (class, not object), LayerMeta object is formed.
- * Those objetct arrange themselves as linked list and provide some info
- * about Layers, such as name (in future, position in layer tree), group,
- * initial activity flag, as well as method to create object of specific
- * Layer class.
- *
- * Thus, one can iterate LayerMeta objects to find all available Layers
- * and create objects for some of them.
- *
- * Macros (DECLARE_GAIA_LAYER, IMPLEMENT_GAIA_LAYER) are provided, so
- * all metadata stuff Just Works (C)
- *
- * TODO: make it actual class with protected data, better encapsulation,
- * methods to access data?
- */
+/// Layer metadata
+///
+/// For each layer class (class, not object), LayerMeta object is formed.
+/// Those objetct arrange themselves as linked list and provide some info
+/// about Layers, such as name (in future, position in layer tree), group,
+/// initial activity flag, as well as method to create object of specific
+/// Layer class.
+///
+/// Thus, one can iterate LayerMeta objects to find all available Layers
+/// and create objects for some of them.
+///
+/// Macros (DECLARE_GAIA_LAYER, IMPLEMENT_GAIA_LAYER) are provided, so
+/// all metadata stuff Just Works (C)
+///
+/// TODO: make it actual class with protected data, better encapsulation,
+/// methods to access data?
 class LayerMeta {
 public:
 	LayerMeta(char *nname, Layer *(*nspawn)(), int ngroup, int ninitiallyactive);
 
 public:
-	char	*name;		///< Layer name in human-friendly format
-	int	group;		///< Layer group (see LAYERGROUP_* above)
-	int	initiallyactive;	///< Whether layer is active on app start
-	Layer	*(*spawn)();	///< Method to create object of correspondint Layer-derived class
+	/// Layer name in human-friendly format
+	char	*name;
 
-	LayerMeta	*next;	///< Next LayerMeta object in the linked list
-	static LayerMeta* first;	///< Head of LayerMeta linked list
+	/// Layer group (see LAYERGROUP_* above)
+	int	group;
+
+	/// Whether layer is active on app start
+	int	initiallyactive;
+
+	/// Method to create object of correspondint Layer-derived class
+	Layer	*(*spawn)();
+
+
+	/// Next LayerMeta object in the linked list
+	LayerMeta	*next;
+
+	/// Head of LayerMeta linked list
+	static LayerMeta* first;
+
 };
 
-/**
- * Base class for all geo-bound data
- */
+/// Base class for all geo-bound data.
 class Layer {
 public:
-	/**
-	 * Constructor
-	 */
+	/// Constructor.
 	Layer();
 
-	/**
-	 * Destructor
-	 */
+	/// Destructor.
 	virtual ~Layer();
 
-	/**
-	 * Render one specific region of earth surface
-	 *
-	 * @param rgn region to render
-	 */
+	/// Renders one specific region of earth surface.
+	///
+	/// @param rgn region to render
 	virtual void RenderRegion(Region *rgn) = 0;
 
-	/**
-	 * Return layer metadata object
-	 */
+	/// Returns layer metadata object
 	virtual LayerMeta *GetMeta() = 0;
 };
 
-} /* namespace gaia */
+} // namespace gaia
 
 #endif
