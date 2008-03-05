@@ -1,8 +1,16 @@
 TODO
 ~~~~
 * Reimplement layer architecture
-  * Add 
-
+  * Add LayerManager class
+  * Retoss includes in Layer* classes
+    * Actually, Layer.h should include LayerMeta.h and GL/gl.h, so
+      there'll be no need to include same files in each layer
+      * Even better, no includes in Layer.h, but special header for
+        use in layers. Think of separating layer-side and frontend-side
+        interface of libgaia (but better after implementing config and
+        other stuff)
+* Update Qt gui (proper layer list with model linked to
+  LayerManager)
 * Add config class with configfile reading/writing and easy
   access to tree-like structure. Implement basic types handling
   (int/string/bool)
@@ -32,7 +40,7 @@ TODO
     * Add font manager (ASCII only for now, later think of TTF text
       renderer)
   * Implement Texture/Tile managers as libgaia classes
-* Update Qt GUI
+* Update GL rendering
   * Level 1: should just update view at fixed framerate (use Qt timers
     with fixed value and consider frame rendering time)
   * Level 2: idle when nothing changes, but fixed framerate if the view

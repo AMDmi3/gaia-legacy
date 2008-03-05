@@ -4,14 +4,14 @@ Old doesn't mean abandoned, I'll return to it after gaia is refactored
 enough.
 
 Graphics/user interface:
-* Full 3D earth renderer (partially done)
+* Finish GlobeEarthRenderer
 * HUD to display text labels and icons (partially done)
   * Text label support
     * Bar with current geographical coordinates and statistics
     * Freetype font renderer (will also allow internationalization
       of HUD)
-* Ability to set initial viewer's coordinates, possibly with location
-  catalogue (patch by Andreas Grau available)
+* Ability to set initial viewer's coordinates, (patch by Andreas
+  Grau available), possibly with location catalogue
 * gaia-mkmap utility; tell it corner coordinates, dimensions, dpi, and
   it'll make you map in single JPEG, ready for printing or whatever.
   (should be also available from gaia itself). XXX: wtf is geotiffs?
