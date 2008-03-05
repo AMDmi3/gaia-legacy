@@ -28,49 +28,28 @@
 
 #include "Layer.h"
 
-/* type to distinguish LayerTreeItem's from other QTreeWidgetItem's */
+// type to distinguish LayerTreeItem's from other QTreeWidgetItem's
 #define LayerTreeItemType	QTreeWidgetItem::UserType+1
 
 namespace gaia {
 
-/**
- * Single item of layer list
- *
- * There object of this class, derived from QCheckListItem for every
- * Layer available, so user can toggle (and later change order of) layers
- */
-class LayerTreeItem: public QTreeWidgetItem {
-public:
-	LayerTreeItem(QTreeWidget *parent, QTreeWidgetItem *preceding, LayerMeta *meta);
-	~LayerTreeItem();
-
-	LayerMeta	*GetMeta();
-
-protected:
-	LayerMeta	*m_Meta;	///< Layer metadata associated with this item
-};
-
-/**
- * Widget gaia's left panel
- *
- * Contains layer list, view mode selector and other stuff
- */
+/// Gaia sidebar 
 class ControlWidget: public QWidget, Ui::ControlWidget {
 	Q_OBJECT
 public:
-	ControlWidget(GLWidget* target, QWidget* parent = 0);
+	ControlWidget(GLWidget* glwidget, QWidget* parent = 0);
 
 	virtual QSize sizeHint() const;
 
 private slots:
-	void ToggleLayerTreeItem(QTreeWidgetItem *item);
+/*	void ToggleLayerTreeItem(QTreeWidgetItem *item);
+	void UpdateLayers();*/
 	void SetFlatEarthView();
 	void SetGlobeEarthView();
-	void MoveToPosition();
-	void UpdateLayers();
 
 private:
-	GLWidget	*m_GLWidget;		///< GLWidget to control
+	/// Controlled GLWidget
+	GLWidget *gl_widget_;
 };
 
 } /* namespace gaia */

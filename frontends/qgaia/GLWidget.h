@@ -31,9 +31,7 @@
 
 namespace gaia {
 
-/**
- * Widget with earth view
- */
+/// Widget with earth view.
 class GLWidget: public QGLWidget {
 	Q_OBJECT
 public:
@@ -41,20 +39,20 @@ public:
 	~GLWidget();
 
 public:
-	/* methods to call from ControlWidget */
+	// methods to call from ControlWidget
 	void SetFlatEarthView();
 	void SetGlobeEarthView();
-	void ActivateLayer(LayerMeta *meta);
-	void DeactivateLayer(LayerMeta *meta);
-	void MoveToPosition(double x, double y);
+//	void ActivateLayer(LayerMeta *meta);
+//	void DeactivateLayer(LayerMeta *meta);
+//	void MoveToPosition(double x, double y);
 
-protected:
-	/* GL stuff */
+private:
+	// GL stuff
 	void initializeGL();
 	void paintGL();
 	void resizeGL(int w, int h);
 
-	/* events */
+	// events
 	void mousePressEvent(QMouseEvent *e);
 	void mouseReleaseEvent(QMouseEvent *e);
 	void mouseMoveEvent(QMouseEvent *e);
@@ -62,16 +60,25 @@ protected:
 	void keyPressEvent(QKeyEvent *e);
 	void keyReleaseEvent(QKeyEvent *e);
 
-private:
-	EarthView	*m_EarthView;		///< EarthView to render data with
-	int		m_MouseDownMask;	///< Bitmask containing info on which mouse buttons are currently down
-	QPoint		m_MouseLeftAnchor;	///< Where left mouse button was pressed
-	QPoint		m_MouseMidAnchor;	///< Where middle mouse button was pressed
-	QPoint		m_MouseRightAnchor;	///< Where right mouse button was pressed
+	/// EarthView to render data with
+	EarthView	*earth_view_;
 
-	QTime		m_LastRender;
+	/// Bitmask containing info on which mouse buttons are currently down
+	int		mouse_down_mask_;
+
+	/// Where left mouse button was pressed
+	QPoint		mouse_left_anchor_;
+
+	/// Where middle mouse button was pressed
+	QPoint		mouse_mid_anchor_;
+
+	/// Where right mouse button was pressed
+	QPoint		mouse_right_anchor_;
+
+	/// Time of previous render
+	QTime		last_render_;
 };
 
-} /* namespace gaia */
+} // namespace gaia
 
 #endif

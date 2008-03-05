@@ -11,7 +11,6 @@ FILE(GLOB qgaia_SRCS *.cc)
 SET(qgaia_MOC_HDRS
 	ControlWidget.h
 	GLWidget.h
-	GeoCoordSpinbox.h
 )
 
 SET(qgaia_UIS

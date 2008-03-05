@@ -27,23 +27,23 @@
 namespace gaia {
 
 GLWidget::GLWidget(QWidget* parent): QGLWidget(parent) {
-	/* init preloaded texture manager */
+	// init preloaded texture manager
 	//PreloadedTextureManager::Instance()->LoadPNG(TEXTURE_FONT, DATADIR "/font.png");
 
-	/* create default EarthView */
-	m_EarthView = new FlatEarthView();
+	// create default EarthView
+	earth_view_ = new FlatEarthView();
 
-	/* create default Layers */
-	for (LayerMeta *meta = LayerMeta::first; meta; meta = meta->next)
+	// create default Layers
+	/*for (LayerMeta *meta = LayerMeta::first; meta; meta = meta->next)
 		if (meta->initiallyactive)
-			m_EarthView->ActivateLayer(meta);
+			earth_view_->ActivateLayer(meta);*/
 
-	m_MouseDownMask = 0;
+	mouse_down_mask_ = 0;
 
 //	SetMouseTracking(1);
-	setFocusPolicy(Qt::WheelFocus);
+	/*setFocusPolicy(Qt::WheelFocus);*/
 
-	m_LastRender.start();
+	last_render_.start();
 
 	QTimer *timer = new QTimer(this);
 	connect(timer, SIGNAL(timeout()), this, SLOT(updateGL()));
@@ -51,18 +51,18 @@ GLWidget::GLWidget(QWidget* parent): QGLWidget(parent) {
 }
 
 GLWidget::~GLWidget() {
-	delete m_EarthView;
+	delete earth_view_;
 }
 
 void GLWidget::paintGL() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	if (m_EarthView) {
-		m_EarthView->Animate((double)m_LastRender.elapsed()/1000.0);
-		m_EarthView->Resize(width(), height());
-		m_EarthView->Render();
+	if (earth_view_) {
+		earth_view_->Animate((double)last_render_.elapsed()/1000.0);
+		earth_view_->Resize(width(), height());
+		earth_view_->Render();
 
-		m_LastRender.start();
+		last_render_.start();
 	}
 }
 
@@ -74,21 +74,21 @@ void GLWidget::resizeGL(int w, int h) {
 	glViewport(0, 0, w, h);
 }
 
-/* events */
+// events
 void GLWidget::mousePressEvent(QMouseEvent *e) {
-	m_MouseDownMask |= e->button();
+	mouse_down_mask_ |= e->button();
 
 	switch(e->button()) {
 	case Qt::LeftButton:
-		m_MouseLeftAnchor = e->pos();
-		m_EarthView->StartDrag(e->x(), e->y(), NAV_DRAG_PAN);
+		mouse_left_anchor_ = e->pos();
+		earth_view_->StartDrag(e->x(), e->y(), NAV_DRAG_PAN);
 		break;
 	case Qt::MidButton:
-		m_MouseMidAnchor = e->pos();
+		mouse_mid_anchor_ = e->pos();
 		break;
 	case Qt::RightButton:
-		m_MouseRightAnchor = e->pos();
-		m_EarthView->StartDrag(e->x(), e->y(), NAV_DRAG_ZOOM);
+		mouse_right_anchor_ = e->pos();
+		earth_view_->StartDrag(e->x(), e->y(), NAV_DRAG_ZOOM);
 		break;
 	default:
 		break;
@@ -98,7 +98,7 @@ void GLWidget::mousePressEvent(QMouseEvent *e) {
 }
 
 void GLWidget::mouseReleaseEvent(QMouseEvent *e) {
-	m_MouseDownMask &= ~e->button();
+	mouse_down_mask_ &= ~e->button();
 
 	switch(e->button()) {
 	case Qt::LeftButton:
@@ -115,19 +115,19 @@ void GLWidget::mouseReleaseEvent(QMouseEvent *e) {
 }
 
 void GLWidget::mouseMoveEvent(QMouseEvent *e) {
-	if (m_MouseDownMask & Qt::LeftButton)
-		m_EarthView->Drag(m_MouseLeftAnchor.x(), m_MouseLeftAnchor.y(), e->x(), e->y(), NAV_DRAG_PAN);
-	if (m_MouseDownMask & Qt::RightButton)
-		m_EarthView->Drag(m_MouseRightAnchor.x(), m_MouseRightAnchor.y(), e->x(), e->y(), NAV_DRAG_ZOOM);
+	if (mouse_down_mask_ & Qt::LeftButton)
+		earth_view_->Drag(mouse_left_anchor_.x(), mouse_left_anchor_.y(), e->x(), e->y(), NAV_DRAG_PAN);
+	if (mouse_down_mask_ & Qt::RightButton)
+		earth_view_->Drag(mouse_right_anchor_.x(), mouse_right_anchor_.y(), e->x(), e->y(), NAV_DRAG_ZOOM);
 
 	updateGL();
 }
 
 void GLWidget::wheelEvent(QWheelEvent *e) {
 	if (e->delta() > 0)
-		m_EarthView->SingleMovement(NAV_ZOOM_IN);
+		earth_view_->SingleMovement(NAV_ZOOM_IN);
 	else
-		m_EarthView->SingleMovement(NAV_ZOOM_OUT);
+		earth_view_->SingleMovement(NAV_ZOOM_OUT);
 
 	updateGL();
 }
@@ -140,24 +140,24 @@ void GLWidget::keyPressEvent(QKeyEvent *e) {
 
 	switch(e->key()) {
 		case Qt::Key_Left:
-			m_EarthView->StartMovement(NAV_PAN_LEFT);
+			earth_view_->StartMovement(NAV_PAN_LEFT);
 			break;
 		case Qt::Key_Right:
-			m_EarthView->StartMovement(NAV_PAN_RIGHT);
+			earth_view_->StartMovement(NAV_PAN_RIGHT);
 			break;
 		case Qt::Key_Down:
-			m_EarthView->StartMovement(NAV_PAN_DOWN);
+			earth_view_->StartMovement(NAV_PAN_DOWN);
 			break;
 		case Qt::Key_Up:
-			m_EarthView->StartMovement(NAV_PAN_UP);
+			earth_view_->StartMovement(NAV_PAN_UP);
 			break;
 		case Qt::Key_PageUp:
 		case Qt::Key_Equal:
-			m_EarthView->StartMovement(NAV_ZOOM_IN);
+			earth_view_->StartMovement(NAV_ZOOM_IN);
 			break;
 		case Qt::Key_PageDown:
 		case Qt::Key_Minus:
-			m_EarthView->StartMovement(NAV_ZOOM_OUT);
+			earth_view_->StartMovement(NAV_ZOOM_OUT);
 			break;
 		default:
 			e->ignore();
@@ -176,24 +176,24 @@ void GLWidget::keyReleaseEvent(QKeyEvent *e) {
 
 	switch(e->key()) {
 		case Qt::Key_Left:
-			m_EarthView->StopMovement(NAV_PAN_LEFT);
+			earth_view_->StopMovement(NAV_PAN_LEFT);
 			break;
 		case Qt::Key_Right:
-			m_EarthView->StopMovement(NAV_PAN_RIGHT);
+			earth_view_->StopMovement(NAV_PAN_RIGHT);
 			break;
 		case Qt::Key_Down:
-			m_EarthView->StopMovement(NAV_PAN_DOWN);
+			earth_view_->StopMovement(NAV_PAN_DOWN);
 			break;
 		case Qt::Key_Up:
-			m_EarthView->StopMovement(NAV_PAN_UP);
+			earth_view_->StopMovement(NAV_PAN_UP);
 			break;
 		case Qt::Key_PageUp:
 		case Qt::Key_Equal:
-			m_EarthView->StopMovement(NAV_ZOOM_IN);
+			earth_view_->StopMovement(NAV_ZOOM_IN);
 			break;
 		case Qt::Key_PageDown:
 		case Qt::Key_Minus:
-			m_EarthView->StopMovement(NAV_ZOOM_OUT);
+			earth_view_->StopMovement(NAV_ZOOM_OUT);
 			break;
 		default:
 			e->ignore();
@@ -205,37 +205,37 @@ void GLWidget::keyReleaseEvent(QKeyEvent *e) {
 }
 
 void GLWidget::SetFlatEarthView() {
-	EarthView *newearthview = new FlatEarthView(m_EarthView);
+	EarthView *newearthview = new FlatEarthView(earth_view_);
 
-	delete m_EarthView;
+	delete earth_view_;
 
-	m_EarthView = newearthview;
+	earth_view_ = newearthview;
 }
 
 void GLWidget::SetGlobeEarthView() {
-	EarthView *newearthview = new GlobeEarthView(m_EarthView);
+	EarthView *newearthview = new GlobeEarthView(earth_view_);
 
-	delete m_EarthView;
+	delete earth_view_;
 
-	m_EarthView = newearthview;
+	earth_view_ = newearthview;
 }
 
-void GLWidget::ActivateLayer(LayerMeta *meta) {
-	m_EarthView->ActivateLayer(meta);
+/*void GLWidget::ActivateLayer(LayerMeta *meta) {
+	earth_view_->ActivateLayer(meta);
 
 	updateGL();
 }
 
 void GLWidget::DeactivateLayer(LayerMeta *meta) {
-	m_EarthView->DeactivateLayer(meta);
+	earth_view_->DeactivateLayer(meta);
 
 	updateGL();
 }
 
 void GLWidget::MoveToPosition(double x, double y) {
-	m_EarthView->MoveToPosition(x, y);
+	earth_view_->MoveToPosition(x, y);
 
 	updateGL();
-}
+}*/
 
-} /* namespace gaia */
+} // namespace gaia

@@ -27,8 +27,9 @@
 using namespace gaia;
 
 int main(int argc, char **argv) {
-	QApplication app(argc,argv);
+	QApplication app(argc, argv);
 
+	// OpenGL is essential
 	if (!QGLFormat::hasOpenGL()) {
 		qWarning( "This system has no OpenGL support. Exiting." );
 		return 1;
