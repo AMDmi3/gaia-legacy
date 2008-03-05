@@ -20,9 +20,9 @@
 #ifndef __LIBGAIA__REGION_H__
 #define __LIBGAIA__REGION_H__
 
-#include "Math.h"
-
 #include <GL/gl.h>
+
+#include <libgaia/Math.h>
 
 namespace gaia {
 

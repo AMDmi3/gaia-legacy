@@ -17,8 +17,9 @@
  * along with Gaia.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "SidebarWidget.h"
 #include "GLWidget.h"
+
+#include "SidebarWidget.h"
 
 namespace gaia {
 

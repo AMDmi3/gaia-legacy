@@ -20,13 +20,12 @@
 #ifndef __GAIA__SIDEBARWIDGET_H__
 #define __GAIA__SIDEBARWIDGET_H__
 
-#include <QTreeWidgetItem>
-
-#include "ui_SidebarWidget.h"
-
 #include "GLWidget.h"
 
-#include "Layer.h"
+#include <QTreeWidgetItem>
+#include <libgaia/Layer.h>
+
+#include "ui_SidebarWidget.h"
 
 namespace gaia {
 

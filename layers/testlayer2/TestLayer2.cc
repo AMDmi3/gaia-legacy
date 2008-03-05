@@ -19,9 +19,9 @@
 
 #include <GL/gl.h>
 
-#include "Layer.h"
-#include "LayerMeta.h"
-#include "Region.h"
+#include <libgaia/Layer.h>
+#include <libgaia/LayerMeta.h>
+#include <libgaia/Region.h>
 
 namespace gaia {
 

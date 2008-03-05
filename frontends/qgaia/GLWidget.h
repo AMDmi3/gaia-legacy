@@ -26,8 +26,8 @@
 #include <QWheelEvent>
 #include <QTime>
 
-#include "EarthRenderer.h"
-#include "Layer.h"
+#include <libgaia/EarthRenderer.h>
+#include <libgaia/Layer.h>
 
 namespace gaia {
 

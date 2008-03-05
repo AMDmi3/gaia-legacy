@@ -17,54 +17,43 @@
  * along with Gaia.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __LIBGAIA__FLATEARTHVIEW_H__
-#define __LIBGAIA__FLATEARTHVIEW_H__
+#ifndef __LIBGAIA__GLOBEEARTHVIEW_H__
+#define __LIBGAIA__GLOBEEARTHVIEW_H__
 
-#include "EarthRenderer.h"
+#include <libgaia/EarthRenderer.h>
 
 namespace gaia {
 
-/// Flat earth renderer.
+/// Flat representation of Earth.
 ///
 /// Simplest possible earth representation. Orthogonal projection, pitch
 /// cannot be changed and north is always 'up'.
-class FlatEarthRenderer: public EarthRenderer {
+class GlobeEarthRenderer: public EarthRenderer {
 public:
 	/// Constructor.
-	FlatEarthRenderer(EarthRenderer *ancestor = 0);
+	GlobeEarthRenderer(EarthRenderer *ancestor = 0);
 
 	/// Destructor.
-	virtual ~FlatEarthRenderer();
+	virtual ~GlobeEarthRenderer();
 
-	/// Render one frame.
+	/// Renders one frame.
 	void Render();
 
-	/// Animate view.
+	/// Animates view.
 	///
 	/// @param delta time since last frame
 	void Animate(double delta);
-
-	int StartDrag(int x, int y, int flags);
-	int Drag(int fromx, int fromy, int x, int y, int flags);
 
 	int StartMovement(int flags);
 	int StopMovement(int flags);
 	int SingleMovement(int flags);
 
 private:
-	/// Fix eye coordinates after movements
+	/// Fixes eye coordinates after movements
 	void NormalizeEye();
 
-	/// Calculate aspect ratio correction value
-	double AspectCorrection();
-
-	/// Calculate aspect ratio correction value for given latitude
-	double AspectCorrection(double y);
-
 protected:
-	int		current_movement_flags_;
-	Eye		saved_zoom_eye_;
-	Eye		saved_pan_eye_;
+	int	current_movement_flags_;
 };
 
 } // namespace gaia

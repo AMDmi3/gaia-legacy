@@ -17,13 +17,13 @@
  * along with Gaia.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "FlatEarthRenderer.h"
-
-#include "Region.h"
-#include "Layer.h"
-#include "Math.h"
+#include <libgaia/FlatEarthRenderer.h>
 
 #include <GL/gl.h>
+
+#include <libgaia/Region.h>
+#include <libgaia/Layer.h>
+#include <libgaia/Math.h>
 
 namespace gaia {
 

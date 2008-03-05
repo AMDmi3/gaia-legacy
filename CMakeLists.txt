@@ -12,9 +12,9 @@ ADD_DEFINITIONS(-Wall -g -DGAIA_VERSION="\\"${GAIA_VERSION}\\"" -DGAIA_LAYERS_DI
 # depends
 FIND_PACKAGE(OpenGL REQUIRED)
 
-INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(lib/ ${OPENGL_INCLUDE_DIR})
 
 # subdirs (everything is in subdirs)
-SUBDIRS(frontends)
+SUBDIRS(lib)
 SUBDIRS(layers)
-SUBDIRS(libgaia)
+SUBDIRS(frontends)

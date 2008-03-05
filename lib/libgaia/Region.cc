@@ -17,7 +17,7 @@
  * along with Gaia.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Region.h"
+#include <libgaia/Region.h>
 
 #include <GL/glu.h>
 

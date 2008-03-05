@@ -20,9 +20,9 @@
 #ifndef __LIBGAIA__EARTHVIEW_H__
 #define __LIBGAIA__EARTHVIEW_H__
 
-#include <vector>
+#include <libgaia/Eye.h>
 
-#include "Eye.h"
+#include <vector>
 
 #define NAV_DRAG_PAN	0x01
 #define NAV_DRAG_ZOOM	0x02

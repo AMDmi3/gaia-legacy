@@ -17,12 +17,12 @@
  * along with Gaia.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "GLWidget.h"
-#include "SidebarWidget.h"
-
 #include <QApplication>
 #include <QGLFormat>
 #include <QSplitter>
+
+#include "GLWidget.h"
+#include "SidebarWidget.h"
 
 using namespace gaia;
 

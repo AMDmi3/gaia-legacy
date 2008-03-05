@@ -17,14 +17,14 @@
  * along with Gaia.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "GlobeEarthRenderer.h"
-
-#include "Region.h"
-#include "Math.h"
-#include "Layer.h"
+#include <libgaia/GlobeEarthRenderer.h>
 
 #include <GL/gl.h>
 #include <GL/glu.h>
+
+#include <libgaia/Region.h>
+#include <libgaia/Math.h>
+#include <libgaia/Layer.h>
 
 namespace gaia {
 

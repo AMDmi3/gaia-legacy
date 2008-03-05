@@ -17,7 +17,7 @@
  * along with Gaia.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Layer.h"
+#include <libgaia/Layer.h>
 
 namespace gaia {
 

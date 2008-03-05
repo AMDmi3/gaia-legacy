@@ -17,12 +17,12 @@
  * along with Gaia.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <QTimer>
-
 #include "GLWidget.h"
 
-#include "FlatEarthRenderer.h"
-#include "GlobeEarthRenderer.h"
+#include <QTimer>
+
+#include <libgaia/FlatEarthRenderer.h>
+#include <libgaia/GlobeEarthRenderer.h>
 
 namespace gaia {
 
