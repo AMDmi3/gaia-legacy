@@ -49,13 +49,21 @@ public:
 	/// Layer spawning function
 	typedef Layer *(*SpawnLayer)(); 
 
+	/// LayerMeta returning function
+	typedef LayerMeta (*GetMeta)(); 
+
 	/// Constructor
 	LayerMeta(const string &name, LayerGroup group, bool initially_active, SpawnLayer spawn):
 		name_(name), group_(group), initially_active_(initially_active), spawn_(spawn) {
 	}
 
+	/// Accessors
+	string GetName() const { return name_; };
+
+	LayerGroup GetGroup() const { return group_; };
+
 	/// Spawn layer object
-	Layer *Spawn() {
+	Layer *Spawn() const {
 		return spawn_();
 	}
 
