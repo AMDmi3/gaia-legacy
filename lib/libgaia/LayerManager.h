@@ -21,17 +21,13 @@
 #define __LIBGAIA__LAYERMANAGER_H__
 
 #include <map>
+#include <set>
 #include <stdexcept>
 #include <string>
 #include <vector>
 
-#include <libgaia/LayerMeta.h>
+#include <libgaia/MetaLayer.h>
 #include <libgaia/Layer.h>
-
-using std::map;
-using std::runtime_error;
-using std::string;
-using std::vector;
 
 namespace gaia {
 
@@ -44,21 +40,25 @@ public:
 	virtual ~LayerManager();
 
 	/// Loads layer from specified dynamic library file
-	static void LoadLayer(const string &filename);
+	static void LoadLayer(const std::string &filename);
 
 	// TODO(amdmi3): add methods for GUI and Renderer interaction
 
 private:
-	typedef map<string, LayerMeta> LayerMetaMap;
-	typedef vector<Layer*> LayerMap;
+	typedef std::map<std::string, MetaLayer> MetaLayerMap;
+	typedef std::vector<std::pair<std::string, Layer*> > LayerMap;
+	typedef std::set<std::string> LayerNameSet;
 
-	Layer *SpawnLayerByName(const string &name);
+	Layer *SpawnLayer(const std::string &name);
 
 	/// All loaded layers
-	static LayerMetaMap layer_metas_;
+	static MetaLayerMap metalayers_;
 
 	/// All layer objects for current LayerManager instance
 	LayerMap layers_;
+
+	/// Names of all layers
+	LayerNameSet layer_names_;
 };
 
 } // namespace gaia

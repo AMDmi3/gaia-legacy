@@ -17,27 +17,29 @@
  * along with Gaia.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __LIBGAIA__LAYERMETA_H__
-#define __LIBGAIA__LAYERMETA_H__
+#ifndef __LIBGAIA__METALAYER_H__
+#define __LIBGAIA__METALAYER_H__
 
 #include <string>
 
-#define REGISTER_GAIA_LAYER(name,group,active) \
+#define REGISTER_LAYER(classname, readablename, group, active) \
 static Layer *Spawn() { \
-	return new name; \
+	return new classname; \
 } \
-extern "C" LayerMeta GetLayerMeta() { \
-	return LayerMeta(#name, group, active, Spawn); \
-} \
+extern "C" MetaLayer GetMetaLayer() { \
+	return MetaLayer(#readablename, group, active, Spawn); \
+}
 
 namespace gaia {
 
-using std::string;
-
 class Layer;
 
-/// Layer metadata
-class LayerMeta {
+/// Layer metadata.
+///
+/// For each class derived from Layer, there is MetaLayer object,
+/// which holds information about this layer type (like human-readable
+/// name) and is able of spawning object of corresponding Layer class.
+class MetaLayer {
 public:
 	/// Layer group - specifies layer ordering (from bottom to top)
 	enum LayerGroup {
@@ -47,18 +49,18 @@ public:
 	};
 
 	/// Layer spawning function
-	typedef Layer *(*SpawnLayer)(); 
+	typedef Layer *(*SpawnLayerFunc)(); 
 
-	/// LayerMeta returning function
-	typedef LayerMeta (*GetMeta)(); 
+	/// MetaLayer returning function
+	typedef MetaLayer (*GetMetaLayerFunc)(); 
 
 	/// Constructor
-	LayerMeta(const string &name, LayerGroup group, bool initially_active, SpawnLayer spawn):
+	MetaLayer(const std::string &name, LayerGroup group, bool initially_active, SpawnLayerFunc spawn):
 		name_(name), group_(group), initially_active_(initially_active), spawn_(spawn) {
 	}
 
 	/// Accessors
-	string GetName() const { return name_; };
+	std::string GetName() const { return name_; };
 
 	LayerGroup GetGroup() const { return group_; };
 
@@ -69,7 +71,7 @@ public:
 
 private:
 	/// Layer name
-	string name_;
+	std::string name_;
 
 	/// Layer group
 	LayerGroup group_;
@@ -80,7 +82,7 @@ private:
 	bool initially_active_;
 
 	/// Method to create object of corresponding Layer class
-	SpawnLayer spawn_;
+	SpawnLayerFunc spawn_;
 };
 
 } // namespace gaia

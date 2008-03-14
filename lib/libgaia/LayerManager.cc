@@ -23,7 +23,7 @@
 
 namespace gaia {
 
-LayerManager::LayerMetaMap LayerManager::layer_metas_;
+LayerManager::MetaLayerMap LayerManager::metalayers_;
 
 LayerManager::LayerManager() {
 }
@@ -31,7 +31,7 @@ LayerManager::LayerManager() {
 LayerManager::~LayerManager() {
 }
 
-void LayerManager::LoadLayer(const string &filename) {
+void LayerManager::LoadLayer(const std::string &filename) {
 	void *dl;
 
 	// TODO(amdmi3): add proper logging/exception handling here
@@ -39,7 +39,7 @@ void LayerManager::LoadLayer(const string &filename) {
 	if ((dl = dlopen(filename.c_str(), RTLD_NOW)) == NULL)
 		throw std::runtime_error("Cannot dlopen layer file");
 
-	LayerMeta::GetMeta getmeta = (LayerMeta::GetMeta)dlfunc(dl, "GetLayerMeta");
+	MetaLayer::GetMetaLayerFunc getmeta = (MetaLayer::GetMetaLayerFunc)dlfunc(dl, "GetMetaLayer");
 
 	if (getmeta == NULL) {
 		dlclose(dl);
@@ -48,16 +48,22 @@ void LayerManager::LoadLayer(const string &filename) {
 
 	// TODO(amdmi3): add version check here
 
-	LayerMeta meta = getmeta();
+	MetaLayer meta = getmeta();
 
-	layer_metas_.insert(std::make_pair(meta.GetName(), meta));
+	// No duplicate layers allowed
+	if (metalayers_.find(meta.GetName()) != metalayers_.end()) {
+		dlclose(dl);
+		throw std::runtime_error("Layer already loaded");
+	}
+
+	metalayers_.insert(std::make_pair(meta.GetName(), meta));
 }
 
-Layer *LayerManager::SpawnLayerByName(const string &name) {
-	LayerMetaMap::const_iterator i = layer_metas_.find(name);
+Layer *LayerManager::SpawnLayer(const std::string &name) {
+	MetaLayerMap::const_iterator i = metalayers_.find(name);
 
-	if (i == layer_metas_.end())
-		return NULL;
+	if (i == metalayers_.end())
+		throw std::runtime_error("No layer by that name");
 
 	return i->second.Spawn();
 }

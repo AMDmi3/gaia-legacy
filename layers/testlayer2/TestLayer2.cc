@@ -20,7 +20,7 @@
 #include <GL/gl.h>
 
 #include <libgaia/Layer.h>
-#include <libgaia/LayerMeta.h>
+#include <libgaia/MetaLayer.h>
 #include <libgaia/Region.h>
 
 namespace gaia {
@@ -32,7 +32,7 @@ public:
 
 	virtual void RenderRegion(Region *rgn);
 };
-REGISTER_GAIA_LAYER(TestLayer2, LayerMeta::LAYERGROUP_TRANSPARENT, true);
+REGISTER_LAYER(TestLayer2, "Second testing layer", MetaLayer::LAYERGROUP_TRANSPARENT, true);
 
 void TestLayer2::RenderRegion(Region *rgn) {
 	glColor3f(0.0, 1.0, 0.0);
