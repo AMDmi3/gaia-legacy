@@ -59,13 +59,4 @@ void LayerManager::LoadLayer(const std::string &filename) {
 	metalayers_.insert(std::make_pair(meta.GetName(), meta));
 }
 
-Layer *LayerManager::SpawnLayer(const std::string &name) {
-	MetaLayerMap::const_iterator i = metalayers_.find(name);
-
-	if (i == metalayers_.end())
-		throw std::runtime_error("No layer by that name");
-
-	return i->second.Spawn();
-}
-
 } // namespace gaia

@@ -31,6 +31,9 @@
 
 namespace gaia {
 
+/// Base class for layer managers.
+///
+/// Knows all loaded Layers and stores list of active layer objects.
 class LayerManager {
 public:
 	/// Constructor
@@ -44,21 +47,12 @@ public:
 
 	// TODO(amdmi3): add methods for GUI and Renderer interaction
 
-private:
-	typedef std::map<std::string, MetaLayer> MetaLayerMap;
-	typedef std::vector<std::pair<std::string, Layer*> > LayerMap;
-	typedef std::set<std::string> LayerNameSet;
-
-	Layer *SpawnLayer(const std::string &name);
+protected:
+	/// Creates new Layer object and adds it into list of layers
+	void AddLayer(const std::string &name) = 0;
 
 	/// All loaded layers
 	static MetaLayerMap metalayers_;
-
-	/// All layer objects for current LayerManager instance
-	LayerMap layers_;
-
-	/// Names of all layers
-	LayerNameSet layer_names_;
 };
 
 } // namespace gaia
