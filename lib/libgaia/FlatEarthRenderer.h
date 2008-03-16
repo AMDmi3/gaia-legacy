@@ -31,7 +31,7 @@ namespace gaia {
 class FlatEarthRenderer: public EarthRenderer {
 public:
 	/// Constructor.
-	FlatEarthRenderer(EarthRenderer *ancestor = 0);
+	FlatEarthRenderer();
 
 	/// Destructor.
 	virtual ~FlatEarthRenderer();

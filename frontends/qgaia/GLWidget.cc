@@ -202,19 +202,9 @@ void GLWidget::keyReleaseEvent(QKeyEvent *e) {
 }
 
 void GLWidget::SetFlatEarthRenderer() {
-	EarthRenderer *newearthview = new FlatEarthRenderer(earth_view_);
-
-	delete earth_view_;
-
-	earth_view_ = newearthview;
 }
 
 void GLWidget::SetGlobeEarthRenderer() {
-	EarthRenderer *newearthview = new GlobeEarthRenderer(earth_view_);
-
-	delete earth_view_;
-
-	earth_view_ = newearthview;
 }
 
 /*void GLWidget::ActivateLayer(LayerMeta *meta) {

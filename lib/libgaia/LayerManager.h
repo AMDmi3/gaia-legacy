@@ -33,7 +33,9 @@ namespace gaia {
 
 /// Base class for layer managers.
 ///
-/// Knows all loaded Layers and stores list of active layer objects.
+/// Handled layer loading, layer object spawning, render order etc.
+/// This should be subclassed by the frontend to implement specific
+/// behavior
 class LayerManager {
 public:
 	/// Constructor
@@ -45,11 +47,11 @@ public:
 	/// Loads layer from specified dynamic library file
 	static void LoadLayer(const std::string &filename);
 
-	// TODO(amdmi3): add methods for GUI and Renderer interaction
+	/// Renders one specific region of earth surface
+	virtual void RenderRegion(Region *rgn) = 0;
 
 protected:
-	/// Creates new Layer object and adds it into list of layers
-	void AddLayer(const std::string &name) = 0;
+	typedef std::map<std::string, MetaLayer> MetaLayerMap;
 
 	/// All loaded layers
 	static MetaLayerMap metalayers_;

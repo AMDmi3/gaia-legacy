@@ -39,20 +39,20 @@ namespace gaia {
 
 class Layer;
 class LayerMeta;
+class LayerManager;
 
 ///
 /// Abstract class for earth view.
 ///
 class EarthRenderer {
 public:
-	EarthRenderer(EarthRenderer *ancestor = 0);
+	EarthRenderer();
 	virtual ~EarthRenderer();
-
-//	int ActivateLayer(LayerMeta *meta);
-//	int DeactivateLayer(LayerMeta *meta);
 
 	virtual void Render() = 0;
 	virtual void Animate(double delta) = 0;
+
+	void SetLayerManager(LayerManager *manager);
 
 	void Resize(int width, int height);
 
@@ -66,9 +66,14 @@ public:
 
 	void MoveToPosition(double x, double y);
 
+	/*template <class R> virtual void EarthRenderer *Fork() {
+		EarthRendeder *r = new R;
+		r->layer_manager_ = layer_manager_;
+	}*/
+
 protected:
 	/// Layers to use
-	std::vector<Layer*> layers_;
+	LayerManager *layer_manager_;
 
 	/// Current viewer's position
 	Eye eye_;

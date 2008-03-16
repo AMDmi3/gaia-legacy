@@ -21,14 +21,15 @@
 
 #include <GL/gl.h>
 
-#include <libgaia/Region.h>
 #include <libgaia/Layer.h>
+#include <libgaia/LayerManager.h>
 #include <libgaia/Math.h>
+#include <libgaia/Region.h>
 
 namespace gaia {
 
-FlatEarthRenderer::FlatEarthRenderer(EarthRenderer *ancestor): EarthRenderer(ancestor) {
-	current_movement_flags_ = 0;
+FlatEarthRenderer::FlatEarthRenderer(): EarthRenderer(),
+	current_movement_flags_(0) {
 }
 
 FlatEarthRenderer::~FlatEarthRenderer() {
@@ -112,8 +113,8 @@ void FlatEarthRenderer::Render() {
 	glEnd();
 
 	// call layers rendering routines
-	for (std::vector<Layer*>::iterator i = layers_.begin(); i < layers_.end(); i++)
-		(*i)->RenderRegion(&rgn);
+	if (layer_manager_)
+		layer_manager_->RenderRegion(&rgn);
 }
 
 void FlatEarthRenderer::Animate(double delta) {

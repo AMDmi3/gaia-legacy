@@ -22,13 +22,14 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 
-#include <libgaia/Region.h>
-#include <libgaia/Math.h>
 #include <libgaia/Layer.h>
+#include <libgaia/LayerManager.h>
+#include <libgaia/Math.h>
+#include <libgaia/Region.h>
 
 namespace gaia {
 
-GlobeEarthRenderer::GlobeEarthRenderer(EarthRenderer *ancestor): EarthRenderer(ancestor) {
+GlobeEarthRenderer::GlobeEarthRenderer(): EarthRenderer() {
 }
 
 GlobeEarthRenderer::~GlobeEarthRenderer() {
@@ -45,7 +46,6 @@ void GlobeEarthRenderer::Render() {
 	glTranslatef(0, 0, -1.0-eye_.h);
 	glRotatef(-90.0 + eye_.y*360.0, 1, 0, 0);
 	glRotatef(-eye_.x*360.0 + 180.0, 0, 0, 1);
-
 
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
@@ -87,8 +87,8 @@ void GlobeEarthRenderer::Render() {
 			rgn.reset_proj_z();
 
 			// call layers rendering routines
-			for (std::vector<Layer*>::iterator i = layers_.begin(); i < layers_.end(); i++)
-				(*i)->RenderRegion(&rgn);
+			if (layer_manager_)
+				layer_manager_->RenderRegion(&rgn);
 		}
 	}
 }

@@ -31,7 +31,7 @@ namespace gaia {
 class GlobeEarthRenderer: public EarthRenderer {
 public:
 	/// Constructor.
-	GlobeEarthRenderer(EarthRenderer *ancestor = 0);
+	GlobeEarthRenderer();
 
 	/// Destructor.
 	virtual ~GlobeEarthRenderer();
