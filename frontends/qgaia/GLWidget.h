@@ -17,8 +17,8 @@
  * along with Gaia.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GAIA__GLWIDGET_H__
-#define __GAIA__GLWIDGET_H__
+#ifndef __QGAIA__GLWIDGET_H__
+#define __QGAIA__GLWIDGET_H__
 
 #include <QGLWidget>
 #include <QMouseEvent>
@@ -27,9 +27,8 @@
 #include <QTime>
 
 #include <libgaia/EarthRenderer.h>
-#include <libgaia/Layer.h>
 
-namespace gaia {
+namespace qgaia {
 
 /// Widget with earth view.
 class GLWidget: public QGLWidget {
@@ -61,7 +60,7 @@ private:
 	void keyReleaseEvent(QKeyEvent *e);
 
 	/// EarthRenderer to render data with
-	EarthRenderer	*earth_view_;
+	gaia::EarthRenderer	*earth_view_;
 
 	/// Bitmask containing info on which mouse buttons are currently down
 	int		mouse_down_mask_;
@@ -79,6 +78,6 @@ private:
 	QTime		last_render_;
 };
 
-} // namespace gaia
+} // namespace qgaia
 
 #endif

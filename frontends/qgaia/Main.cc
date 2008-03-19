@@ -24,7 +24,7 @@
 #include "GLWidget.h"
 #include "SidebarWidget.h"
 
-using namespace gaia;
+using namespace qgaia;
 
 int main(int argc, char **argv) {
 	QApplication app(argc, argv);

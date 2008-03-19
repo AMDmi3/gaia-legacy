@@ -24,11 +24,11 @@
 #include <libgaia/FlatEarthRenderer.h>
 #include <libgaia/GlobeEarthRenderer.h>
 
-namespace gaia {
+namespace qgaia {
 
 GLWidget::GLWidget(QWidget* parent): QGLWidget(parent) {
 	// create default EarthRenderer
-	earth_view_ = new FlatEarthRenderer();
+	earth_view_ = new gaia::FlatEarthRenderer();
 
 	// create default Layers
 	/*for (LayerMeta *meta = LayerMeta::first; meta; meta = meta->next)
@@ -225,4 +225,4 @@ void GLWidget::MoveToPosition(double x, double y) {
 	updateGL();
 }*/
 
-} // namespace gaia
+} // namespace qgaia

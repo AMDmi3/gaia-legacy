@@ -17,8 +17,8 @@
  * along with Gaia.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GAIA__SIDEBARWIDGET_H__
-#define __GAIA__SIDEBARWIDGET_H__
+#ifndef __QGAIA__SIDEBARWIDGET_H__
+#define __QGAIA__SIDEBARWIDGET_H__
 
 #include "GLWidget.h"
 
@@ -27,7 +27,7 @@
 
 #include "ui_SidebarWidget.h"
 
-namespace gaia {
+namespace qgaia {
 
 /// Sidebar widget
 class SidebarWidget: public QWidget, Ui::SidebarWidget {
@@ -48,6 +48,6 @@ private:
 	GLWidget *gl_widget_;
 };
 
-} // namespace gaia
+} // namespace qgaia
 
 #endif

@@ -21,7 +21,7 @@
 
 #include "SidebarWidget.h"
 
-namespace gaia {
+namespace qgaia {
 
 SidebarWidget::SidebarWidget(GLWidget* glwidget, QWidget* parent): QWidget(parent), gl_widget_(glwidget) {
 	setupUi(this);
@@ -68,4 +68,4 @@ void SidebarWidget::SetGlobeEarthRenderer() {
 	gl_widget_->updateGL();
 }
 
-} // namespace gaia
+} // namespace qgaia
