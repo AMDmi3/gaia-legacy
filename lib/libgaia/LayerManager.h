@@ -21,10 +21,8 @@
 #define __LIBGAIA__LAYERMANAGER_H__
 
 #include <map>
-#include <set>
 #include <stdexcept>
 #include <string>
-#include <vector>
 
 #include <libgaia/MetaLayer.h>
 #include <libgaia/Layer.h>
